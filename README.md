@@ -1,6 +1,6 @@
 # escout
 
-A new Flutter project.
+eScout is an application that eases Scout students and officers regarding attending events
 
 ## Getting Started
 
