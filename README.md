@@ -1,16 +1,16 @@
-# escout
+# eScout: Scouting Makes Easy
 
-eScout is an application that eases Scout students and officers regarding attending events
+## Introduction
+eScout is a system that integrates with IoT devices such as NFC cards to a working digital platform, primarily a mobile application. Main features are: 
 
-## Getting Started
+- Keeping up to date with future activities (camps, jamborees, etc...)
+- Event creations and updation
+- Tracking attendance
+- User management
 
-This project is a starting point for a Flutter application.
+## Authors
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [Fikri Akmal (Product Master)](https://github.com/FikriAkmalAizuddin)
+- [Iqmal Aizat (Scrum Master)](https://github.com/iqmalje)
+- [Fahmi Roslee (Developer)](https://github.com/FahmiRoslee)
+- [Haziq Farhan (Developer)](https://github.com/karinaHani)
