@@ -45,6 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const SizedBox(height: 30),
               TextFormField(
                 //Scout ID form field
                 decoration: InputDecoration(
@@ -54,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   hintText: 'Scout ID',
                 ),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               TextFormField(
                 //Password form field
                 decoration: InputDecoration(
@@ -62,6 +63,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     borderRadius: BorderRadius.circular(15.0),
                   ),
                   hintText: 'Password',
+                ),
+              ),
+              const SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: () {},
+                child: const Text('Sign In'),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(200, 50),
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
               ),
             ],
