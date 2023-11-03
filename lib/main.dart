@@ -11,7 +11,6 @@ void main() async {
   runApp(const MyApp());
 }
 
-//comment this
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
