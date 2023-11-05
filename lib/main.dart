@@ -1,4 +1,7 @@
+
 import 'package:escout/pages/signin/signin.dart';
+
+import 'package:escout/backend/backend.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -9,6 +12,9 @@ void main() async {
     url: dotenv.env['SUPABASE_URL']!,
     anonKey: dotenv.env['SUPABASE_AUTH_KEY']!,
   );
+
+  //await SupabaseB().signIn('iqmalaizat5ab@gmail.com', 'iqmalpassword');
+  await SupabaseB().test();
   runApp(const MyApp());
 }
 
