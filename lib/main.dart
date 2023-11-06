@@ -1,4 +1,3 @@
-
 import 'package:escout/pages/signin/signin.dart';
 
 import 'package:escout/backend/backend.dart';
@@ -14,7 +13,7 @@ void main() async {
   );
 
   //await SupabaseB().signIn('iqmalaizat5ab@gmail.com', 'iqmalpassword');
-  await SupabaseB().test();
+
   runApp(const MyApp());
 }
 
