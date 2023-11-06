@@ -63,7 +63,7 @@ class _SignInPageState extends State<SignInPage> {
                   fontSize: 28,
                   fontFamily: 'Poppins', // Change the font family if needed
                   fontWeight:
-                      FontWeight.w100, // Adjust the font weight as needed
+                      FontWeight.w900, // Adjust the font weight as needed
                   height: 0,
                 ),
               ),
@@ -113,61 +113,50 @@ class _SignInPageState extends State<SignInPage> {
             Positioned(
               left: 45,
               top: 467,
-              child: SizedBox(
-                width: 300,
-                height: 40,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      top: 0,
-                      child: Container(
-                        width: 300,
-                        height: 40,
-                        decoration: ShapeDecoration(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6)),
+              child: Stack(
+                children: [
+                  Container(
+                    width: 300,
+                    height: 40,
+                    decoration: ShapeDecoration(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6)),
+                    ),
+                    child: const TextField(
+                      decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 9),
+                        hintText: 'Email',
+                        labelStyle: TextStyle(
+                          color: Color(0xFFD9D9D9),
+                          fontSize: 12,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                          height: 0,
                         ),
+                        border: InputBorder.none,
                       ),
                     ),
-                    const Positioned(
-                      left: 20,
-                      top: 12,
-                      child: SizedBox(
-                        width: 38,
-                        height: 16.80,
-                        child: Text(
-                          'Email',
-                          style: TextStyle(
-                            color: Color(0xFFD9D9D9),
-                            fontSize: 12,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                            height: 0,
-                          ),
+                  ),
+                  Positioned(
+                    left: 260,
+                    top: 12,
+                    child: Container(
+                      width: 20,
+                      height: 16,
+                      decoration: ShapeDecoration(
+                        image: const DecorationImage(
+                          image:
+                              NetworkImage("https://via.placeholder.com/20x16"),
+                          fit: BoxFit.contain,
                         ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6)),
                       ),
                     ),
-                    Positioned(
-                      left: 260,
-                      top: 12,
-                      child: Container(
-                        width: 20,
-                        height: 16,
-                        decoration: ShapeDecoration(
-                          image: const DecorationImage(
-                            image: NetworkImage(
-                                "https://via.placeholder.com/20x16"),
-                            fit: BoxFit.contain,
-                          ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6)),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             Positioned(
@@ -178,17 +167,13 @@ class _SignInPageState extends State<SignInPage> {
                 height: 40,
                 child: Stack(
                   children: [
-                    Positioned(
-                      left: 0,
-                      top: 0,
-                      child: Container(
-                        width: 300,
-                        height: 40,
-                        decoration: ShapeDecoration(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6)),
-                        ),
+                    Container(
+                      width: 300,
+                      height: 40,
+                      decoration: ShapeDecoration(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6)),
                       ),
                     ),
                     const Positioned(

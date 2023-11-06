@@ -1,4 +1,6 @@
 import 'package:escout/pages/signin/signin.dart';
+import 'package:escout/pages/signin/testpage.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
             seedColor: const Color.fromARGB(255, 13, 63, 214)),
         useMaterial3: true,
       ),
-      home: const SignInPage(),
+      home: const TestPage(),
     );
   }
 }
