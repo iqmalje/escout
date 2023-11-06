@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
             seedColor: const Color.fromARGB(255, 13, 63, 214)),
         useMaterial3: true,
       ),
-      home: const TestPage(),
+      home: const SignInPage(),
     );
   }
 }

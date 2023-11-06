@@ -13,238 +13,128 @@ class _SignInPageState extends State<SignInPage> {
     return Scaffold(
       body: Container(
         width: MediaQuery.sizeOf(context).width,
-        height: 900,
-        decoration: const BoxDecoration(color: Colors.white),
-        child: Stack(
+        height: MediaQuery.sizeOf(context).height,
+        margin: EdgeInsets.only(top: MediaQuery.sizeOf(context).height * 0.3),
+        decoration: const ShapeDecoration(
+          gradient: LinearGradient(
+            begin: Alignment(0.00, -1.00),
+            end: Alignment(0, 1),
+            colors: [Color(0xFF3B3F65), Color(0xFF9254D8)],
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(45),
+              topRight: Radius.circular(45),
+            ),
+          ),
+        ),
+        //The space of the widget for the left edge in the container
+        padding: EdgeInsets.only(
+            left: MediaQuery.sizeOf(context).width * 0.15,
+            right: MediaQuery.sizeOf(context).width * 0.15),
+        // All widget Column
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Positioned(
-              left: MediaQuery.sizeOf(context).width,
-              top: MediaQuery.sizeOf(context).height,
-              child: Transform(
-                transform: Matrix4.identity()
-                  ..translate(0.0, 0.0)
-                  ..rotateZ(-3.14),
-                child: Container(
-                  width: MediaQuery.sizeOf(context).width,
-                  height: 539,
-                  decoration: const ShapeDecoration(
-                    color: Color(0xFF3B3F65),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(45),
-                        bottomRight: Radius.circular(45),
-                      ),
+            //Welcome and log in column
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 50,
+                ),
+                Text(
+                  'Welcome to eScout',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w500,
+                    height: 0,
+                  ),
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                Text(
+                  'Log In',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w700,
+                    height: 0,
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(
+              height: 40,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
+                    hintText: 'Email',
+                    filled: true, // Fill the background with color
+                    fillColor:
+                        Colors.white, // Set the background color to white
+                  ),
+                ),
+                const SizedBox(
+                  height: 18,
+                ),
+                TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
+                    hintText: 'Password',
+                    filled: true, // Fill the background with color
+                    fillColor:
+                        Colors.white, // Set the background color to white
+                  ),
+                ),
+                const SizedBox(
+                  height: 18,
+                ),
+                const Align(
+                  alignment: Alignment.bottomRight,
+                  child: Text(
+                    'Forgot Password?',
+                    style: TextStyle(
+                      color: Color(0xFFFFC600),
+                      fontSize: 12,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w500,
+                      decoration: TextDecoration.underline,
+                      height: 0,
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-            const Positioned(
-              left: 47,
-              top: 344,
-              child: Text(
-                'Welcome to eScout',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w500,
-                  height: 0,
+
+            const SizedBox(
+              height: 40,
+            ),
+            Container(
+              width: 300,
+              height: 50,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                  side: const BorderSide(width: 3, color: Color(0xFFFFC600)),
+                  borderRadius: BorderRadius.circular(15),
                 ),
               ),
-            ),
-            const Positioned(
-              left: 47,
-              top: 384,
-              child: Text(
-                'Log In',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
-                  fontFamily: 'Poppins', // Change the font family if needed
-                  fontWeight:
-                      FontWeight.w900, // Adjust the font weight as needed
-                  height: 0,
-                ),
-              ),
-            ),
-            Positioned(
-              left: 45,
-              top: 698,
-              child: SizedBox(
-                width: 300,
-                height: 50,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      top: 0,
-                      child: Container(
-                        width: 300,
-                        height: 50,
-                        decoration: ShapeDecoration(
-                          shape: RoundedRectangleBorder(
-                            side: const BorderSide(
-                                width: 3, color: Color(0xFFFFC600)),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Positioned(
-                      left: 123,
-                      top: 15,
-                      child: Text(
-                        'SIGN IN',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w700,
-                          height: 0,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              left: 45,
-              top: 467,
-              child: Stack(
-                children: [
-                  Container(
-                    width: 300,
-                    height: 40,
-                    decoration: ShapeDecoration(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6)),
-                    ),
-                    child: const TextField(
-                      decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 9),
-                        hintText: 'Email',
-                        labelStyle: TextStyle(
-                          color: Color(0xFFD9D9D9),
-                          fontSize: 12,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w400,
-                          height: 0,
-                        ),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 260,
-                    top: 12,
-                    child: Container(
-                      width: 20,
-                      height: 16,
-                      decoration: ShapeDecoration(
-                        image: const DecorationImage(
-                          image:
-                              NetworkImage("https://via.placeholder.com/20x16"),
-                          fit: BoxFit.contain,
-                        ),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6)),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Positioned(
-              left: 45,
-              top: 527,
-              child: SizedBox(
-                width: 300,
-                height: 40,
-                child: Stack(
-                  children: [
-                    Container(
-                      width: 300,
-                      height: 40,
-                      decoration: ShapeDecoration(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6)),
-                      ),
-                    ),
-                    const Positioned(
-                      left: 20,
-                      top: 12,
-                      child: SizedBox(
-                        width: 68,
-                        height: 16.80,
-                        child: Text(
-                          'Password',
-                          style: TextStyle(
-                            color: Color(0xFFD9D9D9),
-                            fontSize: 12,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                            height: 0,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: 260,
-                      top: 12,
-                      child: Container(
-                        width: 20,
-                        height: 16,
-                        decoration: ShapeDecoration(
-                          image: const DecorationImage(
-                            image: NetworkImage(
-                                "https://via.placeholder.com/20x16"),
-                            fit: BoxFit.contain,
-                          ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6)),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const Positioned(
-              left: 238,
-              top: 587,
-              child: Text(
-                'Forgot Password?',
-                textAlign: TextAlign.right,
-                style: TextStyle(
-                  color: Color(0xFFFFC600),
-                  fontSize: 12,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w500,
-                  decoration: TextDecoration.underline,
-                  height: 0,
-                ),
-              ),
-            ),
-            Positioned(
-              left: 102,
-              top: 83,
-              child: Container(
-                width: 186,
-                height: 178,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/Escout Logo.png'),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
-            ),
+            )
           ],
         ),
       ),
