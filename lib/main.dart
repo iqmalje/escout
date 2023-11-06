@@ -12,8 +12,6 @@ void main() async {
     anonKey: dotenv.env['SUPABASE_AUTH_KEY']!,
   );
 
-  //await SupabaseB().signIn('iqmalaizat5ab@gmail.com', 'iqmalpassword');
-
   runApp(const MyApp());
 }
 
