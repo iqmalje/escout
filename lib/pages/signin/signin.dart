@@ -1,3 +1,4 @@
+import 'package:escout/pages/signin/forgotpassword.dart';
 import 'package:flutter/material.dart';
 
 class SignInPage extends StatefulWidget {
@@ -86,7 +87,7 @@ class _SignInPageState extends State<SignInPage> {
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.0),
-                            borderSide: BorderSide(color: Colors.white),
+                            borderSide: const BorderSide(color: Colors.white),
                           ),
                           hintText: 'Email',
                           filled: true, // Fill the background with color
@@ -101,7 +102,7 @@ class _SignInPageState extends State<SignInPage> {
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.0),
-                            borderSide: BorderSide(color: Colors.white),
+                            borderSide: const BorderSide(color: Colors.white),
                           ),
                           hintText: 'Password',
                           filled: true, // Fill the background with color
@@ -112,17 +113,25 @@ class _SignInPageState extends State<SignInPage> {
                       const SizedBox(
                         height: 18,
                       ),
-                      const Align(
+                      Align(
                         alignment: Alignment.bottomRight,
-                        child: Text(
-                          'Forgot Password?',
-                          style: TextStyle(
-                            color: Color(0xFFFFC600),
-                            fontSize: 12,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.underline,
-                            height: 0,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const ForgotPasswordPage()),
+                            );
+                          },
+                          child: const Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                              color: Color(0xFFFFC600),
+                              fontSize: 12,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500,
+                              decoration: TextDecoration.underline,
+                              height: 0,
+                            ),
                           ),
                         ),
                       ),
@@ -136,7 +145,7 @@ class _SignInPageState extends State<SignInPage> {
                     color: Colors.transparent,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(15),
-                      splashColor: Colors.red,
+                      splashColor: const Color.fromARGB(255, 123, 90, 255),
                       onTap: () {
                         print('tekan');
                       },
@@ -150,6 +159,16 @@ class _SignInPageState extends State<SignInPage> {
                             borderRadius: BorderRadius.circular(15),
                           ),
                         ),
+                        child: const Center(
+                            child: Text(
+                          'Sign In',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        )),
                       ),
                     ),
                   )
