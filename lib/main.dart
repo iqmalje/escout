@@ -1,3 +1,4 @@
+import 'package:escout/pages/forgotpassword/verifyOTP.dart';
 import 'package:escout/pages/signin/signinpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -25,7 +26,10 @@ class MyApp extends StatelessWidget {
             seedColor: const Color.fromARGB(255, 13, 63, 214)),
         useMaterial3: true,
       ),
-      home: const SignInPage(),
+      routes: {
+        '/signin': (context) => const SignInPage(),
+      },
+      home: VerifyResetPassword(email: 'iqmalaizat5ab@gmail.com'),
     );
   }
 }
