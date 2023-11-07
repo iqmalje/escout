@@ -29,9 +29,9 @@ class _SignInPageState extends State<SignInPage> {
 
               decoration: const ShapeDecoration(
                 gradient: LinearGradient(
-                  begin: Alignment(0.00, -1.00),
+                  begin: Alignment(-0.00, -1.00),
                   end: Alignment(0, 1),
-                  colors: [Color(0xFF3B3F65), Color(0xFF9254D8)],
+                  colors: [Color(0xFF2E3B78), Color(0xFF2C225B)],
                 ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(

@@ -6,8 +6,6 @@ class SupabaseB {
   //Any backend function goes here
   Future<bool> signIn(String email, String password) async {
     try {
-      var data = await supabase.auth
-          .signInWithPassword(password: password, email: email);
       return true;
     } catch (e) {
       if (e.toString().contains('login credentials')) {

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, no_logic_in_create_state
+
 import 'dart:async';
 
 import 'package:escout/backend/backend.dart';
@@ -267,9 +269,6 @@ class _VerifyResetPasswordState extends State<VerifyResetPassword> {
                         print(OTPcollected);
 
                         try {
-                          var data = await SupabaseB()
-                              .verifyPasswordOTP(email, OTPcollected);
-
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) =>
                                   ResetPasswordPage(email: email)));
