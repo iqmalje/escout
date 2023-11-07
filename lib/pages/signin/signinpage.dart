@@ -1,4 +1,4 @@
-import 'package:escout/pages/signin/forgotpassword.dart';
+import 'package:escout/pages/signin/forgotpasswordpage.dart';
 import 'package:flutter/material.dart';
 
 class SignInPage extends StatefulWidget {
@@ -119,7 +119,9 @@ class _SignInPageState extends State<SignInPage> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const ForgotPasswordPage()),
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ForgotPasswordPage()),
                             );
                           },
                           child: const Text(
@@ -147,7 +149,11 @@ class _SignInPageState extends State<SignInPage> {
                       borderRadius: BorderRadius.circular(15),
                       splashColor: const Color.fromARGB(255, 123, 90, 255),
                       onTap: () {
-                        print('tekan');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const homepage()),
+                        );
                       },
                       child: Ink(
                         width: 300,
