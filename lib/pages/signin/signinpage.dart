@@ -1,3 +1,4 @@
+import 'package:escout/pages/homepage.dart';
 import 'package:escout/pages/signin/forgotpasswordpage.dart';
 import 'package:flutter/material.dart';
 
@@ -152,7 +153,7 @@ class _SignInPageState extends State<SignInPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const homepage()),
+                              builder: (context) => const HomePage()),
                         );
                       },
                       child: Ink(
