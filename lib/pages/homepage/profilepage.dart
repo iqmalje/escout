@@ -13,7 +13,14 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('PROFILE PAGE'),
+        child: Column(
+          children: [
+            Container(
+          width: 390,
+          height: 110,
+          decoration: BoxDecoration(color: Color(0xFF2E3B78)),
+) 
+          ]),
       ),
     );
   }
