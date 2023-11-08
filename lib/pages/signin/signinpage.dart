@@ -1,6 +1,7 @@
 import 'package:escout/backend/backend.dart';
 import 'package:escout/pages/homepage.dart';
 import 'package:escout/pages/forgotpassword/forgotpasswordpage.dart';
+import 'package:escout/pages/homepage/temppage.dart';
 import 'package:flutter/material.dart';
 
 class SignInPage extends StatefulWidget {
@@ -176,7 +177,7 @@ class _SignInPageState extends State<SignInPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const HomePage()),
+                              builder: (context) => const TempPage()),
                         );
                       },
                       child: Ink(

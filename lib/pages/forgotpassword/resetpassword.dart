@@ -2,7 +2,6 @@
 
 import 'package:escout/backend/backend.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   String email;
@@ -108,7 +107,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     ),
                     Builder(builder: (context) {
                       if (password.text != confirmpassword.text) {
-                        return Center(
+                        return const Center(
                           child: Text(
                             'Your password did not match!',
                             style: TextStyle(
@@ -116,8 +115,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             ),
                           ),
                         );
-                      } else
+                      } else {
                         return Container();
+                      }
                     })
                   ],
                 ),

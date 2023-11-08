@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/signin': (context) => const SignInPage(),
       },
-      home: VerifyResetPassword(email: 'iqmalaizat5ab@gmail.com'),
+      home: const SignInPage(),
     );
   }
 }

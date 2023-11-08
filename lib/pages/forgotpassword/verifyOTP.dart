@@ -220,7 +220,7 @@ class _VerifyResetPasswordState extends State<VerifyResetPassword> {
 
                               _start = 330;
                               _timer =
-                                  Timer.periodic(Duration(seconds: 1), (timer) {
+                                  Timer.periodic(const Duration(seconds: 1), (timer) {
                                 if (_start == 0) {
                                   _timer!.cancel();
                                 } else {
@@ -256,15 +256,15 @@ class _VerifyResetPasswordState extends State<VerifyResetPassword> {
                       onTap: () async {
                         String OTPcollected = "";
 
-                        OTP.forEach((element) {
+                        for (var element in OTP) {
                           if (element.text.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                     content: Text('Fill in all OTP code')));
-                            return;
+                            continue;
                           }
                           OTPcollected += element.text;
-                        });
+                        }
 
                         print(OTPcollected);
 

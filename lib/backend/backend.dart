@@ -12,7 +12,7 @@ class SupabaseB {
         throw Exception("Invalid login credentials");
       }
 
-      throw e;
+      rethrow;
     }
   }
 
@@ -27,8 +27,9 @@ class SupabaseB {
 
       if (data.session != null) {
         return true;
-      } else
+      } else {
         return false;
+      }
     } catch (e) {
       throw Exception("Token has expired or is invalid");
     }
