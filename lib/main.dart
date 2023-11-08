@@ -1,4 +1,3 @@
-import 'package:escout/pages/forgotpassword/verifyOTP.dart';
 import 'package:escout/pages/signin/signinpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
