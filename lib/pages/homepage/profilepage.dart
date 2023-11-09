@@ -1,4 +1,5 @@
 import 'package:escout/backend/backend.dart';
+import 'package:escout/pages/forgotpassword/verifyOTP.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -280,33 +281,41 @@ class _ProfilePageState extends State<ProfilePage> {
                       const SizedBox(
                         height: 15,
                       ),
-                      Container(
-                        width: MediaQuery.sizeOf(context).width * 0.8,
-                        height: 40,
-                        decoration: ShapeDecoration(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                          shadows: const [
-                            BoxShadow(
-                              color: Color(0x3F000000),
-                              blurRadius: 2,
-                              offset: Offset(0, 1),
-                              spreadRadius: 0,
-                            )
-                          ],
-                        ),
-                        child: Center(
-                          child: SizedBox(
-                            width: MediaQuery.sizeOf(context).width * 0.8 - 20,
-                            child: const Text(
-                              'Reset Password',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w500,
-                                height: 0,
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  VerifyResetPassword(email: email.text)));
+                        },
+                        child: Ink(
+                          width: MediaQuery.sizeOf(context).width * 0.8,
+                          height: 40,
+                          decoration: ShapeDecoration(
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
+                            shadows: const [
+                              BoxShadow(
+                                color: Color(0x3F000000),
+                                blurRadius: 2,
+                                offset: Offset(0, 1),
+                                spreadRadius: 0,
+                              )
+                            ],
+                          ),
+                          child: Center(
+                            child: SizedBox(
+                              width:
+                                  MediaQuery.sizeOf(context).width * 0.8 - 20,
+                              child: const Text(
+                                'Reset Password',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w500,
+                                  height: 0,
+                                ),
                               ),
                             ),
                           ),

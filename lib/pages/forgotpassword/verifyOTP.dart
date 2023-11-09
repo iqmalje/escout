@@ -59,7 +59,9 @@ class _VerifyResetPasswordState extends State<VerifyResetPassword> {
                     alignment: Alignment.centerLeft,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(100),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
                       child: Ink(
                         width: 60,
                         height: 60,
@@ -219,8 +221,8 @@ class _VerifyResetPasswordState extends State<VerifyResetPassword> {
                               if (_timer!.isActive) _timer!.cancel();
 
                               _start = 330;
-                              _timer =
-                                  Timer.periodic(const Duration(seconds: 1), (timer) {
+                              _timer = Timer.periodic(
+                                  const Duration(seconds: 1), (timer) {
                                 if (_start == 0) {
                                   _timer!.cancel();
                                 } else {
