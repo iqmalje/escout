@@ -6,6 +6,7 @@ class SupabaseB {
   //Any backend function goes here
   Future<bool> signIn(String email, String password) async {
     try {
+      await supabase.auth.signInWithPassword(password: password, email: email);
       return true;
     } catch (e) {
       if (e.toString().contains('login credentials')) {
@@ -18,6 +19,19 @@ class SupabaseB {
 
   Future<void> sendPasswordOTP(String email) async {
     await supabase.auth.resetPasswordForEmail(email);
+  }
+
+  Future<void> signout() async {
+    await supabase.auth.signOut();
+  }
+
+  Future<dynamic> getProfileInfo() async {
+    var userid = supabase.auth.currentUser!.id;
+    print("USERID = ${userid}");
+    var data =
+        await supabase.from('accounts').select('*').eq('accountid', userid);
+
+    return data[0];
   }
 
   Future<bool> verifyPasswordOTP(String email, String OTP) async {
