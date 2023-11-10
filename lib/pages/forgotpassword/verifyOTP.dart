@@ -271,6 +271,8 @@ class _VerifyResetPasswordState extends State<VerifyResetPassword> {
                         print(OTPcollected);
 
                         try {
+                          await SupabaseB()
+                              .verifyPasswordOTP(email, OTPcollected);
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) =>
                                   ResetPasswordPage(email: email)));
