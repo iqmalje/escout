@@ -100,6 +100,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       splashColor: const Color.fromARGB(255, 123, 90, 255),
                       onTap: () async {
                         // ... your existing code
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                VerifyResetPassword(email: email.text)));
                       },
                       child: Ink(
                         width: MediaQuery.of(context).size.width * 0.8,

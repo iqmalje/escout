@@ -182,7 +182,7 @@ class _SignInPageState extends State<SignInPage> {
                           );
                         },
                         child: Ink(
-                          width: 300,
+                          width: MediaQuery.sizeOf(context).width * 0.8,
                           height: 50,
                           decoration: ShapeDecoration(
                             shape: RoundedRectangleBorder(

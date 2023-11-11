@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:escout/backend/backend.dart';
 import 'package:escout/pages/forgotpassword/verifyOTP.dart';
 import 'package:flutter/material.dart';
@@ -445,38 +446,50 @@ class _ProfilePageState extends State<ProfilePage> {
                     side: BorderSide(width: 4, color: Color(0xFF00579E)),
                   ),
                 ),
-                child: const CircleAvatar(
-                    backgroundImage: AssetImage('assets/madni3.png')),
+                child: CircleAvatar(
+                    backgroundImage: NetworkImage(snapshot.data['image_url'])),
               ),
               const SizedBox(
                 height: 14,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '${fullname.text} ',
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
-                      height: 0,
-                    ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: SizedBox(
+                  height: 30,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: AutoSizeText(
+                          '${fullname.text} ',
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w600,
+                            height: 0,
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Builder(builder: (context) {
+                          if (snapshot.data['is_member']) {
+                            return const Icon(
+                              Icons.verified,
+                              size: 20,
+                              color: Colors.white,
+                            );
+                          } else {
+                            return Container();
+                          }
+                        }),
+                      )
+                    ],
                   ),
-                  Builder(builder: (context) {
-                    if (snapshot.data['is_member']) {
-                      return const Icon(
-                        Icons.verified,
-                        color: Colors.white,
-                      );
-                    } else {
-                      return Container();
-                    }
-                  })
-                ],
+                ),
               ),
               const SizedBox(
                 height: 5,
