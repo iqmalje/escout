@@ -62,7 +62,6 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - .env
-    - 2.env
     - assets/
     - assets/Escout Logo.png
     - assets/Email.png
