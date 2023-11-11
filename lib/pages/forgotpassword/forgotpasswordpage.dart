@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:escout/pages/forgotpassword/verifyOTP.dart';
+import 'package:escout/pages/signin/signinpage.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
@@ -45,9 +46,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               borderRadius: BorderRadius.circular(100),
                               color: Colors.white,
                             ),
-                            child: const Icon(
-                              Icons.arrow_back,
-                              size: 35,
+                            child: IconButton(
+                              icon: Icon(Icons.arrow_back, size: 35),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const SignInPage()),
+                                );
+                              },
                             ),
                           ),
                         ),
