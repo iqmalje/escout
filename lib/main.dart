@@ -1,4 +1,3 @@
-import 'package:escout/ForgotPassword.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -109,4 +108,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+class ForgotPasswordPage extends StatefulWidget {
+  const ForgotPasswordPage({super.key});
 
+  @override
+  State<ForgotPasswordPage> createState() => _ForgotPasswordPage();
+}
+
+class _ForgotPasswordPage extends State<ForgotPasswordPage> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
