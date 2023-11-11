@@ -1,14 +1,23 @@
+import 'package:escout/pages/homepage/profilepage.dart';
+import 'package:escout/pages/homepage/temppage.dart';
 import 'package:escout/pages/signin/signinpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+bool isSignedIn = false;
 void main() async {
   await dotenv.load(fileName: '.env');
   await Supabase.initialize(
     url: dotenv.env['SUPABASE_URL']!,
     anonKey: dotenv.env['SUPABASE_AUTH_KEY']!,
   );
+
+  if (Supabase.instance.client.auth.currentUser == null) {
+    isSignedIn = false;
+  } else {
+    isSignedIn = true;
+  }
 
   runApp(const MyApp());
 }
@@ -25,7 +34,10 @@ class MyApp extends StatelessWidget {
             seedColor: const Color.fromARGB(255, 13, 63, 214)),
         useMaterial3: true,
       ),
-      home: const SignInPage(),
+      routes: {
+        '/signin': (context) => const SignInPage(),
+      },
+      home: isSignedIn ? const TempPage() : const SignInPage(),
     );
   }
 }

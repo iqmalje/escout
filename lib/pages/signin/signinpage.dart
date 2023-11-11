@@ -1,5 +1,6 @@
-import 'package:escout/pages/homepage.dart';
-import 'package:escout/pages/signin/forgotpasswordpage.dart';
+import 'package:escout/backend/backend.dart';
+import 'package:escout/pages/forgotpassword/forgotpasswordpage.dart';
+import 'package:escout/pages/homepage/temppage.dart';
 import 'package:flutter/material.dart';
 
 class SignInPage extends StatefulWidget {
@@ -10,6 +11,8 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  TextEditingController email = TextEditingController(),
+      password = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,9 +29,9 @@ class _SignInPageState extends State<SignInPage> {
 
               decoration: const ShapeDecoration(
                 gradient: LinearGradient(
-                  begin: Alignment(0.00, -1.00),
+                  begin: Alignment(-0.00, -1.00),
                   end: Alignment(0, 1),
-                  colors: [Color(0xFF3B3F65), Color(0xFF9254D8)],
+                  colors: [Color(0xFF2E3B78), Color(0xFF2C225B)],
                 ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
@@ -85,6 +88,7 @@ class _SignInPageState extends State<SignInPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextField(
+                        controller: email,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.0),
@@ -92,6 +96,7 @@ class _SignInPageState extends State<SignInPage> {
                           ),
                           hintText: 'Email',
                           filled: true, // Fill the background with color
+
                           fillColor:
                               Colors.white, // Set the background color to white
                         ),
@@ -100,6 +105,8 @@ class _SignInPageState extends State<SignInPage> {
                         height: 18,
                       ),
                       TextField(
+                        controller: password,
+                        obscureText: true,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.0),
@@ -133,6 +140,7 @@ class _SignInPageState extends State<SignInPage> {
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w500,
                               decoration: TextDecoration.underline,
+                              decorationColor: Color(0xFFFFC600),
                               height: 0,
                             ),
                           ),
@@ -149,11 +157,26 @@ class _SignInPageState extends State<SignInPage> {
                     child: InkWell(
                       borderRadius: BorderRadius.circular(15),
                       splashColor: const Color.fromARGB(255, 123, 90, 255),
-                      onTap: () {
+                      onTap: () async {
+                        if (email.text.isEmpty || password.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Please fill in all fields!')));
+                          return;
+                        }
+
+                        try {
+                          await SupabaseB().signIn(email.text, password.text);
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(e.toString())));
+                          return;
+                        }
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const HomePage()),
+                              builder: (context) => const TempPage()),
                         );
                       },
                       child: Ink(
