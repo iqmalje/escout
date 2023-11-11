@@ -7,7 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 bool isSignedIn = false;
 void main() async {
-  await dotenv.load(fileName: '.env');
+  await dotenv.load(fileName: '2.env');
   await Supabase.initialize(
     url: dotenv.env['SUPABASE_URL']!,
     anonKey: dotenv.env['SUPABASE_AUTH_KEY']!,

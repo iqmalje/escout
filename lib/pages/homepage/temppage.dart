@@ -28,7 +28,7 @@ class _TempPageState extends State<TempPage> {
     return Scaffold(
       body: _pages[index],
       bottomNavigationBar: Container(
-        height: 100,
+        height: 60,
         decoration: const BoxDecoration(color: Colors.white, boxShadow: [
           BoxShadow(
             color: Color(0x28000000),
@@ -56,7 +56,7 @@ class _TempPageState extends State<TempPage> {
                       },
                       child: Icon(
                         Icons.home,
-                        size: 35,
+                        size: 25,
                         color: index == 0
                             ? const Color(0xFF2E3B78)
                             : const Color(0xFFD9D9D9),
@@ -66,6 +66,7 @@ class _TempPageState extends State<TempPage> {
                   Text(
                     'Home',
                     style: TextStyle(
+                      fontSize: 13,
                       color: index == 0
                           ? const Color(0xFF2E3B78)
                           : const Color(0xFFD9D9D9),
@@ -86,7 +87,7 @@ class _TempPageState extends State<TempPage> {
                       },
                       child: Icon(
                         Icons.calendar_month,
-                        size: 35,
+                        size: 25,
                         color: index == 1
                             ? const Color(0xFF2E3B78)
                             : const Color(0xFFD9D9D9),
@@ -96,6 +97,7 @@ class _TempPageState extends State<TempPage> {
                   Text(
                     'Activity',
                     style: TextStyle(
+                      fontSize: 13,
                       color: index == 1
                           ? const Color(0xFF2E3B78)
                           : const Color(0xFFD9D9D9),
@@ -116,7 +118,7 @@ class _TempPageState extends State<TempPage> {
                       borderRadius: BorderRadius.circular(100),
                       child: Icon(
                         Icons.apartment,
-                        size: 35,
+                        size: 25,
                         color: index == 2
                             ? const Color(0xFF2E3B78)
                             : const Color(0xFFD9D9D9),
@@ -126,6 +128,7 @@ class _TempPageState extends State<TempPage> {
                   Text(
                     'Facility',
                     style: TextStyle(
+                      fontSize: 13,
                       color: index == 2
                           ? const Color(0xFF2E3B78)
                           : const Color(0xFFD9D9D9),
@@ -146,7 +149,7 @@ class _TempPageState extends State<TempPage> {
                       borderRadius: BorderRadius.circular(100),
                       child: Icon(
                         Icons.account_circle,
-                        size: 35,
+                        size: 25,
                         color: index == 3
                             ? const Color(0xFF2E3B78)
                             : const Color(0xFFD9D9D9),
@@ -156,6 +159,7 @@ class _TempPageState extends State<TempPage> {
                   Text(
                     'Profile',
                     style: TextStyle(
+                      fontSize: 13,
                       color: index == 3
                           ? const Color(0xFF2E3B78)
                           : const Color(0xFFD9D9D9),
