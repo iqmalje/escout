@@ -109,6 +109,7 @@ class _SignInPageState extends State<SignInPage> {
                           controller: password,
                           obscureText: true,
                           decoration: InputDecoration(
+                            suffixIcon: Icon(Icons.remove_red_eye),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12.0),
                               borderSide: const BorderSide(color: Colors.white),

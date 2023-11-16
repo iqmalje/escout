@@ -54,24 +54,32 @@ class _TempPageState extends State<TempPage> {
                           index = 0;
                         });
                       },
-                      child: Icon(
-                        Icons.home,
-                        size: 25,
-                        color: index == 0
-                            ? const Color(0xFF2E3B78)
-                            : const Color(0xFFD9D9D9),
+                      child: SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.home,
+                              size: 25,
+                              color: index == 0
+                                  ? const Color(0xFF2E3B78)
+                                  : const Color(0xFFD9D9D9),
+                            ),
+                            Text(
+                              'Home',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: index == 0
+                                    ? const Color(0xFF2E3B78)
+                                    : const Color(0xFFD9D9D9),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                  Text(
-                    'Home',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: index == 0
-                          ? const Color(0xFF2E3B78)
-                          : const Color(0xFFD9D9D9),
-                    ),
-                  )
                 ],
               ),
               Column(
@@ -85,24 +93,32 @@ class _TempPageState extends State<TempPage> {
                           index = 1;
                         });
                       },
-                      child: Icon(
-                        Icons.calendar_month,
-                        size: 25,
-                        color: index == 1
-                            ? const Color(0xFF2E3B78)
-                            : const Color(0xFFD9D9D9),
+                      child: SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.calendar_month,
+                              size: 25,
+                              color: index == 1
+                                  ? const Color(0xFF2E3B78)
+                                  : const Color(0xFFD9D9D9),
+                            ),
+                            Text(
+                              'Activity',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: index == 1
+                                    ? const Color(0xFF2E3B78)
+                                    : const Color(0xFFD9D9D9),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                  Text(
-                    'Activity',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: index == 1
-                          ? const Color(0xFF2E3B78)
-                          : const Color(0xFFD9D9D9),
-                    ),
-                  )
                 ],
               ),
               Column(
@@ -116,24 +132,32 @@ class _TempPageState extends State<TempPage> {
                         });
                       },
                       borderRadius: BorderRadius.circular(100),
-                      child: Icon(
-                        Icons.apartment,
-                        size: 25,
-                        color: index == 2
-                            ? const Color(0xFF2E3B78)
-                            : const Color(0xFFD9D9D9),
+                      child: SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.apartment,
+                              size: 25,
+                              color: index == 2
+                                  ? const Color(0xFF2E3B78)
+                                  : const Color(0xFFD9D9D9),
+                            ),
+                            Text(
+                              'Facility',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: index == 2
+                                    ? const Color(0xFF2E3B78)
+                                    : const Color(0xFFD9D9D9),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                  Text(
-                    'Facility',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: index == 2
-                          ? const Color(0xFF2E3B78)
-                          : const Color(0xFFD9D9D9),
-                    ),
-                  )
                 ],
               ),
               Column(
@@ -147,24 +171,32 @@ class _TempPageState extends State<TempPage> {
                         });
                       },
                       borderRadius: BorderRadius.circular(100),
-                      child: Icon(
-                        Icons.account_circle,
-                        size: 25,
-                        color: index == 3
-                            ? const Color(0xFF2E3B78)
-                            : const Color(0xFFD9D9D9),
+                      child: SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.account_circle,
+                              size: 25,
+                              color: index == 3
+                                  ? const Color(0xFF2E3B78)
+                                  : const Color(0xFFD9D9D9),
+                            ),
+                            Text(
+                              'Profile',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: index == 3
+                                    ? const Color(0xFF2E3B78)
+                                    : const Color(0xFFD9D9D9),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                  Text(
-                    'Profile',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: index == 3
-                          ? const Color(0xFF2E3B78)
-                          : const Color(0xFFD9D9D9),
-                    ),
-                  )
                 ],
               ),
             ],

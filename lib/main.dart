@@ -1,8 +1,10 @@
 import 'package:escout/pages/homepage/profilepage.dart';
 import 'package:escout/pages/homepage/temppage.dart';
+import 'package:escout/pages/nfc_test.dart';
 import 'package:escout/pages/signin/signinpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:nfc_manager/nfc_manager.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 bool isSignedIn = false;
@@ -18,7 +20,8 @@ void main() async {
   } else {
     isSignedIn = true;
   }
-
+  bool isAvailable = await NfcManager.instance.isAvailable();
+  print(isAvailable);
   runApp(const MyApp());
 }
 
@@ -38,7 +41,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/signin': (context) => const SignInPage(),
       },
-      home: isSignedIn ? const TempPage() : const SignInPage(),
+      home: isSignedIn ? const NFCTest() : const SignInPage(),
     );
   }
 }

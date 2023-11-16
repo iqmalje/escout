@@ -15,303 +15,424 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController fullname = TextEditingController(),
       mobilenumber = TextEditingController(),
       email = TextEditingController();
-
+  bool isAdminToggled = false;
+  bool shorten = false;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        body: Center(
-          child: FutureBuilder<dynamic>(
-              future: SupabaseB().getProfileInfo(),
-              builder: (context, snapshot) {
-                if (snapshot.data == null) {
-                  return const CircularProgressIndicator();
-                }
+    return Container(
+      color: const Color(0xFF2E3B78),
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SafeArea(
+          child: Scaffold(
+            body: SingleChildScrollView(
+              child: Center(
+                child: FutureBuilder<dynamic>(
+                    future: SupabaseB().getProfileInfo(),
+                    builder: (context, snapshot) {
+                      if (snapshot.data == null) {
+                        return const CircularProgressIndicator();
+                      }
 
-                print(snapshot.data);
+                      print(snapshot.data);
+                      if (isAdminToggled && snapshot.data['roles'] == 'ADMIN') {
+                        fullname.text = 'PPM NEGERI JOHOR';
+                        mobilenumber.text = '07-111 5566';
+                        email.text = 'ppmnegerijohor@gmail.com';
+                      } else {
+                        fullname.text = snapshot.data['fullname'];
+                        email.text = snapshot.data['email'];
+                        mobilenumber.text = snapshot.data['phoneno'];
+                      }
 
-                fullname =
-                    TextEditingController(text: snapshot.data['fullname']);
-                email = TextEditingController(text: snapshot.data['email']);
-                mobilenumber =
-                    TextEditingController(text: snapshot.data['phoneno']);
-                return SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Container(
-                        width: MediaQuery.sizeOf(context).width,
-                        height: 110,
-                        decoration:
-                            const BoxDecoration(color: Color(0xFF2E3B78)),
-                        child: const Center(
-                          child: Text(
-                            'Profile',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 255, 255, 255),
-                              fontSize: 24,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w600,
+                      if (snapshot.data['position'].length > 40) {
+                        shorten = true;
+                      } else {
+                        shorten = false;
+                      }
+                      return Column(
+                        children: [
+                          Container(
+                            width: MediaQuery.sizeOf(context).width,
+                            height: 90,
+                            decoration:
+                                const BoxDecoration(color: Color(0xFF2E3B78)),
+                            child: const Center(
+                              child: Text(
+                                'Profile',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  fontSize: 24,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 18,
-                      ),
-                      Container(
-                        width: 330,
-                        height: 40,
-                        decoration: ShapeDecoration(
-                          color: const Color(0xFF2C225B),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                        ),
-                        child: Center(
-                          child: Text(
-                            snapshot.data['roles'] == 'ADMIN'
-                                ? 'Admin View'
-                                : 'Scout View',
-                            style: const TextStyle(
-                              color: Colors.white,
+                          const SizedBox(
+                            height: 18,
+                          ),
+                          Builder(builder: (context) {
+                            if (snapshot.data['roles'] != 'ADMIN') {
+                              return Container();
+                            }
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  if (snapshot.data['roles'] != 'ADMIN') return;
+                                  isAdminToggled = !isAdminToggled;
+                                  if (!isAdminToggled) {
+                                    fullname.text = 'PPM NEGERI JOHOR';
+                                    mobilenumber.text = '07-111 5566';
+                                    email.text = 'ppmnegerijohor@gmail.com';
+                                  } else {
+                                    fullname.text = snapshot.data['fullname'];
+                                    email.text = snapshot.data['email'];
+                                    mobilenumber.text =
+                                        snapshot.data['phoneno'];
+                                  }
+                                });
+                              },
+                              child: Ink(
+                                width: 330,
+                                height: 40,
+                                decoration: ShapeDecoration(
+                                  color: const Color(0xFF2C225B),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    isAdminToggled
+                                        ? 'Admin View'
+                                        : "Scout View",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w900,
+                                      height: 0,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                          const SizedBox(
+                            height: 18,
+                          ),
+                          Builder(builder: (context) {
+                            if (snapshot.data['roles'] != 'ADMIN') {
+                              return Column(
+                                children: [
+                                  const Text(
+                                    'JOHOR SCOUT DIGITAL ID',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w900,
+                                      height: 0,
+                                    ),
+                                  ),
+                                  buildCard(snapshot),
+                                ],
+                              );
+                            }
+                            if (!isAdminToggled) {
+                              return Column(
+                                children: [
+                                  const Text(
+                                    'JOHOR SCOUT DIGITAL ID',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w900,
+                                      height: 0,
+                                    ),
+                                  ),
+                                  buildCard(snapshot),
+                                ],
+                              );
+                            } else {
+                              return Column(
+                                children: [
+                                  Image.asset('assets/pengakap_logo_2.png')
+                                ],
+                              );
+                            }
+                          }),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          const Text(
+                            'ACCOUNT INFORMATION',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black,
                               fontSize: 12,
                               fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w600,
                               height: 0,
                             ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 18,
-                      ),
-                      Builder(builder: (context) {
-                        if (snapshot.data['roles'] == 'ADMIN') {
-                          return Column(
-                            children: [
-                              const Text(
-                                'JOHOR SCOUT DIGITAL ID',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w900,
-                                  height: 0,
-                                ),
-                              ),
-                              buildCard(snapshot),
-                            ],
-                          );
-                        } else {
-                          return Column(
-                            children: [
-                              Image.asset('assets/pengakap_logo_2.png')
-                            ],
-                          );
-                        }
-                      }),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      const Text(
-                        'ACCOUNT INFORMATION',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
-                          height: 0,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Column(
-                        children: [
-                          Container(
-                            width: MediaQuery.sizeOf(context).width * 0.8,
-                            height: 50,
-                            decoration: ShapeDecoration(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5)),
-                              shadows: const [
-                                BoxShadow(
-                                  color: Color(0x3F000000),
-                                  blurRadius: 2,
-                                  offset: Offset(0, 1),
-                                  spreadRadius: 0,
-                                ),
-                              ],
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: TextField(
-                                controller: fullname,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0,
-                                ),
-                                maxLines: 1,
-                                decoration: const InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.only(top: 1, left: 10),
-                                    labelStyle: TextStyle(
-                                      color: Color.fromARGB(255, 183, 183, 183),
-                                      fontSize: 14,
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0,
-                                    ),
-                                    border: InputBorder.none,
-                                    labelText: 'Full Name'),
-                              ),
-                            ),
-                          ),
                           const SizedBox(
-                            height: 10,
+                            height: 15,
                           ),
-                          Container(
-                            width: MediaQuery.sizeOf(context).width * 0.8,
-                            height: 50,
-                            decoration: ShapeDecoration(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5)),
-                              shadows: const [
-                                BoxShadow(
-                                  color: Color(0x3F000000),
-                                  blurRadius: 2,
-                                  offset: Offset(0, 1),
-                                  spreadRadius: 0,
+                          Column(
+                            children: [
+                              Container(
+                                width: MediaQuery.sizeOf(context).width * 0.8,
+                                height: 50,
+                                decoration: ShapeDecoration(
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                  shadows: const [
+                                    BoxShadow(
+                                      color: Color(0x3F000000),
+                                      blurRadius: 2,
+                                      offset: Offset(0, 1),
+                                      spreadRadius: 0,
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: TextField(
-                                controller: mobilenumber,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0,
-                                ),
-                                maxLines: 1,
-                                decoration: const InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.only(top: 1, left: 10),
-                                    labelStyle: TextStyle(
-                                      color: Color.fromARGB(255, 183, 183, 183),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: TextField(
+                                    controller: fullname,
+                                    readOnly: true,
+                                    style: const TextStyle(
+                                      color: Colors.black,
                                       fontSize: 14,
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w400,
                                       height: 0,
                                     ),
-                                    border: InputBorder.none,
-                                    labelText: 'Mobile Number'),
+                                    maxLines: 1,
+                                    decoration: const InputDecoration(
+                                        contentPadding:
+                                            EdgeInsets.only(top: 1, left: 10),
+                                        labelStyle: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 183, 183, 183),
+                                          fontSize: 14,
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w400,
+                                          height: 0,
+                                        ),
+                                        border: InputBorder.none,
+                                        labelText: 'Full Name'),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: MediaQuery.sizeOf(context).width * 0.8,
-                            height: 50,
-                            decoration: ShapeDecoration(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5)),
-                              shadows: const [
-                                BoxShadow(
-                                  color: Color(0x3F000000),
-                                  blurRadius: 2,
-                                  offset: Offset(0, 1),
-                                  spreadRadius: 0,
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                width: MediaQuery.sizeOf(context).width * 0.8,
+                                height: 50,
+                                decoration: ShapeDecoration(
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                  shadows: const [
+                                    BoxShadow(
+                                      color: Color(0x3F000000),
+                                      blurRadius: 2,
+                                      offset: Offset(0, 1),
+                                      spreadRadius: 0,
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: TextField(
-                                controller: email,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0,
-                                ),
-                                maxLines: 1,
-                                decoration: const InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.only(top: 1, left: 10),
-                                    labelStyle: TextStyle(
-                                      color: Color.fromARGB(255, 183, 183, 183),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: TextField(
+                                    controller: mobilenumber,
+                                    readOnly: true,
+                                    style: const TextStyle(
+                                      color: Colors.black,
                                       fontSize: 14,
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w400,
                                       height: 0,
                                     ),
-                                    border: InputBorder.none,
-                                    labelText: 'Email'),
+                                    maxLines: 1,
+                                    decoration: const InputDecoration(
+                                        contentPadding:
+                                            EdgeInsets.only(top: 1, left: 10),
+                                        labelStyle: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 183, 183, 183),
+                                          fontSize: 14,
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w400,
+                                          height: 0,
+                                        ),
+                                        border: InputBorder.none,
+                                        labelText: 'Mobile Number'),
+                                  ),
+                                ),
                               ),
-                            ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      const Text(
-                        'PASSWORD',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
-                          height: 0,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  VerifyResetPassword(email: email.text)));
-                        },
-                        child: Ink(
-                          width: MediaQuery.sizeOf(context).width * 0.8,
-                          height: 40,
-                          decoration: ShapeDecoration(
-                            color: Colors.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5)),
-                            shadows: const [
-                              BoxShadow(
-                                color: Color(0x3F000000),
-                                blurRadius: 2,
-                                offset: Offset(0, 1),
-                                spreadRadius: 0,
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                width: MediaQuery.sizeOf(context).width * 0.8,
+                                height: 50,
+                                decoration: ShapeDecoration(
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                  shadows: const [
+                                    BoxShadow(
+                                      color: Color(0x3F000000),
+                                      blurRadius: 2,
+                                      offset: Offset(0, 1),
+                                      spreadRadius: 0,
+                                    ),
+                                  ],
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: TextField(
+                                    controller: email,
+                                    readOnly: true,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0,
+                                    ),
+                                    maxLines: 1,
+                                    decoration: const InputDecoration(
+                                        contentPadding:
+                                            EdgeInsets.only(top: 1, left: 10),
+                                        labelStyle: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 183, 183, 183),
+                                          fontSize: 14,
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w400,
+                                          height: 0,
+                                        ),
+                                        border: InputBorder.none,
+                                        labelText: 'Email'),
+                                  ),
+                                ),
                               )
                             ],
                           ),
-                          child: Center(
-                            child: SizedBox(
-                              width:
-                                  MediaQuery.sizeOf(context).width * 0.8 - 20,
-                              child: const Text(
-                                'Reset Password',
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          const Text(
+                            'PASSWORD',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              height: 0,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      VerifyResetPassword(email: email.text)));
+                            },
+                            child: Ink(
+                              width: MediaQuery.sizeOf(context).width * 0.8,
+                              height: 40,
+                              decoration: ShapeDecoration(
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5)),
+                                shadows: const [
+                                  BoxShadow(
+                                    color: Color(0x3F000000),
+                                    blurRadius: 2,
+                                    offset: Offset(0, 1),
+                                    spreadRadius: 0,
+                                  )
+                                ],
+                              ),
+                              child: Center(
+                                child: SizedBox(
+                                  width:
+                                      MediaQuery.sizeOf(context).width * 0.8 -
+                                          20,
+                                  child: const Text(
+                                    'Reset Password',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w500,
+                                      height: 0,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 35,
+                          ),
+                          InkWell(
+                            onTap: () async {
+                              await SupabaseB().signout();
+
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/signin', (context) => true);
+                            },
+                            child: Ink(
+                              width: MediaQuery.sizeOf(context).width * 0.8,
+                              height: 40,
+                              decoration: ShapeDecoration(
+                                color: const Color(0xFF3B4367),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5)),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'Log Out',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                    height: 0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          Container(
+                            width: MediaQuery.sizeOf(context).width * 0.8,
+                            height: 40,
+                            decoration: ShapeDecoration(
+                              shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                    width: 1, color: Color(0xFFD9D9D9)),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'Delete My Account',
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: Color(0xFF626262),
                                   fontSize: 14,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w500,
@@ -320,75 +441,15 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 35,
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          await SupabaseB().signout();
-
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                              '/signin', (context) => true);
-                        },
-                        child: Ink(
-                          width: MediaQuery.sizeOf(context).width * 0.8,
-                          height: 40,
-                          decoration: ShapeDecoration(
-                            color: const Color(0xFF3B4367),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5)),
+                          const SizedBox(
+                            height: 15,
                           ),
-                          child: const Center(
-                            child: Text(
-                              'Log Out',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w600,
-                                height: 0,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      Container(
-                        width: MediaQuery.sizeOf(context).width * 0.8,
-                        height: 40,
-                        decoration: ShapeDecoration(
-                          shape: RoundedRectangleBorder(
-                            side: const BorderSide(
-                                width: 1, color: Color(0xFFD9D9D9)),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'Delete My Account',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Color(0xFF626262),
-                              fontSize: 14,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w500,
-                              height: 0,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                    ],
-                  ),
-                );
-              }),
+                        ],
+                      );
+                    }),
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -461,7 +522,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       Flexible(
                         child: AutoSizeText(
-                          '${fullname.text} ',
+                          snapshot.data['fullname'],
                           textAlign: TextAlign.center,
                           maxLines: 2,
                           style: const TextStyle(
@@ -494,19 +555,25 @@ class _ProfilePageState extends State<ProfilePage> {
               const SizedBox(
                 height: 5,
               ),
-              const Text(
-                'KETUA PESURUHJAYA PENGAKAP NEGERI JOHOR',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w500,
-                  height: 0,
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                  child: AutoSizeText(
+                    snapshot.data['position'],
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w500,
+                      height: 0,
+                    ),
+                  ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 34.0, top: 20),
+                padding: EdgeInsets.only(left: 34.0, top: shorten ? 10 : 20),
                 child: Column(
                   children: [
                     Row(
@@ -595,18 +662,14 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          width: 116,
-                          height: 18,
-                          child: Text(
-                            ': ${snapshot.data['unit']}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w500,
-                              height: 0,
-                            ),
+                        Text(
+                          ': ${snapshot.data['unit']}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w500,
+                            height: 0,
                           ),
                         )
                       ],
@@ -630,18 +693,14 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          width: 76,
-                          height: 18,
-                          child: Text(
-                            ': ${snapshot.data['daerah']}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w500,
-                              height: 0,
-                            ),
+                        Text(
+                          ': ${snapshot.data['daerah']}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w500,
+                            height: 0,
                           ),
                         )
                       ],
