@@ -229,8 +229,9 @@ class _ActivityPageState extends State<ActivityPage> {
       child: GestureDetector(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  RecordAttendance(activityid: item['activityid'])));
+              builder: (context) => DetailsActivity(
+                    activity: item,
+                  )));
         },
         child: Container(
           width: 340,

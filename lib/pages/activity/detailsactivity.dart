@@ -1,15 +1,49 @@
+import 'package:escout/pages/attendance/recordAttendance.dart';
 import 'package:flutter/material.dart';
 
 class DetailsActivity extends StatefulWidget {
-  const DetailsActivity({super.key});
+  dynamic activity;
+  DetailsActivity({super.key, required this.activity});
 
   @override
-  State<DetailsActivity> createState() => _DetailsActivityState();
+  State<DetailsActivity> createState() => _DetailsActivityState(activity);
 }
 
 class _DetailsActivityState extends State<DetailsActivity> {
+  _DetailsActivityState(this.activity);
+
+  dynamic activity;
+  DateTime startdate = DateTime.now(), enddate = DateTime.now();
+  List<String> monthName = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  List<DateTime> daysInvolved = [];
   @override
   Widget build(BuildContext context) {
+    startdate = DateTime.parse(activity['startdate']);
+    enddate = DateTime.parse(activity['enddate']);
+
+    print(activity);
+    daysInvolved.clear();
+
+    var diff = enddate.difference(startdate);
+    var tempdate = startdate;
+    for (var i = 0; i <= diff.inDays; i++) {
+      daysInvolved.add(tempdate);
+      tempdate = tempdate.add(const Duration(days: 1));
+    }
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(100),
@@ -59,11 +93,9 @@ class _DetailsActivityState extends State<DetailsActivity> {
           children: [
             Stack(
               children: [
-                SizedBox(
+                Image.network(
+                  activity['imageurl'],
                   width: MediaQuery.sizeOf(context).width,
-                  child: FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: Image.asset('assets/images/feedExample.png')),
                 ),
                 Align(
                   alignment: Alignment.topRight,
@@ -91,9 +123,9 @@ class _DetailsActivityState extends State<DetailsActivity> {
                           const SizedBox(
                             width: 5,
                           ),
-                          const Text(
-                            'Camping',
-                            style: TextStyle(
+                          Text(
+                            activity['category'],
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 10,
                               fontFamily: 'Poppins',
@@ -127,15 +159,16 @@ class _DetailsActivityState extends State<DetailsActivity> {
                   )
                 ],
               ),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      'Johor Rovers Vigil 2023 & Serving For The Future',
-                      style: TextStyle(
+                      activity['name'],
+                      style: const TextStyle(
                         color: Colors.black,
                         fontSize: 12,
                         fontFamily: 'Poppins',
@@ -145,13 +178,13 @@ class _DetailsActivityState extends State<DetailsActivity> {
                     ),
                     Row(
                       children: [
-                        Icon(Icons.location_on),
-                        SizedBox(
+                        const Icon(Icons.location_on),
+                        const SizedBox(
                           width: 10,
                         ),
                         Text(
-                          'KEM JUBLI INTAN TANJUNG LABUH BATU PAHAT',
-                          style: TextStyle(
+                          activity['location'],
+                          style: const TextStyle(
                             color: Colors.black,
                             fontSize: 11,
                             fontFamily: 'Poppins',
@@ -163,13 +196,13 @@ class _DetailsActivityState extends State<DetailsActivity> {
                     ),
                     Row(
                       children: [
-                        Icon(Icons.calendar_month),
-                        SizedBox(
+                        const Icon(Icons.calendar_month),
+                        const SizedBox(
                           width: 10,
                         ),
                         Text(
-                          '26 - 28 October 2023',
-                          style: TextStyle(
+                          '${startdate.day} - ${enddate.day} ${monthName[enddate.month - 1]} 2023',
+                          style: const TextStyle(
                             color: Colors.black,
                             fontSize: 11,
                             fontFamily: 'Poppins',
@@ -179,7 +212,7 @@ class _DetailsActivityState extends State<DetailsActivity> {
                         )
                       ],
                     ),
-                    Row(
+                    const Row(
                       children: [
                         Icon(Icons.account_circle),
                         SizedBox(
@@ -217,11 +250,11 @@ class _DetailsActivityState extends State<DetailsActivity> {
             ),
             Expanded(
               child: ListView.builder(
-                  itemCount: 2,
+                  itemCount: daysInvolved.length,
                   padding: EdgeInsets.symmetric(
                       horizontal: MediaQuery.sizeOf(context).width * 0.15 / 2),
                   itemBuilder: (context, index) {
-                    return buildDate(context);
+                    return buildDate(context, index);
                   }),
             ),
             const Spacer(),
@@ -293,26 +326,41 @@ class _DetailsActivityState extends State<DetailsActivity> {
     );
   }
 
-  Widget buildDate(BuildContext context) {
+  Widget buildDate(BuildContext context, int index) {
+    List<String> monthAbbreviations =
+        monthName.map((month) => month.substring(0, 3)).toList();
+
+    DateTime date = daysInvolved.elementAt(index);
+
     return Padding(
       padding: const EdgeInsets.only(top: 10.0),
-      child: Container(
-        width: MediaQuery.sizeOf(context).width * 0.85,
-        height: 40,
-        decoration: ShapeDecoration(
-          color: const Color(0xFF2C225B),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-        ),
-        child: const Center(
-          child: Text(
-            '26 Oct 2023',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 11,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w600,
-              height: 0,
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => RecordAttendance(
+                  activityid: activity['activityid'],
+                  secondkey: '${date.day}${date.month}${date.year}')));
+        },
+        borderRadius: BorderRadius.circular(5),
+        child: Ink(
+          width: MediaQuery.sizeOf(context).width * 0.85,
+          height: 40,
+          decoration: ShapeDecoration(
+            color: const Color(0xFF2C225B),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+          ),
+          child: Center(
+            child: Text(
+              '${date.day} ${monthAbbreviations[date.month - 1]} ${date.year}',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 11,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                height: 0,
+              ),
             ),
           ),
         ),

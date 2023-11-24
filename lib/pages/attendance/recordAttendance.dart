@@ -5,10 +5,13 @@ import '../../backend/backend.dart';
 
 class RecordAttendance extends StatefulWidget {
   String activityid;
-  RecordAttendance({super.key, required this.activityid});
+  String secondkey;
+  RecordAttendance(
+      {super.key, required this.activityid, required this.secondkey});
 
   @override
-  State<RecordAttendance> createState() => _RecordAttendanceState(activityid);
+  State<RecordAttendance> createState() =>
+      _RecordAttendanceState(activityid, secondkey);
 }
 
 class _RecordAttendanceState extends State<RecordAttendance> {
@@ -16,9 +19,9 @@ class _RecordAttendanceState extends State<RecordAttendance> {
       attendance = TextEditingController();
   FocusNode fn = FocusNode();
 
-  String activityid = '';
+  String activityid = '', secondkey = '';
 
-  _RecordAttendanceState(this.activityid);
+  _RecordAttendanceState(this.activityid, this.secondkey);
 
   List<dynamic> attendees = [];
 
@@ -212,7 +215,14 @@ class _RecordAttendanceState extends State<RecordAttendance> {
                               return CircularProgressIndicator();
 
                             print(snapshot.data);
+
+                            //separate based on date
+
                             attendees = snapshot.data!;
+                            attendees.removeWhere((element) =>
+                                !element['attendancekey']
+                                    .toString()
+                                    .contains(secondkey));
                             return Expanded(
                               child: ListView.builder(
                                   itemCount: attendees.length,
