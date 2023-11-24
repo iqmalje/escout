@@ -156,7 +156,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             } else {
                               return Column(
                                 children: [
-                                  Image.asset('assets/pengakap_logo_2.png')
+                                  Image.asset('assets/images/pengakap_logo_2.png')
                                 ],
                               );
                             }
@@ -458,14 +458,14 @@ class _ProfilePageState extends State<ProfilePage> {
   Stack buildCard(AsyncSnapshot<dynamic> snapshot) {
     return Stack(
       children: [
-        Image.asset('assets/card_profile.png'),
+        Image.asset('assets/images/card_profile.png'),
         Positioned.fill(
           child: Column(
             children: [
               const SizedBox(
                 height: 29,
               ),
-              Image.asset('assets/icon_pengakap.png'),
+              Image.asset('assets/images/icon_pengakap.png'),
               const SizedBox(
                 height: 12,
               ),

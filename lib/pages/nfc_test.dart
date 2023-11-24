@@ -18,30 +18,12 @@ class _NFCTestState extends State<NFCTest> {
     NfcManager.instance.startSession(
       onDiscovered: (NfcTag tag) async {
         // Do something with an NfcTag instance.
-        Ndef? ndef = Ndef.from(tag);
-        if (ndef == null || !ndef.isWritable) {
-          print('Tag is not ndef writable');
-          NfcManager.instance
-              .stopSession(errorMessage: 'Tag is not ndef writable');
-          return;
-        }
-        NdefMessage message = NdefMessage([
-          NdefRecord.createText('Hello World!'),
-          NdefRecord.createUri(Uri.parse('https://flutter.dev')),
-          NdefRecord.createMime(
-              'text/plain', Uint8List.fromList('Hello'.codeUnits)),
-          NdefRecord.createExternal(
-              'com.example', 'mytype', Uint8List.fromList('mydata'.codeUnits)),
-        ]);
-
-        try {
-          await ndef.write(message);
-          print('successfully wrote');
-          NfcManager.instance.stopSession();
-        } catch (e) {
-          NfcManager.instance.stopSession(errorMessage: e.toString());
-          return;
-        }
+        // print(tag.data);
+        var payload =
+            tag.data["ndef"]["cachedMessage"]["records"][0]["payload"];
+        print(payload);
+        var stringPayload = String.fromCharCodes(payload);
+        print(stringPayload);
       },
     );
     super.initState();

@@ -86,7 +86,7 @@ class _VerifyResetPasswordState extends State<VerifyResetPassword> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(100),
                               color: Colors.white),
-                          child: Image.asset('assets/lock_icon.png'),
+                          child: Image.asset('assets/images/lock_icon.png'),
                         ),
                         const SizedBox(
                           height: 10,

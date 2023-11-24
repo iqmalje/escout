@@ -67,10 +67,14 @@ flutter:
   assets:
     - 2.env
     - assets/
+<<<<<<< HEAD
     - assets/Escout Logo.png
     - assets/Email.png
     - assets/Hide Password.png
-    # - assets/images
+    - assets/images
+=======
+    - assets/images/
+>>>>>>> d48daa52366205f6f40e38b037f431293aca0b17
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
