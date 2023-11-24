@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class attendancePage3 extends StatefulWidget {
   const attendancePage3({super.key});
 
@@ -199,15 +198,12 @@ Widget icon_activity(String detail, Icon icon) {
 
 Widget openAttendanceButton() {
   return ElevatedButton(
-    onPressed: () {
-    
-    },
-    child: Text(
-      'Open for attendances',
-      style: TextStyle(
-        fontSize: 14,
-        letterSpacing: .3,
-      )),
+    onPressed: () {},
+    child: Text('Open for attendances',
+        style: TextStyle(
+          fontSize: 14,
+          letterSpacing: .3,
+        )),
     style: ElevatedButton.styleFrom(
       primary: Color.fromRGBO(44, 34, 91, 100),
       elevation: 0,
@@ -219,29 +215,26 @@ Widget openAttendanceButton() {
   );
 }
 
-Widget showParticipantButton(){
+Widget showParticipantButton() {
   return ElevatedButton(
-    onPressed: () {
-    
-    },
-    child: Text(
-      'Show all participants',
-      style: TextStyle(
-        color: Color.fromRGBO(44, 34, 91, 100),
-        fontSize: 14,
-        letterSpacing: .3,
-      )),
+    onPressed: () {},
+    child: Text('Show all participants',
+        style: TextStyle(
+          color: Color.fromRGBO(44, 34, 91, 100),
+          fontSize: 14,
+          letterSpacing: .3,
+        )),
     style: ElevatedButton.styleFrom(
       primary: Colors.transparent,
       elevation: 0,
       fixedSize: const Size(355, 50),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-      side: const BorderSide(
-        width: 2,
-        color: Color.fromRGBO(44, 34, 91, 100),
-        style: BorderStyle.solid,
-      ),
+        side: const BorderSide(
+          width: 2,
+          color: Color.fromRGBO(44, 34, 91, 100),
+          style: BorderStyle.solid,
+        ),
       ),
     ),
   );

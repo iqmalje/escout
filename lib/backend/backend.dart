@@ -57,4 +57,71 @@ class SupabaseB {
       throw Exception(e.toString());
     }
   }
+
+  Future<void> addAttendance(String activityid, String cardid) async {
+    //get accountid from cardid
+    try {
+      var accid = await supabase
+          .from('accounts')
+          .select('accountid, fullname')
+          .eq('cardid', cardid)
+          .single();
+      print(accid);
+      await supabase.from('attendance').insert({
+        'activityid': activityid,
+        'accountid': accid['accountid'],
+        'fullname': accid['fullname'],
+        'attendancekey':
+            '${accid['accountid']}.${DateTime.now().day}${DateTime.now().month}${DateTime.now().year}'
+      });
+    } catch (e) {
+      print(e);
+      print('no acc found');
+    }
+  }
+
+  Future<void> addEvent(Map<String, dynamic> items) async {
+    var accid = supabase.auth.currentUser!.id;
+
+    var activity = await supabase
+        .from('activities')
+        .insert({
+          'name': items['name'],
+          'category': items['category'],
+          'location': items['location'],
+          'startdate': items['startdate'],
+          'enddate': items['enddate'],
+          'is_feed': true,
+          'created_by': accid
+        })
+        .select('activityid')
+        .single();
+
+    //upload to db
+    //{activityid: blabla}
+    await supabase.storage
+        .from('activities')
+        .upload('${activity['activityid']}/cover.png', items['file']);
+
+    //update activity db
+
+    await supabase.from('activities').update({
+      'imageurl': supabase.storage
+          .from('activities')
+          .getPublicUrl('${activity['activityid']}/cover.png')
+    }).eq('activityid', activity['activityid']);
+  }
+
+  Future<List<dynamic>> getFeed() async {
+    var feed =
+        await supabase.from('activities').select('*').match({'is_feed': true});
+
+    return feed;
+  }
+
+  Future<List<dynamic>> getActivities() async {
+    var activities = await supabase.from('activities').select('*');
+
+    return activities;
+  }
 }

@@ -40,6 +40,7 @@ dependencies:
   auto_size_text: ^3.0.0
   nfc_manager: ^3.3.0
   intl: ^0.18.1
+  image_picker: ^1.0.4
 
 dev_dependencies:
   flutter_test:

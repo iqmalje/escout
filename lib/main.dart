@@ -1,3 +1,6 @@
+import 'package:escout/pages/activity/activitypage.dart';
+import 'package:escout/pages/activity/createactivitypage.dart';
+import 'package:escout/pages/attendancetest.dart';
 import 'package:escout/pages/homepage/profilepage.dart';
 import 'package:escout/pages/homepage/temppage.dart';
 import 'package:escout/pages/nfc_test.dart';

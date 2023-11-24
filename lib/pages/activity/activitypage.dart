@@ -1,6 +1,10 @@
-import 'dart:ffi';
+import 'package:escout/backend/backend.dart';
 import 'package:escout/pages/activity/createactivitypage.dart';
-import 'package:escout/pages/feed/createFeedPage.dart';
+import 'package:escout/pages/activity/detailsactivity.dart';
+import 'package:escout/pages/attendance/attendacePage.dart';
+import 'package:escout/pages/attendance/attendancePage2.dart';
+import 'package:escout/pages/attendance/attendancePage3.dart';
+
 import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
@@ -15,6 +19,22 @@ class ActivityPage extends StatefulWidget {
 
 class _ActivityPageState extends State<ActivityPage> {
   DateTime selectedDate = DateTime.now();
+  List<dynamic> activities = [];
+
+  List<String> monthName = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
 
   Future<void> _selectDate(BuildContext context) async {
     int selectedMonth = selectedDate.month;
@@ -99,171 +119,193 @@ class _ActivityPageState extends State<ActivityPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        //blue bow column
-        children: [
-          Container(
-            //blue box container
-            width: MediaQuery.sizeOf(context).width,
-            height: 90,
-            decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
-            child: const Center(
-              child: Text(
-                'Activity',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 255, 255, 255),
-                  fontSize: 24,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
-                ),
+      floatingActionButton: CircleAvatar(
+        maxRadius: 30,
+        backgroundColor: const Color(0xFF2C225B),
+        child: IconButton(
+          color: Colors.white,
+          icon: const Icon(
+            Icons.add,
+          ),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const CreateActivityPage()));
+          },
+        ),
+      ),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(100),
+        child: Container(
+          //blue box container
+          width: MediaQuery.sizeOf(context).width,
+          height: 90,
+          decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
+          child: const Center(
+            child: Text(
+              'Activity',
+              style: TextStyle(
+                color: Color.fromARGB(255, 255, 255, 255),
+                fontSize: 24,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
-          const SizedBox(
-            height: 18,
-          ),
-          Padding(
-            //padding for the edge of column below the blue box
-            padding: const EdgeInsets.symmetric(horizontal: 36.0),
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: GestureDetector(
-                    onTap: () => _selectDate(context),
-                    child: Container(
-                      width: 110,
-                      height: 30,
-                      decoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 174, 169, 169)),
-                      child: Row(
-                        children: [
-                          Text(
-                            "${selectedDate.month}/${selectedDate.year}",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 36),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+              maxWidth: MediaQuery.sizeOf(context).width,
+              maxHeight: double.infinity),
+          child: Column(
+            //blue bow column
+            children: [
+              const SizedBox(
+                height: 18,
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  onTap: () => _selectDate(context),
+                  child: Container(
+                    width: 140,
+                    height: 30,
+                    decoration: const BoxDecoration(color: Color(0xFFEDEDED)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "${monthName[selectedDate.month - 1]} ${selectedDate.year.toString().substring(2)}",
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
                           ),
-                          const SizedBox(
-                              width:
-                                  5), // Add some space between the text and the icon
-                          const Icon(
-                            Icons.calendar_today,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(
+                            width:
+                                5), // Add some space between the text and the icon
+                        const Icon(
+                          Icons.calendar_today,
+                          color: Colors.black,
+                          size: 16,
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 18,
-                ),
-                Container(
-                  width: 340,
-                  height: 58,
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    shadows: const [
-                      BoxShadow(
-                        color: Color(0x3F000000),
-                        blurRadius: 2,
-                        offset: Offset(0, 2),
-                        spreadRadius: 0,
-                      )
-                    ],
+              ),
+              FutureBuilder(
+                  future: SupabaseB().getActivities(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    activities = snapshot.data!;
+
+                    return Expanded(
+                      child: ListView.builder(
+                          itemCount: activities.length,
+                          itemBuilder: (context, index) {
+                            return buildActivity(activities.elementAt(index));
+                          }),
+                    );
+                  })
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildActivity(dynamic item) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10.0),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => DetailsActivity()));
+        },
+        child: Container(
+          width: 340,
+          height: 58,
+          decoration: ShapeDecoration(
+            color: Colors.white,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            shadows: const [
+              BoxShadow(
+                color: Color(0x3F000000),
+                blurRadius: 2,
+                offset: Offset(0, 2),
+                spreadRadius: 0,
+              )
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: Text(
+                    item['name'],
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w500,
+                      height: 0,
+                    ),
                   ),
-                  child: const Column(
-                    children: [
-                      Text(
-                        'Johor Rovers Vigil 2023 & Serving For The Future',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w500,
-                          height: 0,
-                        ),
+                ),
+                Row(
+                  children: [
+                    Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: const Color(0xFF302E84)),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      item['category'],
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 10,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            'Camping',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 10,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w400,
-                              height: 0,
-                            ),
-                          ),
-                          Spacer(),
-                          Text(
-                            '26/10/2023',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 10,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w400,
-                              height: 0,
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      DateFormat('dd/MM/yyyy').format(DateTime.parse(
+                          item['created_at'].toString().split('+')[0])),
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 10,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
-          Container(
-            padding: EdgeInsets.only(
-                left: 36,
-                right: 36,
-                top: MediaQuery.sizeOf(context).height * 0.53),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: GestureDetector(
-                onTap: () =>
-                    // Navigate to the second page
-                    Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const createactivitypage()),
-                ),
-                child: Container(
-                  width: 55,
-                  height: 55,
-                  decoration: const ShapeDecoration(
-                    color: Color(0xFF2C225B),
-                    shape: OvalBorder(),
-                  ),
-                  child: const SizedBox(
-                    width: 15,
-                    height: 27,
-                    child: Center(
-                      child: Text(
-                        '+',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontFamily: 'SF Pro Text',
-                          fontWeight: FontWeight.w800,
-                          height: 0,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

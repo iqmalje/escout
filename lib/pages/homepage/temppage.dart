@@ -1,5 +1,6 @@
 import 'package:escout/pages/activity/activitypage.dart';
 import 'package:escout/pages/activity/createactivitypage.dart';
+import 'package:escout/pages/feed/listPage.dart';
 import 'package:escout/pages/homepage/facilitypage.dart';
 import 'package:escout/pages/homepage/homepage.dart';
 import 'package:escout/pages/homepage/profilepage.dart';
@@ -18,7 +19,7 @@ class _TempPageState extends State<TempPage> {
   int index = 0; //chosen page
 
   final List<Widget> _pages = [
-    const Homepage(),
+    const listPage(),
     const ActivityPage(),
     const FacilityPage(),
     const ProfilePage(),
