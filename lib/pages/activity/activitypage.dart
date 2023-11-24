@@ -228,8 +228,9 @@ class _ActivityPageState extends State<ActivityPage> {
       padding: const EdgeInsets.only(top: 10.0),
       child: GestureDetector(
         onTap: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => RecordAttendance()));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) =>
+                  RecordAttendance(activityid: item['activityid'])));
         },
         child: Container(
           width: 340,

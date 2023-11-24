@@ -1,16 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+import '../../backend/backend.dart';
 
 class RecordAttendance extends StatefulWidget {
-  const RecordAttendance({super.key});
+  String activityid;
+  RecordAttendance({super.key, required this.activityid});
 
   @override
-  State<RecordAttendance> createState() => _RecordAttendanceState();
+  State<RecordAttendance> createState() => _RecordAttendanceState(activityid);
 }
 
 class _RecordAttendanceState extends State<RecordAttendance> {
   TextEditingController search = TextEditingController(),
       attendance = TextEditingController();
   FocusNode fn = FocusNode();
+
+  String activityid = '';
+
+  _RecordAttendanceState(this.activityid);
+
+  List<dynamic> attendees = [];
+
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,7 +134,7 @@ class _RecordAttendanceState extends State<RecordAttendance> {
                   autofocus: true,
                   onSubmitted: (value) {
                     //do logic
-
+                    SupabaseB().addAttendance(activityid, value);
                     attendance.clear();
                     fn.requestFocus();
                   },
@@ -186,47 +201,27 @@ class _RecordAttendanceState extends State<RecordAttendance> {
                         width: MediaQuery.sizeOf(context).width * 0.8 - 10,
                         color: Colors.black,
                       ),
-                      Expanded(
-                        child: ListView.builder(
-                            itemCount: 100,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SizedBox(
-                                    width: MediaQuery.sizeOf(context).width *
-                                        0.8 *
-                                        0.1,
-                                    child: Text(
-                                      (index + 1).toString(),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: MediaQuery.sizeOf(context).width *
-                                        0.8 *
-                                        0.65,
-                                    child: const Text(
-                                      'IQMAL AIZAT  FARISHA NABIHA',
-                                      textAlign: TextAlign.center,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: MediaQuery.sizeOf(context).width *
-                                        0.8 *
-                                        0.25,
-                                    child: const Text(
-                                      '08:12 AM',
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }),
-                      ),
+                      StreamBuilder(
+                          stream: SupabaseB()
+                              .supabase
+                              .from('attendance')
+                              .stream(primaryKey: ['attendanceid']).eq(
+                                  'activityid', activityid),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData)
+                              return CircularProgressIndicator();
+
+                            print(snapshot.data);
+                            attendees = snapshot.data!;
+                            return Expanded(
+                              child: ListView.builder(
+                                  itemCount: attendees.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    return buildAttendees(context, index);
+                                  }),
+                            );
+                          }),
                     ],
                   ),
                 ),
@@ -235,6 +230,40 @@ class _RecordAttendanceState extends State<RecordAttendance> {
           ),
         ),
       ),
+    );
+  }
+
+  Row buildAttendees(BuildContext context, int index) {
+    DateTime time = DateTime.parse(attendees.elementAt(index)['time_attended'])
+        .add(Duration(hours: 8));
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SizedBox(
+          width: MediaQuery.sizeOf(context).width * 0.8 * 0.1,
+          child: Text(
+            (index + 1).toString(),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        SizedBox(
+          width: MediaQuery.sizeOf(context).width * 0.8 * 0.65,
+          child: Text(
+            attendees[index]['fullname'],
+            textAlign: TextAlign.start,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        SizedBox(
+          width: MediaQuery.sizeOf(context).width * 0.8 * 0.25,
+          child: Text(
+            time.hour > 12
+                ? '${time.hour - 12}:${time.minute.toString().padLeft(2, '0')} PM'
+                : '${time.hour}:${time.minute.toString().padLeft(2, '0')} AM',
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ],
     );
   }
 }
