@@ -13,6 +13,7 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   TextEditingController email = TextEditingController(),
       password = TextEditingController();
+  bool isShown = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +23,7 @@ class _SignInPageState extends State<SignInPage> {
           children: [
             SizedBox(
                 height: MediaQuery.sizeOf(context).height * 0.35,
-                child: Image.asset('assets/Escout Logo.png')),
+                child: Image.asset('assets/images/Escout Logo.png')),
             SingleChildScrollView(
               child: Container(
                 width: MediaQuery.sizeOf(context).width,
@@ -107,9 +108,20 @@ class _SignInPageState extends State<SignInPage> {
                         ),
                         TextField(
                           controller: password,
-                          obscureText: true,
+                          obscureText: !isShown,
                           decoration: InputDecoration(
-                            suffixIcon: Icon(Icons.remove_red_eye),
+                            suffixIcon: GestureDetector(
+                              onTap: () => setState(() {
+                                isShown = !isShown;
+                              }),
+                              child: Builder(builder: (context) {
+                                if (isShown) {
+                                  return const Icon(Icons.visibility_off);
+                                } else {
+                                  return const Icon(Icons.remove_red_eye);
+                                }
+                              }),
+                            ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12.0),
                               borderSide: const BorderSide(color: Colors.white),

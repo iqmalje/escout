@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/signin': (context) => const SignInPage(),
       },
-      home: isSignedIn ? const NFCTest() : const SignInPage(),
+      home: isSignedIn ? const TempPage() : const SignInPage(),
     );
   }
 }
