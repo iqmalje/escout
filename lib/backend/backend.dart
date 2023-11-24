@@ -91,7 +91,7 @@ class SupabaseB {
           'location': items['location'],
           'startdate': items['startdate'],
           'enddate': items['enddate'],
-          'is_feed': true,
+          'is_feed': false,
           'created_by': accid
         })
         .select('activityid')
@@ -123,5 +123,37 @@ class SupabaseB {
     var activities = await supabase.from('activities').select('*');
 
     return activities;
+  }
+
+  Future<void> createFeed(Map<String, dynamic> items) async {
+    var accid = supabase.auth.currentUser!.id;
+    var activity = await supabase
+        .from('activities')
+        .insert({
+          'name': items['name'],
+          'category': items['category'],
+          'location': items['location'],
+          'startdate': items['startdate'],
+          'enddate': items['enddate'],
+          'is_feed': items['is_feed'],
+          'created_by': accid,
+          'fee': items['fee'],
+          'registrationenddate': items['registrationenddate'],
+          'description': items['description'],
+        })
+        .select('activityid')
+        .single();
+
+    //upload to storage
+
+    await supabase.storage
+        .from('activities')
+        .upload('${activity['activityid']}/cover.png', items['file']);
+
+    await supabase.from('activities').update({
+      'imageurl': supabase.storage
+          .from('activities')
+          .getPublicUrl('${activity['activityid']}/cover.png')
+    }).eq('activityid', activity['activityid']);
   }
 }

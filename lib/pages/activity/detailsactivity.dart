@@ -250,6 +250,7 @@ class _DetailsActivityState extends State<DetailsActivity> {
             ),
             Expanded(
               child: ListView.builder(
+                  shrinkWrap: true,
                   itemCount: daysInvolved.length,
                   padding: EdgeInsets.symmetric(
                       horizontal: MediaQuery.sizeOf(context).width * 0.15 / 2),
@@ -257,7 +258,6 @@ class _DetailsActivityState extends State<DetailsActivity> {
                     return buildDate(context, index);
                   }),
             ),
-            const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [

@@ -1,13 +1,33 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-class createFeedPage extends StatefulWidget {
-  const createFeedPage({super.key});
+import 'package:escout/backend/backend.dart';
+import 'package:escout/pages/homepage/temppage.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+
+class CreateFeedPage extends StatefulWidget {
+  const CreateFeedPage({super.key});
 
   @override
-  State<createFeedPage> createState() => _createFeedPageState();
+  State<CreateFeedPage> createState() => _CreateFeedPageState();
 }
 
-class _createFeedPageState extends State<createFeedPage> {
+class _CreateFeedPageState extends State<CreateFeedPage> {
+  ImagePicker imagePicker = ImagePicker();
+
+  XFile? imagePicked;
+  bool isFeed = false;
+
+  TextEditingController name = TextEditingController(),
+      category = TextEditingController(),
+      location = TextEditingController(),
+      fee = TextEditingController(),
+      description = TextEditingController();
+  DateTime startdate = DateTime.now(),
+      enddate = DateTime.now().add(const Duration(days: 1)),
+      registerenddate = DateTime.now().add(const Duration(days: 10));
+
   @override
   Widget build(BuildContext context) {
     var _mediaQuery = MediaQuery.of(context);
@@ -26,15 +46,15 @@ class _createFeedPageState extends State<createFeedPage> {
               SizedBox(
                 height: 10,
                 child: Container(
-                  color: Color.fromRGBO(237, 237, 237, 100),
+                  color: const Color.fromRGBO(237, 237, 237, 100),
                 ),
               ),
-
-              postDetail(),
+              postAuthor(context),
+              buildUploadImage(context),
 
               //program name
               textField({
-                'controller': new TextEditingController(),
+                'controller': name,
                 'onChange': (String val) {},
                 'label': 'Program Name',
                 'hintText': 'Program name',
@@ -42,7 +62,7 @@ class _createFeedPageState extends State<createFeedPage> {
               }),
               //program category
               textField({
-                'controller': new TextEditingController(),
+                'controller': category,
                 'onChange': (String val) {},
                 'label': 'Program Category',
                 'hintText': 'Program category',
@@ -50,7 +70,7 @@ class _createFeedPageState extends State<createFeedPage> {
               }),
               //program location
               textField({
-                'controller': new TextEditingController(),
+                'controller': location,
                 'onChange': (String val) {},
                 'label': 'Program Location',
                 'hintText': 'Program location',
@@ -58,11 +78,11 @@ class _createFeedPageState extends State<createFeedPage> {
               }),
 
               //program date
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 25.0),
+              const Padding(
+                padding: EdgeInsets.only(left: 25.0),
                 child: Text(
                   'Program Date',
                   style: TextStyle(
@@ -72,64 +92,112 @@ class _createFeedPageState extends State<createFeedPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.only(left: 25.0, right: 25),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     //start date
-                    SizedBox(
-                      height: 35,
-                      width: 170,
-                      child: TextField(
-                        controller: TextEditingController(),
-                        //onChanged: (){},
-                        decoration: InputDecoration(
-                          hintText: 'Start Date',
-                          hintStyle: TextStyle(
-                              fontSize: 14.0,
-                              color: Color.fromRGBO(147, 151, 160, 100)),
-                          contentPadding: EdgeInsets.only(left: 20),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(9),
-                              borderSide: BorderSide.none),
-                          fillColor: Color.fromRGBO(237, 237, 237, 100),
-                          filled: true,
-                          suffixIcon: Padding(
-                            padding: const EdgeInsets.only(right: 17),
-                            child: Icon(
-                              Icons.calendar_today_rounded,
-                              size: 19,
-                            ),
+                    GestureDetector(
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime.now(),
+                            lastDate:
+                                DateTime.now().add(const Duration(days: 365)));
+
+                        if (pickedDate == null) return;
+                        if (pickedDate.millisecondsSinceEpoch >=
+                            enddate.millisecondsSinceEpoch) {
+                          print('bitchass');
+                          return;
+                        } else {
+                          setState(() {
+                            startdate = pickedDate;
+                            print(startdate);
+                          });
+                        }
+                      },
+                      child: Container(
+                        width: 160,
+                        height: 35,
+                        decoration: ShapeDecoration(
+                          color: const Color(0xFFECECEC),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(3)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                DateFormat('dd/MM/yyyy').format(startdate),
+                                style: const TextStyle(
+                                  color: Color(0xFF9397A0),
+                                  fontSize: 13,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                  height: 0,
+                                ),
+                              ),
+                              const Icon(Icons.calendar_today)
+                            ],
                           ),
                         ),
                       ),
                     ),
                     //end date
-                    SizedBox(
-                      height: 35,
-                      width: 170,
-                      child: TextField(
-                        controller: TextEditingController(),
-                        //onChanged: (){},
-                        decoration: InputDecoration(
-                          hintText: 'End Date',
-                          hintStyle: TextStyle(
-                              fontSize: 14.0,
-                              color: Color.fromRGBO(147, 151, 160, 100)),
-                          contentPadding: EdgeInsets.only(left: 20),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(9),
-                              borderSide: BorderSide.none),
-                          fillColor: Color.fromRGBO(237, 237, 237, 100),
-                          filled: true,
-                          suffixIcon: Padding(
-                            padding: const EdgeInsets.only(right: 17),
-                            child: Icon(
-                              Icons.calendar_today_rounded,
-                              size: 19,
-                            ),
+                    GestureDetector(
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime.now(),
+                            lastDate:
+                                DateTime.now().add(const Duration(days: 365)));
+
+                        if (pickedDate == null) return;
+
+                        if (startdate.millisecondsSinceEpoch >=
+                            pickedDate.millisecondsSinceEpoch) {
+                          print('bitchass');
+                          return;
+                        } else {
+                          setState(() {
+                            print('enddate');
+                            enddate = pickedDate;
+                            print(enddate);
+                          });
+                        }
+                      },
+                      child: Container(
+                        width: 160,
+                        height: 35,
+                        decoration: ShapeDecoration(
+                          color: const Color(0xFFECECEC),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(3)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                DateFormat('dd/MM/yyyy').format(enddate),
+                                style: const TextStyle(
+                                  color: Color(0xFF9397A0),
+                                  fontSize: 13,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                  height: 0,
+                                ),
+                              ),
+                              const Icon(Icons.calendar_today)
+                            ],
                           ),
                         ),
                       ),
@@ -140,27 +208,85 @@ class _createFeedPageState extends State<createFeedPage> {
 
               //program fee
               textField({
-                'controller': new TextEditingController(),
+                'controller': fee,
                 'onChange': (String val) {},
                 'label': 'Program Fee',
                 'hintText': 'Program fee (RM)',
                 'icon': null
               }),
               //program end date registration
-              textField({
-                'controller': new TextEditingController(),
-                'onChange': (String val) {},
-                'label': 'Program End Date Registration',
-                'hintText': 'Program end date of registration',
-                'icon': Icons.calendar_today_rounded
-              }),
-
-              //program description
-              SizedBox(
-                height: 20,
+              const Padding(
+                padding: EdgeInsets.only(left: 25.0, top: 10),
+                child: Text(
+                  'Program end date registration',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: .3,
+                  ),
+                ),
               ),
+              const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.only(left: 25.0),
+                child: GestureDetector(
+                  onTap: () async {
+                    DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime.now(),
+                        lastDate:
+                            DateTime.now().add(const Duration(days: 365)));
+
+                    if (pickedDate == null) return;
+                    if (startdate.millisecondsSinceEpoch >=
+                        registerenddate.millisecondsSinceEpoch) {
+                      print('bitchass');
+                      return;
+                    } else {
+                      setState(() {
+                        registerenddate = pickedDate;
+                        print(registerenddate);
+                      });
+                    }
+                  },
+                  child: Container(
+                    width: 360,
+                    height: 35,
+                    decoration: ShapeDecoration(
+                      color: const Color(0xFFECECEC),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(3)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            DateFormat('dd/MM/yyyy').format(registerenddate),
+                            style: const TextStyle(
+                              color: Color(0xFF9397A0),
+                              fontSize: 13,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w400,
+                              height: 0,
+                            ),
+                          ),
+                          const Icon(Icons.calendar_today)
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              //program description
+              const SizedBox(
+                height: 20,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 25.0),
                 child: Text(
                   'Program Description',
                   style: TextStyle(
@@ -170,25 +296,25 @@ class _createFeedPageState extends State<createFeedPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.only(left: 25.0),
                 child: SizedBox(
                   height: 100,
                   width: 360,
                   child: TextField(
-                    controller: TextEditingController(),
+                    controller: description,
                     //onChanged: (){}
                     decoration: InputDecoration(
                       hintText: 'Program description',
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                           fontSize: 14.0,
                           color: Color.fromRGBO(147, 151, 160, 100)),
-                      contentPadding: EdgeInsets.only(left: 20),
+                      contentPadding: const EdgeInsets.only(left: 20),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(9),
                           borderSide: BorderSide.none),
-                      fillColor: Color.fromRGBO(237, 237, 237, 100),
+                      fillColor: const Color.fromRGBO(237, 237, 237, 100),
                       filled: true,
                     ),
                   ),
@@ -196,7 +322,7 @@ class _createFeedPageState extends State<createFeedPage> {
               ),
 
               //toggle button
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Padding(
@@ -204,7 +330,7 @@ class _createFeedPageState extends State<createFeedPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'Add the program in the acitivity list',
                       style: TextStyle(
                           fontStyle: FontStyle.italic,
@@ -212,7 +338,7 @@ class _createFeedPageState extends State<createFeedPage> {
                           fontSize: 14),
                     ),
                     //toggle button
-                    toggleButton(),
+                    switchButton(),
                   ],
                 ),
               ),
@@ -223,212 +349,214 @@ class _createFeedPageState extends State<createFeedPage> {
       ),
     ));
   }
-}
 
-Widget _appBar(context) {
-  return Container(
-      height: 120,
-      width: MediaQuery.of(context).size.width,
+  Widget _appBar(context) {
+    return Container(
+        height: 120,
+        width: MediaQuery.of(context).size.width,
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 50, right: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.clear),
+                color: const Color.fromRGBO(46, 48, 132, 100),
+                iconSize: 35,
+              ),
+            ],
+          ),
+        ));
+  }
+
+  Widget postAuthor(context) {
+    return Container(
+      height: 50,
       color: Colors.white,
       child: Padding(
-        padding: const EdgeInsets.only(top: 50, right: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+        padding: const EdgeInsets.only(left: 25.0),
+        child: Row(
           children: <Widget>[
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.clear),
-              color: Color.fromRGBO(46, 48, 132, 100),
-              iconSize: 35,
+            Image.asset(
+              'assets/images/pengakap.png',
+              width: 36,
+              height: 36,
+            ),
+            const SizedBox(width: 12),
+            const Text(
+              'PPM NEGERI JOHOR',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
-      ));
-}
+      ),
+    );
+  }
 
-Widget postAuthor(context) {
-  return Container(
-    height: 50,
-    color: Colors.white,
-    child: Padding(
-      padding: const EdgeInsets.only(left: 25.0),
-      child: Row(
-        children: <Widget>[
-          Image.asset(
-            'assets/images/pengakap.png',
-            width: 36,
-            height: 36,
-          ),
-          SizedBox(width: 12),
+  Padding buildUploadImage(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: GestureDetector(
+        onTap: () async {
+          imagePicked =
+              await imagePicker.pickImage(source: ImageSource.gallery);
+
+          setState(() {});
+        },
+        child: Builder(builder: (context) {
+          if (imagePicked == null) {
+            return Container(
+              height: 200,
+              width: MediaQuery.of(context).size.width,
+              color: const Color.fromRGBO(237, 237, 237, 100),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.upload_file),
+                      color: const Color.fromRGBO(217, 217, 217, 100),
+                      iconSize: 35,
+                    ),
+                    const Text(
+                      'Upload an image',
+                      style: TextStyle(
+                          color: Color.fromRGBO(217, 217, 217, 100),
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                          letterSpacing: .3),
+                    ),
+                  ]),
+            );
+          } else {
+            return Image.file(File(imagePicked!.path));
+          }
+        }),
+      ),
+    );
+  }
+
+  Widget textField(Map textItems) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20.0, left: 25),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           Text(
-            'PPM NEGERI JOHOR',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 12,
+            textItems['label'],
+            style: const TextStyle(
+              fontSize: 14,
               fontWeight: FontWeight.bold,
+              letterSpacing: .3,
+            ),
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 35,
+            width: 360,
+            child: TextField(
+              controller: textItems['controller'],
+              onChanged: textItems['onChange'],
+              decoration: InputDecoration(
+                hintText: textItems['hintText'],
+                hintStyle: const TextStyle(
+                    fontSize: 14.0, color: Color.fromRGBO(147, 151, 160, 100)),
+                contentPadding: const EdgeInsets.only(left: 20),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(9),
+                    borderSide: BorderSide.none),
+                fillColor: const Color.fromRGBO(237, 237, 237, 100),
+                filled: true,
+                suffixIcon: Padding(
+                  padding: const EdgeInsets.only(right: 17),
+                  child: textItems['icon'] != null
+                      ? Icon(
+                          textItems['icon'],
+                          color: const Color.fromRGBO(147, 151, 160, 100),
+                          size: 19,
+                        )
+                      : null,
+                ),
+              ),
             ),
           ),
         ],
       ),
-    ),
-  );
-}
+    );
+  }
 
-class uploadProgramImage extends StatefulWidget {
-  const uploadProgramImage({super.key});
+  Switch switchButton() {
+    return Switch(
+      activeColor: const Color.fromRGBO(44, 34, 91, 100),
+      value: isFeed,
+      onChanged: (newSwitch) {
+        setState(() {
+          isFeed = newSwitch;
+        });
+      },
+    );
+  }
 
-  @override
-  State<uploadProgramImage> createState() => _uploadProgramImageState();
-}
-
-class _uploadProgramImageState extends State<uploadProgramImage> {
-  @override
-  Widget build(BuildContext context) {
+  Widget postButton() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10.0),
-      child: Container(
-        height: 200,
-        width: MediaQuery.of(context).size.width,
-        color: Color.fromRGBO(237, 237, 237, 100),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.upload_file),
-                color: Color.fromRGBO(217, 217, 217, 100),
-                iconSize: 35,
-              ),
-              Text(
-                'Upload an image',
-                style: TextStyle(
-                    color: Color.fromRGBO(217, 217, 217, 100),
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                    letterSpacing: .3),
-              ),
-            ]),
-      ),
-    );
-  }
-}
+      padding: const EdgeInsets.only(top: 30, bottom: 45),
+      child: Center(
+        child: ElevatedButton(
+          onPressed: () async {
+            if (name.text.isEmpty ||
+                category.text.isEmpty ||
+                location.text.isEmpty ||
+                description.text.isEmpty ||
+                fee.text.isEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Please fill in all the fields!')));
+              return;
+            }
 
-class postDetail extends StatefulWidget {
-  const postDetail({super.key});
+            if (imagePicked == null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Please pick an image')));
+            }
 
-  @override
-  State<postDetail> createState() => _postDetailState();
-}
+            await SupabaseB().createFeed({
+              'name': name.text,
+              'category': category.text,
+              'location': location.text,
+              'startdate':
+                  '${startdate.year}-${startdate.month}-${startdate.day}',
+              'enddate': '${enddate.year}-${enddate.month}-${enddate.day}',
+              'is_feed': isFeed,
+              'fee': fee.text,
+              'registrationenddate':
+                  '${registerenddate.year}-${registerenddate.month}-${registerenddate.day}',
+              'description': description.text,
+              'file': File(imagePicked!.path)
+            });
 
-class _postDetailState extends State<postDetail> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        //header
-        postAuthor(context),
-
-        //image upload
-        uploadProgramImage(),
-      ],
-    );
-  }
-}
-
-Widget textField(Map textItems) {
-  return Padding(
-    padding: const EdgeInsets.only(top: 20.0, left: 25),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          textItems['label'],
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            letterSpacing: .3,
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => TempPage()),
+                (route) => false);
+          },
+          child: const Text('POST',
+              style: TextStyle(
+                fontSize: 14,
+                letterSpacing: .3,
+                fontWeight: FontWeight.bold,
+              )),
+          style: ElevatedButton.styleFrom(
+            primary: const Color.fromRGBO(44, 34, 91, 100),
+            elevation: 0,
+            fixedSize: const Size(355, 50),
           ),
         ),
-        SizedBox(height: 10),
-        SizedBox(
-          height: 35,
-          width: 360,
-          child: TextField(
-            controller: textItems['controller'],
-            onChanged: textItems['onChange'],
-            decoration: InputDecoration(
-              hintText: textItems['hintText'],
-              hintStyle: TextStyle(
-                  fontSize: 14.0, color: Color.fromRGBO(147, 151, 160, 100)),
-              contentPadding: EdgeInsets.only(left: 20),
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(9),
-                  borderSide: BorderSide.none),
-              fillColor: Color.fromRGBO(237, 237, 237, 100),
-              filled: true,
-              suffixIcon: Padding(
-                padding: const EdgeInsets.only(right: 17),
-                child: textItems['icon'] != null
-                    ? Icon(
-                        textItems['icon'],
-                        color: Color.fromRGBO(147, 151, 160, 100),
-                        size: 19,
-                      )
-                    : null,
-              ),
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-class toggleButton extends StatefulWidget {
-  const toggleButton({super.key});
-
-  @override
-  State<toggleButton> createState() => _toggleButtonState();
-}
-
-class _toggleButtonState extends State<toggleButton> {
-  bool isSwitch = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Switch(
-        activeColor: Color.fromRGBO(44, 34, 91, 100),
-        value: isSwitch,
-        onChanged: (newSwitch) {
-          setState(() {
-            isSwitch = newSwitch;
-          });
-        },
       ),
     );
   }
-}
-
-Widget postButton() {
-  return Padding(
-    padding: const EdgeInsets.only(top: 30, bottom: 45),
-    child: Center(
-      child: ElevatedButton(
-        onPressed: () {},
-        child: Text('POST',
-            style: TextStyle(
-              fontSize: 14,
-              letterSpacing: .3,
-              fontWeight: FontWeight.bold,
-            )),
-        style: ElevatedButton.styleFrom(
-          primary: Color.fromRGBO(44, 34, 91, 100),
-          elevation: 0,
-          fixedSize: const Size(355, 50),
-        ),
-      ),
-    ),
-  );
 }

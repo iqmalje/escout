@@ -1,7 +1,10 @@
 import 'dart:io';
 
 import 'package:escout/backend/backend.dart';
+import 'package:escout/pages/feed/createFeedPage.dart';
 import 'package:flutter/material.dart';
+
+import '../activity/createactivitypage.dart';
 
 class listPage extends StatefulWidget {
   const listPage({super.key});
@@ -17,6 +20,22 @@ class _listPageState extends State<listPage> {
   Widget build(BuildContext context) {
     var _mediaQuery = MediaQuery.of(context);
     return Scaffold(
+      floatingActionButton: CircleAvatar(
+        maxRadius: 30,
+        backgroundColor: const Color(0xFF2C225B),
+        child: IconButton(
+          color: Colors.white,
+          icon: const Icon(
+            Icons.add,
+          ),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const CreateFeedPage()));
+          },
+        ),
+      ),
       body: Container(
           width: _mediaQuery.size.width,
           height: _mediaQuery.size.height,
