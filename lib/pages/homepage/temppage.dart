@@ -1,4 +1,5 @@
 import 'package:escout/pages/activity/activitypage.dart';
+import 'package:escout/pages/activity/createactivitypage.dart';
 import 'package:escout/pages/homepage/facilitypage.dart';
 import 'package:escout/pages/homepage/homepage.dart';
 import 'package:escout/pages/homepage/profilepage.dart';
@@ -20,7 +21,7 @@ class _TempPageState extends State<TempPage> {
     const Homepage(),
     const ActivityPage(),
     const FacilityPage(),
-    const ProfilePage()
+    const ProfilePage(),
   ];
 
   @override

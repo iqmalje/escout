@@ -232,7 +232,8 @@ class _ActivityPageState extends State<ActivityPage> {
                     // Navigate to the second page
                     Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const createactivitypage()),
+                  MaterialPageRoute(
+                      builder: (context) => const createactivitypage()),
                 ),
                 child: Container(
                   width: 55,
