@@ -4,6 +4,7 @@ import 'package:escout/pages/activity/detailsactivity.dart';
 import 'package:escout/pages/attendance/attendacePage.dart';
 import 'package:escout/pages/attendance/attendancePage2.dart';
 import 'package:escout/pages/attendance/attendancePage3.dart';
+import 'package:escout/pages/attendance/recordAttendance.dart';
 
 import 'package:intl/intl.dart';
 
@@ -227,8 +228,8 @@ class _ActivityPageState extends State<ActivityPage> {
       padding: const EdgeInsets.only(top: 10.0),
       child: GestureDetector(
         onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => DetailsActivity()));
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => RecordAttendance()));
         },
         child: Container(
           width: 340,
