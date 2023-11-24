@@ -24,15 +24,15 @@ class _ActivityPageState extends State<ActivityPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Select Month and Year'),
-          contentPadding: EdgeInsets.all(16.0), // Adjust padding for size
+          title: const Text('Select Month and Year'),
+          contentPadding: const EdgeInsets.all(16.0), // Adjust padding for size
           content: Column(
             mainAxisSize: MainAxisSize.min, // Adjust size to content
             children: [
               Row(
                 children: [
-                  Text('Month:'),
-                  SizedBox(width: 8),
+                  const Text('Month:'),
+                  const SizedBox(width: 8),
                   DropdownButton<int>(
                     value: selectedMonth,
                     items: List.generate(12, (index) => index + 1).map(
@@ -53,8 +53,8 @@ class _ActivityPageState extends State<ActivityPage> {
               ),
               Row(
                 children: [
-                  Text('Year:'),
-                  SizedBox(width: 8),
+                  const Text('Year:'),
+                  const SizedBox(width: 8),
                   DropdownButton<int>(
                     value: selectedYear,
                     items: List.generate(100, (index) => 2022 + index)
@@ -79,7 +79,7 @@ class _ActivityPageState extends State<ActivityPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             ElevatedButton(
               onPressed: () {
@@ -88,7 +88,7 @@ class _ActivityPageState extends State<ActivityPage> {
                 });
                 Navigator.of(context).pop();
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
@@ -105,7 +105,7 @@ class _ActivityPageState extends State<ActivityPage> {
           Container(
             //blue box container
             width: MediaQuery.sizeOf(context).width,
-            height: 110,
+            height: 90,
             decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
             child: const Center(
               child: Text(
@@ -224,7 +224,7 @@ class _ActivityPageState extends State<ActivityPage> {
             padding: EdgeInsets.only(
                 left: 36,
                 right: 36,
-                top: MediaQuery.sizeOf(context).height * 0.52),
+                top: MediaQuery.sizeOf(context).height * 0.53),
             child: Align(
               alignment: Alignment.centerRight,
               child: GestureDetector(
@@ -232,7 +232,7 @@ class _ActivityPageState extends State<ActivityPage> {
                     // Navigate to the second page
                     Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => createactivitypage()),
+                  MaterialPageRoute(builder: (context) => const createactivitypage()),
                 ),
                 child: Container(
                   width: 55,
