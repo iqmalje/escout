@@ -1,4 +1,4 @@
-import 'package:escout/pages/homepage/activitypage.dart';
+import 'package:escout/pages/activity/activitypage.dart';
 import 'package:escout/pages/homepage/facilitypage.dart';
 import 'package:escout/pages/homepage/homepage.dart';
 import 'package:escout/pages/homepage/profilepage.dart';
