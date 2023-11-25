@@ -1,6 +1,8 @@
+import 'package:escout/backend/backend.dart';
 import 'package:escout/pages/attendance/attendancePage3.dart';
 import 'package:escout/pages/attendance/recordAttendance.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DetailsActivity extends StatefulWidget {
   dynamic activity;
@@ -238,91 +240,206 @@ class _DetailsActivityState extends State<DetailsActivity> {
             const SizedBox(
               height: 15,
             ),
-            const Text(
-              'Select the date of activity',
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 12,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w500,
-                height: 0,
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: daysInvolved.length,
-                  padding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.sizeOf(context).width * 0.15 / 2),
-                  itemBuilder: (context, index) {
-                    return buildDate(context, index);
-                  }),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                InkWell(
-                  onTap: () {},
-                  borderRadius: BorderRadius.circular(10),
-                  child: Ink(
-                    width: 135,
-                    height: 40,
-                    decoration: ShapeDecoration(
-                      color: const Color(0xFFECECEC),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Cancel',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
-                          height: 0,
+            Builder(builder: (context) {
+              if (SupabaseB.isAdminToggled) {
+                return buildDateSelector(context);
+              } else {
+                return buildAttendedList(context, activity['activityid']);
+              }
+            }),
+            Builder(builder: (context) {
+              if (SupabaseB.isAdminToggled && activity['status'] == 'ONGOING') {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    InkWell(
+                      onTap: () {},
+                      borderRadius: BorderRadius.circular(10),
+                      child: Ink(
+                        width: 135,
+                        height: 40,
+                        decoration: ShapeDecoration(
+                          color: const Color(0xFFECECEC),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Cancel',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              height: 0,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {},
-                  borderRadius: BorderRadius.circular(10),
-                  child: Ink(
-                    width: 135,
-                    height: 40,
-                    decoration: ShapeDecoration(
-                      color: const Color(0xFF3B3F65),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Completed',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
-                          height: 0,
+                    InkWell(
+                      onTap: () async {
+                        await SupabaseB()
+                            .updateActivityDone(activity['activityid']);
+                        setState(() {
+                          activity['status'] = "DONE";
+                        });
+                      },
+                      borderRadius: BorderRadius.circular(10),
+                      child: Ink(
+                        width: 135,
+                        height: 40,
+                        decoration: ShapeDecoration(
+                          color: const Color(0xFF3B3F65),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Completed',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              height: 0,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                )
-              ],
-            ),
+                    )
+                  ],
+                );
+              } else {
+                return Container();
+              }
+            }),
             const SizedBox(
               height: 20,
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget buildAttendedList(BuildContext context, String activityid) {
+    List<dynamic> attendance = [];
+    List<DateTime> timeAttended = [];
+    return FutureBuilder(
+        future: SupabaseB().getAttendance(activityid),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          attendance = snapshot.data!;
+          for (var thing in attendance) {
+            timeAttended.add(DateTime.parse(thing['time_attended'])
+                .add(const Duration(hours: 8)));
+          }
+          return Expanded(
+            child: Column(
+              children: [
+                Container(
+                  constraints: BoxConstraints(
+                    minHeight: 70,
+                    minWidth: MediaQuery.sizeOf(context).width * 0.85,
+                  ),
+                  decoration: ShapeDecoration(
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    shadows: const [
+                      BoxShadow(
+                        color: Color(0x3F000000),
+                        blurRadius: 2,
+                        offset: Offset(0, 2),
+                        spreadRadius: 0,
+                      )
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'You successfully attended this event. ',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              height: 0,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          ConstrainedBox(
+                              constraints: BoxConstraints(
+                                  minHeight: 0,
+                                  maxWidth:
+                                      MediaQuery.sizeOf(context).width * 0.85,
+                                  maxHeight: 180),
+                              child: ListView(
+                                shrinkWrap: true,
+                                children: List.generate(
+                                    attendance.length,
+                                    (index) => Center(
+                                            child: Text(
+                                          'Attendance Record: ${DateFormat('dd/MM/yyyy; hh:mm a').format(timeAttended[index])}',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 10,
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w400,
+                                            height: 0,
+                                          ),
+                                        ))),
+                              ))
+                        ]),
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  Widget buildDateSelector(BuildContext context) {
+    return Expanded(
+      child: Column(
+        children: [
+          const Text(
+            'Select the date of activity',
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 12,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w500,
+              height: 0,
+            ),
+          ),
+          ListView.builder(
+              shrinkWrap: true,
+              itemCount: daysInvolved.length,
+              padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.sizeOf(context).width * 0.15 / 2),
+              itemBuilder: (context, index) {
+                return buildDate(context, index);
+              }),
+        ],
       ),
     );
   }

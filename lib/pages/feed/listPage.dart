@@ -20,22 +20,28 @@ class _listPageState extends State<listPage> {
   Widget build(BuildContext context) {
     var _mediaQuery = MediaQuery.of(context);
     return Scaffold(
-      floatingActionButton: CircleAvatar(
-        maxRadius: 30,
-        backgroundColor: const Color(0xFF2C225B),
-        child: IconButton(
-          color: Colors.white,
-          icon: const Icon(
-            Icons.add,
-          ),
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const CreateFeedPage()));
-          },
-        ),
-      ),
+      floatingActionButton: Builder(builder: (context) {
+        if (SupabaseB.isAdminToggled) {
+          return CircleAvatar(
+            maxRadius: 30,
+            backgroundColor: const Color(0xFF2C225B),
+            child: IconButton(
+              color: Colors.white,
+              icon: const Icon(
+                Icons.add,
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CreateFeedPage()));
+              },
+            ),
+          );
+        } else {
+          return Container();
+        }
+      }),
       body: Container(
           width: _mediaQuery.size.width,
           height: _mediaQuery.size.height,

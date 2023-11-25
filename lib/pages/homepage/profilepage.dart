@@ -15,7 +15,6 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController fullname = TextEditingController(),
       mobilenumber = TextEditingController(),
       email = TextEditingController();
-  bool isAdminToggled = false;
   bool shorten = false;
   @override
   Widget build(BuildContext context) {
@@ -35,7 +34,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       }
 
                       print(snapshot.data);
-                      if (isAdminToggled && snapshot.data['roles'] == 'ADMIN') {
+                      if (SupabaseB.isAdminToggled &&
+                          snapshot.data['roles'] == 'ADMIN') {
                         fullname.text = 'PPM NEGERI JOHOR';
                         mobilenumber.text = '07-111 5566';
                         email.text = 'ppmnegerijohor@gmail.com';
@@ -80,8 +80,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               onTap: () {
                                 setState(() {
                                   if (snapshot.data['roles'] != 'ADMIN') return;
-                                  isAdminToggled = !isAdminToggled;
-                                  if (!isAdminToggled) {
+                                  SupabaseB.isAdminToggled =
+                                      !SupabaseB.isAdminToggled;
+                                  if (!SupabaseB.isAdminToggled) {
                                     fullname.text = 'PPM NEGERI JOHOR';
                                     mobilenumber.text = '07-111 5566';
                                     email.text = 'ppmnegerijohor@gmail.com';
@@ -103,7 +104,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    isAdminToggled
+                                    SupabaseB.isAdminToggled
                                         ? 'Admin View'
                                         : "Scout View",
                                     style: const TextStyle(
@@ -138,7 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ],
                               );
                             }
-                            if (!isAdminToggled) {
+                            if (!SupabaseB.isAdminToggled) {
                               return Column(
                                 children: [
                                   const Text(
@@ -156,7 +157,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             } else {
                               return Column(
                                 children: [
-                                  Image.asset('assets/images/pengakap_logo_2.png')
+                                  Image.asset(
+                                      'assets/images/pengakap_logo_2.png')
                                 ],
                               );
                             }

@@ -3,10 +3,34 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class SupabaseB {
   var supabase = Supabase.instance.client;
 
+  static bool isAdminToggled = false;
+
+  Future<List<dynamic>> getAttendedActivities(String filter) async {
+    var data = await supabase.rpc('filter_attended_activities',
+        params: {'filter': filter, 'aid': supabase.auth.currentUser!.id});
+
+    return data;
+  }
+
+  Future<void> updateActivityDone(String activityid) async {
+    await supabase
+        .from('activities')
+        .update({'status': 'DONE'}).eq('activityid', activityid);
+  }
+
+  Future<List<dynamic>> getAttendance(String activityid) async {
+    var data = await supabase.from('attendance').select('*').match(
+        {'activityid': activityid, 'accountid': supabase.auth.currentUser!.id});
+    print(data);
+    return data;
+  }
+
   //Any backend function goes here
   Future<bool> signIn(String email, String password) async {
     try {
       await supabase.auth.signInWithPassword(password: password, email: email);
+      //on sign in, just set the var to false
+      isAdminToggled = false;
       return true;
     } catch (e) {
       if (e.toString().contains('login credentials')) {

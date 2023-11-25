@@ -1,3 +1,4 @@
+import 'package:escout/backend/backend.dart';
 import 'package:escout/pages/activity/activitypage.dart';
 import 'package:escout/pages/activity/createactivitypage.dart';
 import 'package:escout/pages/attendancetest.dart';
@@ -25,6 +26,19 @@ void main() async {
   }
   bool isAvailable = await NfcManager.instance.isAvailable();
   print(isAvailable);
+
+  //listen for auth
+  final authSubscription =
+      SupabaseB().supabase.auth.onAuthStateChange.listen((data) {
+    final AuthChangeEvent event = data.event;
+
+    if (event == AuthChangeEvent.signedOut) {
+      //set admin to false
+      SupabaseB.isAdminToggled = false;
+      print('since logged out, admin toggled to false');
+    }
+  });
+
   runApp(const MyApp());
 }
 

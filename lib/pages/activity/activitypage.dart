@@ -122,22 +122,28 @@ class _ActivityPageState extends State<ActivityPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: CircleAvatar(
-        maxRadius: 30,
-        backgroundColor: const Color(0xFF2C225B),
-        child: IconButton(
-          color: Colors.white,
-          icon: const Icon(
-            Icons.add,
-          ),
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const CreateActivityPage()));
-          },
-        ),
-      ),
+      floatingActionButton: Builder(builder: (context) {
+        if (SupabaseB.isAdminToggled) {
+          return CircleAvatar(
+            maxRadius: 30,
+            backgroundColor: const Color(0xFF2C225B),
+            child: IconButton(
+              color: Colors.white,
+              icon: const Icon(
+                Icons.add,
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CreateActivityPage()));
+              },
+            ),
+          );
+        } else {
+          return Container();
+        }
+      }),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(100),
         child: Container(
@@ -202,8 +208,13 @@ class _ActivityPageState extends State<ActivityPage> {
                 ),
               ),
               FutureBuilder(
-                  future: SupabaseB().getActivities(
-                      filters: {'year': selectedYear, 'month': selectedMonth}),
+                  future: SupabaseB.isAdminToggled
+                      ? SupabaseB().getActivities(filters: {
+                          'year': selectedYear,
+                          'month': selectedMonth
+                        })
+                      : SupabaseB().getAttendedActivities(
+                          '$selectedYear-$selectedMonth%'),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return const Center(child: CircularProgressIndicator());
