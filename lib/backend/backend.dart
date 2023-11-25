@@ -119,10 +119,17 @@ class SupabaseB {
     return feed;
   }
 
-  Future<List<dynamic>> getActivities() async {
-    var activities = await supabase.from('activities').select('*');
+  Future<List<dynamic>> getActivities({Map<String, dynamic>? filters}) async {
+    if (filters == null) {
+      var activities = await supabase.from('activities').select('*');
 
-    return activities;
+      return activities;
+    } else {
+      var activities = await supabase.rpc('filter_activities',
+          params: {'filter': '${filters['year']}-${filters['month']}%'});
+
+      return activities;
+    }
   }
 
   Future<void> createFeed(Map<String, dynamic> items) async {
@@ -155,5 +162,26 @@ class SupabaseB {
           .from('activities')
           .getPublicUrl('${activity['activityid']}/cover.png')
     }).eq('activityid', activity['activityid']);
+  }
+
+  Future<void> addAttendanceByScoutID(String activityid, String scoutID) async {
+    try {
+      var accid = await supabase
+          .from('accounts')
+          .select('accountid, fullname')
+          .eq('no_ahli', scoutID)
+          .single();
+      print(accid);
+      await supabase.from('attendance').insert({
+        'activityid': activityid,
+        'accountid': accid['accountid'],
+        'fullname': accid['fullname'],
+        'attendancekey':
+            '${accid['accountid']}.${DateTime.now().day}${DateTime.now().month}${DateTime.now().year}'
+      });
+    } catch (e) {
+      print(e);
+      print('no acc found');
+    }
   }
 }

@@ -36,10 +36,12 @@ class _ActivityPageState extends State<ActivityPage> {
     'November',
     'December',
   ];
+  int selectedMonth = 1;
+  int selectedYear = 2023;
 
   Future<void> _selectDate(BuildContext context) async {
-    int selectedMonth = selectedDate.month;
-    int selectedYear = selectedDate.year;
+    selectedMonth = selectedDate.month;
+    selectedYear = selectedDate.year;
 
     await showDialog(
       context: context,
@@ -200,7 +202,8 @@ class _ActivityPageState extends State<ActivityPage> {
                 ),
               ),
               FutureBuilder(
-                  future: SupabaseB().getActivities(),
+                  future: SupabaseB().getActivities(
+                      filters: {'year': selectedYear, 'month': selectedMonth}),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return const Center(child: CircularProgressIndicator());
@@ -229,9 +232,7 @@ class _ActivityPageState extends State<ActivityPage> {
       child: GestureDetector(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => DetailsActivity(
-                    activity: item,
-                  )));
+              builder: (context) => DetailsActivity(activity: item)));
         },
         child: Container(
           width: 340,

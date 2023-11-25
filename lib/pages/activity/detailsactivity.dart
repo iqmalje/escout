@@ -1,3 +1,4 @@
+import 'package:escout/pages/attendance/attendancePage3.dart';
 import 'package:escout/pages/attendance/recordAttendance.dart';
 import 'package:flutter/material.dart';
 
@@ -337,9 +338,9 @@ class _DetailsActivityState extends State<DetailsActivity> {
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => RecordAttendance(
-                  activityid: activity['activityid'],
-                  secondkey: '${date.day}${date.month}${date.year}')));
+              builder: (context) => attendancePage3(
+                  activity: activity,
+                  attendancekey: '${date.day}${date.month}${date.year}')));
         },
         borderRadius: BorderRadius.circular(5),
         child: Ink(

@@ -1,3 +1,4 @@
+import 'package:escout/pages/attendance/attendancePage2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -6,22 +7,27 @@ import '../../backend/backend.dart';
 class RecordAttendance extends StatefulWidget {
   String activityid;
   String secondkey;
+  dynamic activity;
   RecordAttendance(
-      {super.key, required this.activityid, required this.secondkey});
+      {super.key,
+      required this.activityid,
+      required this.secondkey,
+      required this.activity});
 
   @override
   State<RecordAttendance> createState() =>
-      _RecordAttendanceState(activityid, secondkey);
+      _RecordAttendanceState(activityid, secondkey, activity);
 }
 
 class _RecordAttendanceState extends State<RecordAttendance> {
   TextEditingController search = TextEditingController(),
       attendance = TextEditingController();
   FocusNode fn = FocusNode();
+  dynamic activity;
 
   String activityid = '', secondkey = '';
 
-  _RecordAttendanceState(this.activityid, this.secondkey);
+  _RecordAttendanceState(this.activityid, this.secondkey, this.activity);
 
   List<dynamic> attendees = [];
 
@@ -233,6 +239,38 @@ class _RecordAttendanceState extends State<RecordAttendance> {
                             );
                           }),
                     ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => attendancePage2(
+                            activity: this.activity,
+                            attendancekey: this.secondkey,
+                          )));
+                },
+                child: Ink(
+                  width: MediaQuery.sizeOf(context).width * 0.8,
+                  height: 40,
+                  decoration: ShapeDecoration(
+                    color: Color(0xFF3B3F65),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'Add participant manually',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
+                        height: 0,
+                      ),
+                    ),
                   ),
                 ),
               )

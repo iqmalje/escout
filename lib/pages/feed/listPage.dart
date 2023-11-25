@@ -231,7 +231,7 @@ Widget buildAPost(BuildContext context, dynamic item) {
                         letterSpacing: .3,
                       ),
                     ),
-
+                    Text(item['description'] ??= 'No description available.')
                     //caption subtitle
                   ]),
             ),

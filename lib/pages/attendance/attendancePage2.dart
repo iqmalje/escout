@@ -1,29 +1,42 @@
+// ignore_for_file: no_logic_in_create_state
+
+import 'package:escout/backend/backend.dart';
 import 'package:flutter/material.dart';
 
 class attendancePage2 extends StatefulWidget {
-  const attendancePage2({super.key});
+  dynamic activity;
+  String attendancekey;
+  attendancePage2(
+      {super.key, required this.activity, required this.attendancekey});
 
   @override
-  State<attendancePage2> createState() => _attendancePage2State();
+  State<attendancePage2> createState() =>
+      _attendancePage2State(activity, attendancekey);
 }
 
 class _attendancePage2State extends State<attendancePage2> {
+  TextEditingController scoutid = TextEditingController();
+
+  dynamic activity;
+  String attendancekey;
+
+  _attendancePage2State(this.activity, this.attendancekey);
   @override
   Widget build(BuildContext context) {
     var _mediaQuery = MediaQuery.of(context);
 
     return Scaffold(
-          body: Container(
-        width: _mediaQuery.size.width,
-        height: _mediaQuery.size.height,
-        color: Color.fromRGBO(237, 237, 237, 100),
-        child: Column(children: <Widget>[
-          _appBar(context),
-          displayActivity(),
-          addParticipant(),
-          _addButton(),
-        ]),
-      ));
+        body: Container(
+      width: _mediaQuery.size.width,
+      height: _mediaQuery.size.height,
+      color: const Color.fromRGBO(237, 237, 237, 100),
+      child: Column(children: <Widget>[
+        _appBar(context),
+        displayActivity(context, activity),
+        addParticipant(scoutid),
+        _addButton(scoutid, activity, context),
+      ]),
+    ));
   }
 }
 
@@ -31,16 +44,16 @@ Widget _appBar(context) {
   return Container(
       height: 155,
       width: MediaQuery.of(context).size.width,
-      color: Color.fromRGBO(44, 34, 91, 100),
+      color: const Color(0xFF2C225B),
       child: Padding(
         padding: const EdgeInsets.only(top: 50, right: 20),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             _backButton(context),
-            SizedBox(width: 25),
-            Padding(
-              padding: const EdgeInsets.only(top: 5.0),
+            const SizedBox(width: 25),
+            const Padding(
+              padding: EdgeInsets.only(top: 5.0),
               child: Text(
                 'Add Participant',
                 style: TextStyle(
@@ -57,7 +70,7 @@ Widget _appBar(context) {
 
 Widget _backButton(context) {
   return Padding(
-    padding: EdgeInsets.only(top: 10, left: 25),
+    padding: const EdgeInsets.only(top: 10, left: 25),
     child: Container(
       width: 50,
       height: 50,
@@ -68,23 +81,41 @@ Widget _backButton(context) {
       child: Padding(
         padding: const EdgeInsets.only(left: 8.0),
         child: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
           iconSize: 25,
-          color: Color.fromRGBO(59, 63, 101, 100),
-          onPressed: () {},
+          color: const Color.fromRGBO(59, 63, 101, 100),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
       ),
     ),
   );
 }
 
-Widget displayActivity() {
+Widget displayActivity(BuildContext context, dynamic activity) {
+  DateTime startdate = DateTime.parse(activity['startdate']);
+  DateTime enddate = DateTime.parse(activity['enddate']);
+  List<String> monthName = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
-      SizedBox(height: 35),
-      Padding(
-        padding: const EdgeInsets.only(left: 5.0),
+      const SizedBox(height: 35),
+      const Padding(
+        padding: EdgeInsets.only(left: 5.0),
         child: Text(
           'Activity',
           style: TextStyle(
@@ -95,12 +126,95 @@ Widget displayActivity() {
           ),
         ),
       ),
-      SizedBox(height: 25),
-      theActivity(
-        activityName: 'Johor Rovers Vigil 2023 & Serving For The Future',
-        activityID: '011220',
-        activityLocation: 'KEM JUBLI INTAN TANJUNG LABUH BATU PAHAT',
-        activityOrgnzr: 'PPM NEGERI JOHOR',
+      const SizedBox(height: 25),
+      Container(
+        width: MediaQuery.sizeOf(context).width * 0.85,
+        height: 120,
+        decoration: ShapeDecoration(
+          color: const Color(0xFFFAFAFA),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+          shadows: const [
+            BoxShadow(
+              color: Color(0x3F000000),
+              blurRadius: 2,
+              offset: Offset(0, 2),
+              spreadRadius: 0,
+            )
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                activity['name'],
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w500,
+                  height: 0,
+                ),
+              ),
+              Row(
+                children: [
+                  const Icon(Icons.location_on),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    activity['location'],
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 11,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                      height: 0,
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  const Icon(Icons.calendar_month),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    '${startdate.day} - ${enddate.day} ${monthName[enddate.month - 1]} 2023',
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 11,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                      height: 0,
+                    ),
+                  )
+                ],
+              ),
+              const Row(
+                children: [
+                  Icon(Icons.account_circle),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'PPM NEGERI JOHOR',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 11,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                      height: 0,
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
       ),
     ],
   );
@@ -130,7 +244,7 @@ class _theActivityState extends State<theActivity> {
       width: 385,
       height: 173,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(251, 251, 251, 100),
+        color: const Color.fromRGBO(251, 251, 251, 100),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
@@ -141,30 +255,31 @@ class _theActivityState extends State<theActivity> {
             //acitivity name
             Text(
               widget.activityName,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
                 letterSpacing: .3,
               ),
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
 
             //acitivity ID
             Text(
               '(Event ID: ' + widget.activityID + ')',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.normal,
               ),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
 
             //acitivity location, date, organizer)
-            icon_activity(widget.activityLocation, Icon(Icons.location_on)),
-            icon_activity("date", Icon(Icons.calendar_today)),
             icon_activity(
-                widget.activityOrgnzr, Icon(Icons.account_circle_rounded)),
+                widget.activityLocation, const Icon(Icons.location_on)),
+            icon_activity("date", const Icon(Icons.calendar_today)),
+            icon_activity(widget.activityOrgnzr,
+                const Icon(Icons.account_circle_rounded)),
           ],
         ),
       ),
@@ -179,12 +294,12 @@ Widget icon_activity(String detail, Icon icon) {
       children: <Widget>[
         Icon(
           icon.icon,
-          color: Color.fromRGBO(44, 34, 91, 100),
+          color: const Color.fromRGBO(44, 34, 91, 100),
         ),
-        SizedBox(width: 15),
+        const SizedBox(width: 15),
         Text(
           detail,
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 13, fontWeight: FontWeight.normal, letterSpacing: .3),
         )
       ],
@@ -192,69 +307,73 @@ Widget icon_activity(String detail, Icon icon) {
   );
 }
 
-Widget addParticipant() {
+Widget addParticipant(TextEditingController scoutid) {
   return Padding(
     padding: const EdgeInsets.only(top: 35),
-    child: Column(
-      crossAxisAlignment:  CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Add participant Scout ID',
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            letterSpacing: .3,
-            color: Colors.black,
-          ),
+    child:
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+      const Text(
+        'Add participant Scout ID',
+        style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.bold,
+          letterSpacing: .3,
+          color: Colors.black,
         ),
-        SizedBox(height: 20),
+      ),
+      const SizedBox(height: 20),
 
-        //input scout ID
-        SizedBox(
-          height: 55,
-          width: 370,
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: 'Participant Scout ID',
-              hintStyle: TextStyle(
-                fontSize: 14.0, 
-                color: Color.fromRGBO(147, 151, 160, 100)
-              ),
-              contentPadding: EdgeInsets.only(left: 20),
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(9),
-                  borderSide: BorderSide.none
-              ),
-              fillColor: Colors.white,
-              filled: true, 
-            ),
+      //input scout ID
+      SizedBox(
+        height: 55,
+        width: 370,
+        child: TextField(
+          controller: scoutid,
+          decoration: InputDecoration(
+            hintText: 'Participant Scout ID',
+            hintStyle: const TextStyle(
+                fontSize: 14.0, color: Color.fromRGBO(147, 151, 160, 100)),
+            contentPadding: const EdgeInsets.only(left: 20),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(9),
+                borderSide: BorderSide.none),
+            fillColor: Colors.white,
+            filled: true,
           ),
         ),
-      ]),
+      ),
+    ]),
   );
 }
 
-Widget _addButton() {
-return  Expanded(
+Widget _addButton(TextEditingController scoutid, dynamic activity, context) {
+  return Expanded(
       child: Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
             padding: const EdgeInsets.only(bottom: 35),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Color.fromRGBO(44, 34, 91, 100),
+                primary: const Color(0xFF2C225B),
                 elevation: 0,
                 fixedSize: const Size(355, 50),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              onPressed: () {},
-              child: Text(
+              onPressed: () async {
+                if (scoutid.text.isEmpty) return;
+                await SupabaseB()
+                    .addAttendanceByScoutID(activity, scoutid.text);
+
+                Navigator.of(context).pop();
+              },
+              child: const Text(
                 'ADD PARTICIPANT',
                 style: TextStyle(
                   color: Colors.white,
-                ),),
+                ),
+              ),
             ),
           )));
 }
