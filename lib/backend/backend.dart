@@ -85,11 +85,11 @@ class SupabaseB {
   Future<void> addAttendance(String activityid, String cardid) async {
     //get accountid from cardid
     try {
+      print(cardid);
       var accid = await supabase
           .from('accounts')
           .select('accountid, fullname')
-          .eq('cardid', cardid)
-          .single();
+          .match({'cardid': cardid}).single();
       print(accid);
       await supabase.from('attendance').insert({
         'activityid': activityid,
