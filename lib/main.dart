@@ -1,4 +1,4 @@
-import 'package:escout/backend/backend.dart';
+import 'backend/backend.dart';
 import 'package:escout/pages/activity/activitypage.dart';
 import 'package:escout/pages/activity/createactivitypage.dart';
 import 'package:escout/pages/attendancetest.dart';
