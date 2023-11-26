@@ -331,7 +331,7 @@ class _CreateActivityPage extends State<CreateActivityPage> {
 
                           if (startdate.millisecondsSinceEpoch >=
                               enddate.millisecondsSinceEpoch) {
-                            print('bitchass');
+                            
                           } else {
                             setState(() {
                               startdate = pickedDate;
@@ -382,7 +382,7 @@ class _CreateActivityPage extends State<CreateActivityPage> {
 
                           if (startdate.millisecondsSinceEpoch >=
                               enddate.millisecondsSinceEpoch) {
-                            print('bitchass');
+                            
                           } else {
                             setState(() {
                               enddate = pickedDate;

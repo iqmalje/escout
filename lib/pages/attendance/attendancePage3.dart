@@ -1,10 +1,11 @@
-// ignore_for_file: no_logic_in_create_state
+// ignore_for_file: no_logic_in_create_state, must_be_immutable
 
+import 'package:escout/model/activity.dart';
 import 'package:escout/pages/attendance/recordAttendance.dart';
 import 'package:flutter/material.dart';
 
 class attendancePage3 extends StatefulWidget {
-  dynamic activity;
+  Activity activity;
   String attendancekey;
   attendancePage3(
       {super.key, required this.activity, required this.attendancekey});
@@ -15,7 +16,7 @@ class attendancePage3 extends StatefulWidget {
 }
 
 class _attendancePage3State extends State<attendancePage3> {
-  dynamic activity;
+  Activity activity;
   String attendancekey;
   _attendancePage3State(this.activity, this.attendancekey);
   @override
@@ -36,7 +37,7 @@ class _attendancePage3State extends State<attendancePage3> {
               displayActivity(activity),
               const SizedBox(height: 30),
               openAttendanceButton(
-                  context, activity['activityid'], attendancekey, activity),
+                  context, activity.activityid, attendancekey, activity),
               const SizedBox(height: 15),
               showParticipantButton(),
             ]),
@@ -114,7 +115,7 @@ Widget _backButton(context) {
   );
 }
 
-Widget displayActivity(dynamic activity) {
+Widget displayActivity(Activity activity) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
@@ -133,12 +134,12 @@ Widget displayActivity(dynamic activity) {
       ),
       const SizedBox(height: 25),
       theActivity(
-        activityName: activity['name'],
+        activityName: activity.name,
         activityID: '011220',
-        activityLocation: activity['location'],
+        activityLocation: activity.location,
         activityOrgnzr: 'PPM NEGERI JOHOR',
-        enddate: DateTime.parse(activity['enddate']),
-        startdate: DateTime.parse(activity['startdate']),
+        enddate: activity.enddate,
+        startdate: activity.startdate,
       ),
     ],
   );

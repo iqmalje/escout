@@ -1,10 +1,7 @@
 import 'package:escout/backend/backend.dart';
+import 'package:escout/model/activity.dart';
 import 'package:escout/pages/activity/createactivitypage.dart';
 import 'package:escout/pages/activity/detailsactivity.dart';
-import 'package:escout/pages/attendance/attendacePage.dart';
-import 'package:escout/pages/attendance/attendancePage2.dart';
-import 'package:escout/pages/attendance/attendancePage3.dart';
-import 'package:escout/pages/attendance/recordAttendance.dart';
 
 import 'package:intl/intl.dart';
 
@@ -20,7 +17,7 @@ class ActivityPage extends StatefulWidget {
 
 class _ActivityPageState extends State<ActivityPage> {
   DateTime selectedDate = DateTime.now();
-  List<dynamic> activities = [];
+  List<Activity> activities = [];
 
   List<String> monthName = [
     'January',
@@ -212,7 +209,7 @@ class _ActivityPageState extends State<ActivityPage> {
                       ),
                     ),
                   ),
-                  FutureBuilder(
+                  FutureBuilder<List<Activity>>(
                       future: SupabaseB.isAdminToggled
                           ? SupabaseB().getActivities(filters: {
                               'year': selectedYear,
@@ -246,7 +243,7 @@ class _ActivityPageState extends State<ActivityPage> {
     );
   }
 
-  Widget buildActivity(dynamic item) {
+  Widget buildActivity(Activity item) {
     return Padding(
       padding: const EdgeInsets.only(top: 10.0),
       child: GestureDetector(
@@ -278,7 +275,7 @@ class _ActivityPageState extends State<ActivityPage> {
               children: [
                 Flexible(
                   child: Text(
-                    item['name'],
+                    item.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
@@ -303,7 +300,7 @@ class _ActivityPageState extends State<ActivityPage> {
                       width: 5,
                     ),
                     Text(
-                      item['category'],
+                      item.category,
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 10,
@@ -314,8 +311,7 @@ class _ActivityPageState extends State<ActivityPage> {
                     ),
                     const Spacer(),
                     Text(
-                      DateFormat('dd/MM/yyyy').format(DateTime.parse(
-                          item['created_at'].toString().split('+')[0])),
+                      DateFormat('dd/MM/yyyy').format(item.created_at),
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 10,

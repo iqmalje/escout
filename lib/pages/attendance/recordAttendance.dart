@@ -1,6 +1,7 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:escout/pages/attendance/attendancePage2.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../backend/backend.dart';
 
@@ -217,10 +218,9 @@ class _RecordAttendanceState extends State<RecordAttendance> {
                               .stream(primaryKey: ['attendanceid']).eq(
                                   'activityid', activityid),
                           builder: (context, snapshot) {
-                            if (!snapshot.hasData)
-                              return CircularProgressIndicator();
-
-                            print(snapshot.data);
+                            if (!snapshot.hasData) {
+                              return const CircularProgressIndicator();
+                            }
 
                             //separate based on date
 

@@ -1,4 +1,3 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:escout/pages/forgotpassword/verifyOTP.dart';
 import 'package:escout/pages/signin/signinpage.dart';
 import 'package:flutter/material.dart';

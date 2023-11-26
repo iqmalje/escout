@@ -27,7 +27,7 @@ class _AttendanceTestState extends State<AttendanceTest> {
       if (mounted) {
         setState(() {
           attendance = event;
-          print(attendance);
+          
         });
       }
     });
@@ -46,7 +46,7 @@ class _AttendanceTestState extends State<AttendanceTest> {
               focusNode: fn,
               controller: card,
               onSubmitted: (value) async {
-                print(value);
+                
 
                 //lets check db
                 SupabaseB().addAttendance(activityid, value);

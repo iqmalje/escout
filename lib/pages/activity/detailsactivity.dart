@@ -1,11 +1,13 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:escout/backend/backend.dart';
+import 'package:escout/model/activity.dart';
 import 'package:escout/pages/attendance/attendancePage3.dart';
-import 'package:escout/pages/attendance/recordAttendance.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DetailsActivity extends StatefulWidget {
-  dynamic activity;
+  Activity activity;
   DetailsActivity({super.key, required this.activity});
 
   @override
@@ -15,8 +17,8 @@ class DetailsActivity extends StatefulWidget {
 class _DetailsActivityState extends State<DetailsActivity> {
   _DetailsActivityState(this.activity);
 
-  dynamic activity;
-  DateTime startdate = DateTime.now(), enddate = DateTime.now();
+  Activity activity;
+
   List<String> monthName = [
     'January',
     'February',
@@ -35,18 +37,6 @@ class _DetailsActivityState extends State<DetailsActivity> {
   List<DateTime> daysInvolved = [];
   @override
   Widget build(BuildContext context) {
-    startdate = DateTime.parse(activity['startdate']);
-    enddate = DateTime.parse(activity['enddate']);
-
-    print(activity);
-    daysInvolved.clear();
-
-    var diff = enddate.difference(startdate);
-    var tempdate = startdate;
-    for (var i = 0; i <= diff.inDays; i++) {
-      daysInvolved.add(tempdate);
-      tempdate = tempdate.add(const Duration(days: 1));
-    }
     return Container(
       color: const Color(0xFF2C225B),
       child: SafeArea(
@@ -100,7 +90,7 @@ class _DetailsActivityState extends State<DetailsActivity> {
                 Stack(
                   children: [
                     Image.network(
-                      activity['imageurl'],
+                      activity.imageurl,
                       width: MediaQuery.sizeOf(context).width,
                     ),
                     Align(
@@ -130,7 +120,7 @@ class _DetailsActivityState extends State<DetailsActivity> {
                                 width: 5,
                               ),
                               Text(
-                                activity['category'],
+                                activity.category,
                                 style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 10,
@@ -173,7 +163,7 @@ class _DetailsActivityState extends State<DetailsActivity> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
-                          activity['name'],
+                          activity.name,
                           style: const TextStyle(
                             color: Colors.black,
                             fontSize: 12,
@@ -189,7 +179,7 @@ class _DetailsActivityState extends State<DetailsActivity> {
                               width: 10,
                             ),
                             Text(
-                              activity['location'],
+                              activity.location,
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 11,
@@ -207,7 +197,7 @@ class _DetailsActivityState extends State<DetailsActivity> {
                               width: 10,
                             ),
                             Text(
-                              '${startdate.day} - ${enddate.day} ${monthName[enddate.month - 1]} 2023',
+                              '${activity.startdate.day} - ${activity.enddate.day} ${monthName[activity.enddate.month - 1]} 2023',
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 11,
@@ -247,12 +237,12 @@ class _DetailsActivityState extends State<DetailsActivity> {
                   if (SupabaseB.isAdminToggled) {
                     return buildDateSelector(context);
                   } else {
-                    return buildAttendedList(context, activity['activityid']);
+                    return buildAttendedList(context, activity.activityid);
                   }
                 }),
                 Builder(builder: (context) {
                   if (SupabaseB.isAdminToggled &&
-                      activity['status'] == 'ONGOING') {
+                      activity.status == 'ONGOING') {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -286,9 +276,9 @@ class _DetailsActivityState extends State<DetailsActivity> {
                         InkWell(
                           onTap: () async {
                             await SupabaseB()
-                                .updateActivityDone(activity['activityid']);
+                                .updateActivityDone(activity.activityid);
                             setState(() {
-                              activity['status'] = "DONE";
+                              activity.status = "DONE";
                             });
                           },
                           borderRadius: BorderRadius.circular(10),
@@ -439,7 +429,7 @@ class _DetailsActivityState extends State<DetailsActivity> {
           ),
           ListView.builder(
               shrinkWrap: true,
-              itemCount: daysInvolved.length,
+              itemCount: activity.dateInvolved.length,
               padding: EdgeInsets.symmetric(
                   horizontal: MediaQuery.sizeOf(context).width * 0.15 / 2),
               itemBuilder: (context, index) {
@@ -454,7 +444,7 @@ class _DetailsActivityState extends State<DetailsActivity> {
     List<String> monthAbbreviations =
         monthName.map((month) => month.substring(0, 3)).toList();
 
-    DateTime date = daysInvolved.elementAt(index);
+    DateTime date = activity.dateInvolved.elementAt(index);
 
     return Padding(
       padding: const EdgeInsets.only(top: 10.0),

@@ -1,10 +1,11 @@
-// ignore_for_file: no_logic_in_create_state
+// ignore_for_file: no_logic_in_create_state, must_be_immutable
 
 import 'package:escout/backend/backend.dart';
+import 'package:escout/model/activity.dart';
 import 'package:flutter/material.dart';
 
 class attendancePage2 extends StatefulWidget {
-  dynamic activity;
+  Activity activity;
   String attendancekey;
   attendancePage2(
       {super.key, required this.activity, required this.attendancekey});
@@ -17,7 +18,7 @@ class attendancePage2 extends StatefulWidget {
 class _attendancePage2State extends State<attendancePage2> {
   TextEditingController scoutid = TextEditingController();
 
-  dynamic activity;
+  Activity activity;
   String attendancekey;
 
   _attendancePage2State(this.activity, this.attendancekey);
@@ -112,9 +113,9 @@ Widget _backButton(context) {
   );
 }
 
-Widget displayActivity(BuildContext context, dynamic activity) {
-  DateTime startdate = DateTime.parse(activity['startdate']);
-  DateTime enddate = DateTime.parse(activity['enddate']);
+Widget displayActivity(BuildContext context, Activity activity) {
+  DateTime startdate = activity.startdate;
+  DateTime enddate = activity.startdate;
   List<String> monthName = [
     'January',
     'February',
@@ -168,7 +169,7 @@ Widget displayActivity(BuildContext context, dynamic activity) {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Text(
-                activity['name'],
+                activity.name,
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 12,
@@ -184,7 +185,7 @@ Widget displayActivity(BuildContext context, dynamic activity) {
                     width: 10,
                   ),
                   Text(
-                    activity['location'],
+                    activity.location,
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 11,
