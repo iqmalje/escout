@@ -111,12 +111,10 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                         if (pickedDate == null) return;
                         if (pickedDate.millisecondsSinceEpoch >=
                             enddate.millisecondsSinceEpoch) {
-                          
                           return;
                         } else {
                           setState(() {
                             startdate = pickedDate;
-                            
                           });
                         }
                       },
@@ -124,7 +122,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                         width: 160,
                         height: 35,
                         decoration: ShapeDecoration(
-                          color: const Color(0xFFECECEC),
+                          color: const Color.fromRGBO(237, 237, 237, 100),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(3)),
                         ),
@@ -163,13 +161,10 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
 
                         if (startdate.millisecondsSinceEpoch >=
                             pickedDate.millisecondsSinceEpoch) {
-                          
                           return;
                         } else {
                           setState(() {
-                            
                             enddate = pickedDate;
-                            
                           });
                         }
                       },
@@ -177,7 +172,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                         width: 160,
                         height: 35,
                         decoration: ShapeDecoration(
-                          color: const Color(0xFFECECEC),
+                          color: const Color.fromRGBO(237, 237, 237, 100),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(3)),
                         ),
@@ -228,7 +223,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
               ),
               const SizedBox(height: 10),
               Padding(
-                padding: const EdgeInsets.only(left: 25.0),
+                padding: const EdgeInsets.only(left: 25.0, right: 25),
                 child: GestureDetector(
                   onTap: () async {
                     DateTime? pickedDate = await showDatePicker(
@@ -241,20 +236,17 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                     if (pickedDate == null) return;
                     if (startdate.millisecondsSinceEpoch >=
                         registerenddate.millisecondsSinceEpoch) {
-
                       return;
                     } else {
                       setState(() {
                         registerenddate = pickedDate;
-
                       });
                     }
                   },
                   child: Container(
-                    width: 360,
                     height: 35,
                     decoration: ShapeDecoration(
-                      color: const Color(0xFFECECEC),
+                      color: const Color.fromRGBO(237, 237, 237, 100),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(3)),
                     ),
@@ -298,10 +290,8 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
               ),
               const SizedBox(height: 10),
               Padding(
-                padding: const EdgeInsets.only(left: 25.0),
+                padding: const EdgeInsets.only(left: 25.0, right: 25),
                 child: SizedBox(
-                  height: 100,
-                  width: 360,
                   child: TextField(
                     controller: description,
                     //onChanged: (){}
@@ -352,19 +342,21 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
 
   Widget _appBar(context) {
     return Container(
-        height: 120,
+        height: 90,
         width: MediaQuery.of(context).size.width,
         color: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.only(top: 50, right: 20),
+          padding: const EdgeInsets.only(top: 40, right: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
                 icon: const Icon(Icons.clear),
                 color: const Color.fromRGBO(46, 48, 132, 100),
-                iconSize: 35,
+                iconSize: 25,
               ),
             ],
           ),
@@ -445,7 +437,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
 
   Widget textField(Map textItems) {
     return Padding(
-      padding: const EdgeInsets.only(top: 20.0, left: 25),
+      padding: const EdgeInsets.only(top: 20.0, left: 25, right: 25),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -460,7 +452,6 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
           const SizedBox(height: 10),
           SizedBox(
             height: 35,
-            width: 360,
             child: TextField(
               controller: textItems['controller'],
               onChanged: textItems['onChange'],
@@ -494,7 +485,8 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
 
   Switch switchButton() {
     return Switch(
-      activeColor: const Color.fromRGBO(44, 34, 91, 100),
+      activeColor: Color.fromARGB(255, 255, 255, 255),
+      activeTrackColor: const Color(0xFF2E3B78),
       value: isFeed,
       onChanged: (newSwitch) {
         setState(() {
@@ -546,12 +538,12 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
           },
           child: const Text('POST',
               style: TextStyle(
-                fontSize: 14,
-                letterSpacing: .3,
-                fontWeight: FontWeight.bold,
-              )),
+                  fontSize: 14,
+                  letterSpacing: .3,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white)),
           style: ElevatedButton.styleFrom(
-            primary: const Color.fromRGBO(44, 34, 91, 100),
+            primary: Color(0xFF2E3B78),
             elevation: 0,
             fixedSize: const Size(355, 50),
           ),

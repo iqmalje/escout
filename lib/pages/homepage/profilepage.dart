@@ -97,7 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 width: 330,
                                 height: 40,
                                 decoration: ShapeDecoration(
-                                  color: const Color(0xFF2C225B),
+                                  color: const Color(0xFF2E3B78),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5)),
                                 ),
@@ -134,6 +134,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                       height: 0,
                                     ),
                                   ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
                                   buildCard(snapshot.data!),
                                 ],
                               );
@@ -149,6 +152,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                       fontWeight: FontWeight.w900,
                                       height: 0,
                                     ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
                                   ),
                                   buildCard(snapshot.data!),
                                 ],

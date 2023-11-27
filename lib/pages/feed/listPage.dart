@@ -1,6 +1,8 @@
 import 'package:escout/backend/backend.dart';
 import 'package:escout/model/activity.dart';
 import 'package:escout/pages/feed/createFeedPage.dart';
+import 'package:escout/pages/homepage/DetailsProgram.dart';
+import 'package:escout/pages/homepage/homepage.dart';
 import 'package:flutter/material.dart';
 
 class listPage extends StatefulWidget {
@@ -17,7 +19,7 @@ class _listPageState extends State<listPage> {
   Widget build(BuildContext context) {
     var _mediaQuery = MediaQuery.of(context);
     return Container(
-      color: const Color(0xFF2C225B),
+      color: const Color(0xFF2E3B78),
       child: SafeArea(
         bottom: false,
         child: Scaffold(
@@ -25,7 +27,7 @@ class _listPageState extends State<listPage> {
             if (SupabaseB.isAdminToggled) {
               return CircleAvatar(
                 maxRadius: 30,
-                backgroundColor: const Color(0xFF2C225B),
+                backgroundColor: const Color(0xFF2E3B78),
                 child: IconButton(
                   color: Colors.white,
                   icon: const Icon(
@@ -102,7 +104,7 @@ Widget _appBar(context) {
   return Container(
       height: 90,
       width: MediaQuery.of(context).size.width,
-      color: const Color(0xFF2C225B),
+      color: const Color(0xFF2E3B78),
       child: Image.asset('assets/images/escout_logo_panjang.png'));
 }
 
@@ -122,133 +124,150 @@ Widget buildAPost(BuildContext context, Activity item) {
     'December',
   ];
 
-  return Padding(
-    padding: const EdgeInsets.only(top: 10.0),
-    child: Column(
-      children: <Widget>[
-        //feed header
-        Container(
-          height: 50,
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 25.0),
-            child: Row(children: <Widget>[
-              Image.asset(
-                'assets/images/pengakap.png',
-                width: 36,
-                height: 36,
-              ),
-              const SizedBox(width: 12),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const Text(
-                    'PPM NEGERI JOHOR',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
+  return Material(
+    color: Colors.transparent,
+    child: InkWell(
+      onTap: () {
+        print('Hello World');
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => Detailsprogram()));
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10.0),
+        child: Ink(
+          child: Column(
+            children: <Widget>[
+              //feed header
+              Container(
+                height: 50,
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 25.0),
+                  child: Row(children: <Widget>[
+                    Image.asset(
+                      'assets/images/pengakap.png',
+                      width: 36,
+                      height: 36,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 3,
-                  ),
-                  Text(
-                    '${item.created_at.day} ${monthName[item.created_at.month - 1]}, ${item.created_at.hour + 8}:${item.created_at.minute.toString().padLeft(2, '0')}',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 10,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                ],
-              )
-            ]),
-          ),
-        ),
-
-        //feed image
-        Container(
-          color: Colors.lightBlue,
-          child: Stack(children: <Widget>[
-            //event image
-            Image.network(item.imageurl),
-
-            //event type details
-            Positioned(
-              top: 8,
-              right: 9,
-              child: Container(
-                width: 90,
-                height: 23,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(6),
+                    const SizedBox(width: 12),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Text(
+                          'PPM NEGERI JOHOR',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 3,
+                        ),
+                        Text(
+                          '${item.created_at.day} ${monthName[item.created_at.month - 1]} ${item.created_at.year}, ${item.created_at.hour + 8}:${item.created_at.minute.toString().padLeft(2, '0')}',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 10,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    )
+                  ]),
                 ),
-                child: Row(children: <Widget>[
-                  const SizedBox(width: 7),
+              ),
 
-                  //event type: colored-circle label
-                  Container(
-                    width: 10,
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: const Color.fromRGBO(48, 46, 132, 100),
-                      borderRadius: BorderRadius.circular(100),
+              //feed image
+              Container(
+                color: Colors.lightBlue,
+                child: Stack(children: <Widget>[
+                  //event image
+                  Image.network(item.imageurl),
+
+                  //event type details
+                  Positioned(
+                    top: 8,
+                    right: 9,
+                    child: Container(
+                      width: 90,
+                      height: 23,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Row(children: <Widget>[
+                        const SizedBox(width: 7),
+
+                        //event type: colored-circle label
+                        Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: const Color.fromRGBO(48, 46, 132, 100),
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                        ),
+                        const SizedBox(width: 7),
+
+                        //event type: name
+                        Text(
+                          item.category,
+                          style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            letterSpacing: .3,
+                          ),
+                        )
+                      ]),
                     ),
                   ),
-                  const SizedBox(width: 7),
-
-                  //event type: name
-                  Text(
-                    item.category,
-                    style: const TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      letterSpacing: .3,
-                    ),
-                  )
                 ]),
               ),
-            ),
-          ]),
-        ),
 
-        //feed caption
-        Container(
-          constraints: BoxConstraints(
-              minWidth: MediaQuery.sizeOf(context).width, minHeight: 50),
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 15.0, bottom: 15),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 25.0, right: 25),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    //caption title
-                    Text(
-                      item.name,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: .3,
-                      ),
-                    ),
-                    Text(
-                      item.description ??= 'No description available.',
-                      textAlign: TextAlign.start,
-                      maxLines: 4,
-                      overflow: TextOverflow.ellipsis,
-                    )
-                    //caption subtitle
-                  ]),
-            ),
+              //feed caption
+              Container(
+                constraints: BoxConstraints(
+                    minWidth: MediaQuery.sizeOf(context).width, minHeight: 50),
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 15.0, bottom: 15),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 25.0, right: 25),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          //caption title
+                          Text(
+                            item.name,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: .3,
+                            ),
+                          ),
+
+                          SizedBox(
+                            height: 10,
+                          ),
+
+                          Text(
+                            item.description ??= 'No description available.',
+                            textAlign: TextAlign.start,
+                            maxLines: 4,
+                            overflow: TextOverflow.ellipsis,
+                          )
+                          //caption subtitle
+                        ]),
+                  ),
+                ),
+              )
+            ],
           ),
-        )
-      ],
+        ),
+      ),
     ),
   );
 }

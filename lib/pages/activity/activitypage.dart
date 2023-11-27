@@ -119,7 +119,7 @@ class _ActivityPageState extends State<ActivityPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFF2C225B),
+      color: const Color(0xFF2E3B78),
       child: SafeArea(
         bottom: false,
         child: Scaffold(
@@ -127,7 +127,7 @@ class _ActivityPageState extends State<ActivityPage> {
             if (SupabaseB.isAdminToggled) {
               return CircleAvatar(
                 maxRadius: 30,
-                backgroundColor: const Color(0xFF2C225B),
+                backgroundColor: const Color(0xFF2E3B78),
                 child: IconButton(
                   color: Colors.white,
                   icon: const Icon(
