@@ -1,10 +1,7 @@
 import 'package:escout/backend/backend.dart';
+import 'package:escout/model/activity.dart';
 import 'package:escout/pages/activity/createactivitypage.dart';
 import 'package:escout/pages/activity/detailsactivity.dart';
-import 'package:escout/pages/attendance/attendacePage.dart';
-import 'package:escout/pages/attendance/attendancePage2.dart';
-import 'package:escout/pages/attendance/attendancePage3.dart';
-import 'package:escout/pages/attendance/recordAttendance.dart';
 
 import 'package:intl/intl.dart';
 
@@ -20,7 +17,7 @@ class ActivityPage extends StatefulWidget {
 
 class _ActivityPageState extends State<ActivityPage> {
   DateTime selectedDate = DateTime.now();
-  List<dynamic> activities = [];
+  List<Activity> activities = [];
 
   List<String> monthName = [
     'January',
@@ -121,123 +118,132 @@ class _ActivityPageState extends State<ActivityPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: Builder(builder: (context) {
-        if (SupabaseB.isAdminToggled) {
-          return CircleAvatar(
-            maxRadius: 30,
-            backgroundColor: const Color(0xFF2C225B),
-            child: IconButton(
-              color: Colors.white,
-              icon: const Icon(
-                Icons.add,
-              ),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CreateActivityPage()));
-              },
-            ),
-          );
-        } else {
-          return Container();
-        }
-      }),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(100),
-        child: Container(
-          //blue box container
-          width: MediaQuery.sizeOf(context).width,
-          height: 90,
-          decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
-          child: const Center(
-            child: Text(
-              'Activity',
-              style: TextStyle(
-                color: Color.fromARGB(255, 255, 255, 255),
-                fontSize: 24,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 36),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-              maxWidth: MediaQuery.sizeOf(context).width,
-              maxHeight: double.infinity),
-          child: Column(
-            //blue bow column
-            children: [
-              const SizedBox(
-                height: 18,
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: GestureDetector(
-                  onTap: () => _selectDate(context),
-                  child: Container(
-                    width: 140,
-                    height: 30,
-                    decoration: const BoxDecoration(color: Color(0xFFEDEDED)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "${monthName[selectedDate.month - 1]} ${selectedDate.year.toString().substring(2)}",
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                          ),
-                        ),
-                        const SizedBox(
-                            width:
-                                5), // Add some space between the text and the icon
-                        const Icon(
-                          Icons.calendar_today,
-                          color: Colors.black,
-                          size: 16,
-                        ),
-                      ],
-                    ),
+    return Container(
+      color: const Color(0xFF2C225B),
+      child: SafeArea(
+        bottom: false,
+        child: Scaffold(
+          floatingActionButton: Builder(builder: (context) {
+            if (SupabaseB.isAdminToggled) {
+              return CircleAvatar(
+                maxRadius: 30,
+                backgroundColor: const Color(0xFF2C225B),
+                child: IconButton(
+                  color: Colors.white,
+                  icon: const Icon(
+                    Icons.add,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CreateActivityPage()));
+                  },
+                ),
+              );
+            } else {
+              return Container();
+            }
+          }),
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(100),
+            child: Container(
+              //blue box container
+              width: MediaQuery.sizeOf(context).width,
+              height: 90,
+              decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
+              child: const Center(
+                child: Text(
+                  'Activity',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    fontSize: 24,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
-              FutureBuilder(
-                  future: SupabaseB.isAdminToggled
-                      ? SupabaseB().getActivities(filters: {
-                          'year': selectedYear,
-                          'month': selectedMonth
-                        })
-                      : SupabaseB().getAttendedActivities(
-                          '$selectedYear-$selectedMonth%'),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
+            ),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 36),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                  maxWidth: MediaQuery.sizeOf(context).width,
+                  maxHeight: double.infinity),
+              child: Column(
+                //blue bow column
+                children: [
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: GestureDetector(
+                      onTap: () => _selectDate(context),
+                      child: Container(
+                        width: 140,
+                        height: 30,
+                        decoration:
+                            const BoxDecoration(color: Color(0xFFEDEDED)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "${monthName[selectedDate.month - 1]} ${selectedDate.year.toString().substring(2)}",
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                              ),
+                            ),
+                            const SizedBox(
+                                width:
+                                    5), // Add some space between the text and the icon
+                            const Icon(
+                              Icons.calendar_today,
+                              color: Colors.black,
+                              size: 16,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  FutureBuilder<List<Activity>>(
+                      future: SupabaseB.isAdminToggled
+                          ? SupabaseB().getActivities(filters: {
+                              'year': selectedYear,
+                              'month': selectedMonth
+                            })
+                          : SupabaseB().getAttendedActivities(
+                              '$selectedYear-$selectedMonth%'),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
 
-                    activities = snapshot.data!;
+                        activities = snapshot.data!;
 
-                    return Expanded(
-                      child: ListView.builder(
-                          itemCount: activities.length,
-                          itemBuilder: (context, index) {
-                            return buildActivity(activities.elementAt(index));
-                          }),
-                    );
-                  })
-            ],
+                        return Expanded(
+                          child: ListView.builder(
+                              itemCount: activities.length,
+                              itemBuilder: (context, index) {
+                                return buildActivity(
+                                    activities.elementAt(index));
+                              }),
+                        );
+                      })
+                ],
+              ),
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget buildActivity(dynamic item) {
+  Widget buildActivity(Activity item) {
     return Padding(
       padding: const EdgeInsets.only(top: 10.0),
       child: GestureDetector(
@@ -269,7 +275,7 @@ class _ActivityPageState extends State<ActivityPage> {
               children: [
                 Flexible(
                   child: Text(
-                    item['name'],
+                    item.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
@@ -294,7 +300,7 @@ class _ActivityPageState extends State<ActivityPage> {
                       width: 5,
                     ),
                     Text(
-                      item['category'],
+                      item.category,
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 10,
@@ -305,8 +311,7 @@ class _ActivityPageState extends State<ActivityPage> {
                     ),
                     const Spacer(),
                     Text(
-                      DateFormat('dd/MM/yyyy').format(DateTime.parse(
-                          item['created_at'].toString().split('+')[0])),
+                      DateFormat('dd/MM/yyyy').format(item.created_at),
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 10,

@@ -1,10 +1,11 @@
-// ignore_for_file: no_logic_in_create_state
+// ignore_for_file: no_logic_in_create_state, must_be_immutable
 
 import 'package:escout/backend/backend.dart';
+import 'package:escout/model/activity.dart';
 import 'package:flutter/material.dart';
 
 class attendancePage2 extends StatefulWidget {
-  dynamic activity;
+  Activity activity;
   String attendancekey;
   attendancePage2(
       {super.key, required this.activity, required this.attendancekey});
@@ -17,7 +18,7 @@ class attendancePage2 extends StatefulWidget {
 class _attendancePage2State extends State<attendancePage2> {
   TextEditingController scoutid = TextEditingController();
 
-  dynamic activity;
+  Activity activity;
   String attendancekey;
 
   _attendancePage2State(this.activity, this.attendancekey);
@@ -25,47 +26,66 @@ class _attendancePage2State extends State<attendancePage2> {
   Widget build(BuildContext context) {
     var _mediaQuery = MediaQuery.of(context);
 
-    return Scaffold(
-        body: Container(
-      width: _mediaQuery.size.width,
-      height: _mediaQuery.size.height,
-      color: const Color.fromRGBO(237, 237, 237, 100),
-      child: Column(children: <Widget>[
-        _appBar(context),
-        displayActivity(context, activity),
-        addParticipant(scoutid),
-        _addButton(scoutid, activity, context),
-      ]),
-    ));
+    return Container(
+      color: const Color(0xFF2C225B),
+      child: SafeArea(
+        child: Scaffold(
+            body: Container(
+          width: _mediaQuery.size.width,
+          height: _mediaQuery.size.height,
+          color: const Color.fromRGBO(237, 237, 237, 100),
+          child: Column(children: <Widget>[
+            _appBar(context),
+            displayActivity(context, activity),
+            addParticipant(scoutid),
+            _addButton(scoutid, activity, context),
+          ]),
+        )),
+      ),
+    );
   }
 }
 
 Widget _appBar(context) {
   return Container(
-      height: 155,
-      width: MediaQuery.of(context).size.width,
-      color: const Color(0xFF2C225B),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 50, right: 20),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            _backButton(context),
-            const SizedBox(width: 25),
-            const Padding(
-              padding: EdgeInsets.only(top: 5.0),
-              child: Text(
-                'Add Participant',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 29,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: .3),
-              ),
-            )
-          ],
+    width: MediaQuery.sizeOf(context).width,
+    height: 90,
+    decoration: const BoxDecoration(color: Color(0xFF2C225B)),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(
+          width: 30,
         ),
-      ));
+        Container(
+          width: 50,
+          height: 50,
+          decoration: const ShapeDecoration(
+            color: Colors.white,
+            shape: OvalBorder(),
+          ),
+          child: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.arrow_back_ios_new)),
+        ),
+        const SizedBox(
+          width: 30,
+        ),
+        const Text(
+          'Add Participant',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 25,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w600,
+            height: 0,
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 Widget _backButton(context) {
@@ -93,9 +113,9 @@ Widget _backButton(context) {
   );
 }
 
-Widget displayActivity(BuildContext context, dynamic activity) {
-  DateTime startdate = DateTime.parse(activity['startdate']);
-  DateTime enddate = DateTime.parse(activity['enddate']);
+Widget displayActivity(BuildContext context, Activity activity) {
+  DateTime startdate = activity.startdate;
+  DateTime enddate = activity.startdate;
   List<String> monthName = [
     'January',
     'February',
@@ -149,7 +169,7 @@ Widget displayActivity(BuildContext context, dynamic activity) {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Text(
-                activity['name'],
+                activity.name,
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 12,
@@ -165,7 +185,7 @@ Widget displayActivity(BuildContext context, dynamic activity) {
                     width: 10,
                   ),
                   Text(
-                    activity['location'],
+                    activity.location,
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 11,
@@ -363,8 +383,8 @@ Widget _addButton(TextEditingController scoutid, dynamic activity, context) {
               ),
               onPressed: () async {
                 if (scoutid.text.isEmpty) return;
-                await SupabaseB()
-                    .addAttendanceByScoutID(activity, scoutid.text);
+                await SupabaseB().addAttendanceByScoutID(
+                    activity['activityid'], scoutid.text);
 
                 Navigator.of(context).pop();
               },

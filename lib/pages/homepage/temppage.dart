@@ -1,8 +1,8 @@
 import 'package:escout/pages/activity/activitypage.dart';
-import 'package:escout/pages/activity/createactivitypage.dart';
+
 import 'package:escout/pages/feed/listPage.dart';
 import 'package:escout/pages/homepage/facilitypage.dart';
-import 'package:escout/pages/homepage/homepage.dart';
+
 import 'package:escout/pages/homepage/profilepage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

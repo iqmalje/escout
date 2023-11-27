@@ -1,3 +1,5 @@
+import 'package:escout/model/account.dart';
+import 'package:escout/model/activity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseB {
@@ -5,13 +7,22 @@ class SupabaseB {
 
   static bool isAdminToggled = false;
 
-  Future<List<dynamic>> getAttendedActivities(String filter) async {
+  /// Returns a list of attended activities that has been attended
+  /// by the user that is logged in.
+  ///
+  /// May return an empty list if there is no activity attended.
+  Future<List<Activity>> getAttendedActivities(String filter) async {
     var data = await supabase.rpc('filter_attended_activities',
         params: {'filter': filter, 'aid': supabase.auth.currentUser!.id});
 
-    return data;
+    List<Activity> activities = [];
+    for (var activity in data) {
+      activities.add(Activity(activity));
+    }
+    return activities;
   }
 
+  /// Set the status of the activity to done
   Future<void> updateActivityDone(String activityid) async {
     await supabase
         .from('activities')
@@ -21,11 +32,12 @@ class SupabaseB {
   Future<List<dynamic>> getAttendance(String activityid) async {
     var data = await supabase.from('attendance').select('*').match(
         {'activityid': activityid, 'accountid': supabase.auth.currentUser!.id});
-    print(data);
+    
     return data;
   }
 
-  //Any backend function goes here
+  /// Sign in the user to the application, will auto login
+  /// So the user wont have to login everytime.
   Future<bool> signIn(String email, String password) async {
     try {
       await supabase.auth.signInWithPassword(password: password, email: email);
@@ -41,21 +53,25 @@ class SupabaseB {
     }
   }
 
+  /// Send an OTP to user's email for forgot password
   Future<void> sendPasswordOTP(String email) async {
     await supabase.auth.resetPasswordForEmail(email);
   }
 
+  /// Will sign out user, and the user will have to relogin
+  /// when opening the app again later.
   Future<void> signout() async {
     await supabase.auth.signOut();
   }
 
-  Future<dynamic> getProfileInfo() async {
+  /// It will return the model Account, this is based on user's login info
+  /// If user is not logged in to the application, an error will be thrown out!
+  Future<Account> getProfileInfo() async {
     var userid = supabase.auth.currentUser!.id;
-    print("USERID = ${userid}");
     var data =
         await supabase.from('accounts').select('*').eq('accountid', userid);
 
-    return data[0];
+    return Account(data[0]);
   }
 
   Future<bool> verifyPasswordOTP(String email, String OTP) async {
@@ -85,11 +101,11 @@ class SupabaseB {
   Future<void> addAttendance(String activityid, String cardid) async {
     //get accountid from cardid
     try {
+      
       var accid = await supabase
           .from('accounts')
           .select('accountid, fullname')
-          .eq('cardid', cardid)
-          .single();
+          .match({'cardid': cardid}).single();
       print(accid);
       await supabase.from('attendance').insert({
         'activityid': activityid,
@@ -100,10 +116,20 @@ class SupabaseB {
       });
     } catch (e) {
       print(e);
-      print('no acc found');
+      
     }
   }
 
+  /// Since adding an event requires many params, it is better
+  /// for developers to send out a Map instead, below is the required info
+  /// for a map.
+  ///
+  /// Map<String, dynamic>
+  /// {
+  ///   name, category, location, startdate, enddate, file (FOR IMAGE)
+  /// }
+  ///
+  /// TODO: Update this function to receive class Activity instead.
   Future<void> addEvent(Map<String, dynamic> items) async {
     var accid = supabase.auth.currentUser!.id;
 
@@ -136,24 +162,38 @@ class SupabaseB {
     }).eq('activityid', activity['activityid']);
   }
 
-  Future<List<dynamic>> getFeed() async {
+  /// Get a list of feed for the user
+  Future<List<Activity>> getFeed() async {
     var feed =
         await supabase.from('activities').select('*').match({'is_feed': true});
 
-    return feed;
+    List<Activity> activities = [];
+
+    for (var data in feed) {
+      activities.add(Activity(data));
+    }
+    return activities;
   }
 
-  Future<List<dynamic>> getActivities({Map<String, dynamic>? filters}) async {
+  Future<List<Activity>> getActivities({Map<String, dynamic>? filters}) async {
+    List<dynamic> rawData = [];
+    List<Activity> activities = [];
     if (filters == null) {
       var activities = await supabase.from('activities').select('*');
 
-      return activities;
+      rawData = activities;
     } else {
       var activities = await supabase.rpc('filter_activities',
           params: {'filter': '${filters['year']}-${filters['month']}%'});
 
-      return activities;
+      rawData = activities;
     }
+
+    for (var activity in rawData) {
+      activities.add(Activity(activity));
+    }
+
+    return activities;
   }
 
   Future<void> createFeed(Map<String, dynamic> items) async {
@@ -195,7 +235,7 @@ class SupabaseB {
           .select('accountid, fullname')
           .eq('no_ahli', scoutID)
           .single();
-      print(accid);
+      
       await supabase.from('attendance').insert({
         'activityid': activityid,
         'accountid': accid['accountid'],
@@ -205,7 +245,7 @@ class SupabaseB {
       });
     } catch (e) {
       print(e);
-      print('no acc found');
+      
     }
   }
 }

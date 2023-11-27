@@ -268,7 +268,7 @@ class _VerifyResetPasswordState extends State<VerifyResetPassword> {
                           OTPcollected += element.text;
                         }
 
-                        print(OTPcollected);
+
 
                         try {
                           await SupabaseB()

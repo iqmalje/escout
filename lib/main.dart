@@ -1,10 +1,8 @@
-import 'package:escout/backend/backend.dart';
-import 'package:escout/pages/activity/activitypage.dart';
-import 'package:escout/pages/activity/createactivitypage.dart';
-import 'package:escout/pages/attendancetest.dart';
-import 'package:escout/pages/homepage/profilepage.dart';
+// ignore_for_file: unused_local_variable
+
+import 'backend/backend.dart';
+
 import 'package:escout/pages/homepage/temppage.dart';
-import 'package:escout/pages/nfc_test.dart';
 import 'package:escout/pages/signin/signinpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -25,7 +23,6 @@ void main() async {
     isSignedIn = true;
   }
   bool isAvailable = await NfcManager.instance.isAvailable();
-  print(isAvailable);
 
   //listen for auth
   final authSubscription =

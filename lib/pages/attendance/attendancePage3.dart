@@ -1,10 +1,11 @@
-// ignore_for_file: no_logic_in_create_state
+// ignore_for_file: no_logic_in_create_state, must_be_immutable
 
+import 'package:escout/model/activity.dart';
 import 'package:escout/pages/attendance/recordAttendance.dart';
 import 'package:flutter/material.dart';
 
 class attendancePage3 extends StatefulWidget {
-  dynamic activity;
+  Activity activity;
   String attendancekey;
   attendancePage3(
       {super.key, required this.activity, required this.attendancekey});
@@ -15,7 +16,7 @@ class attendancePage3 extends StatefulWidget {
 }
 
 class _attendancePage3State extends State<attendancePage3> {
-  dynamic activity;
+  Activity activity;
   String attendancekey;
   _attendancePage3State(this.activity, this.attendancekey);
   @override
@@ -23,51 +24,70 @@ class _attendancePage3State extends State<attendancePage3> {
     var _mediaQuery = MediaQuery.of(context);
 
     return MaterialApp(
-      home: Scaffold(
-          body: Container(
-        width: _mediaQuery.size.width,
-        height: _mediaQuery.size.height,
-        color: Colors.white,
-        child: Column(children: <Widget>[
-          _appBar(context),
-          displayActivity(activity),
-          const SizedBox(height: 30),
-          openAttendanceButton(
-              context, activity['activityid'], attendancekey, activity),
-          const SizedBox(height: 15),
-          showParticipantButton(),
-        ]),
-      )),
+      home: Container(
+        color: const Color(0xFF2C225B),
+        child: SafeArea(
+          child: Scaffold(
+              body: Container(
+            width: _mediaQuery.size.width,
+            height: _mediaQuery.size.height,
+            color: Colors.white,
+            child: Column(children: <Widget>[
+              _appBar(context),
+              displayActivity(activity),
+              const SizedBox(height: 30),
+              openAttendanceButton(
+                  context, activity.activityid, attendancekey, activity),
+              const SizedBox(height: 15),
+              showParticipantButton(),
+            ]),
+          )),
+        ),
+      ),
     );
   }
 }
 
 Widget _appBar(context) {
   return Container(
-      height: 155,
-      width: MediaQuery.of(context).size.width,
-      color: const Color(0xFF2C225B),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 50, right: 20),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            _backButton(context),
-            const SizedBox(width: 25),
-            const Padding(
-              padding: EdgeInsets.only(top: 5.0),
-              child: Text(
-                'Attendances',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 29,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: .3),
-              ),
-            )
-          ],
+    width: MediaQuery.sizeOf(context).width,
+    height: 90,
+    decoration: const BoxDecoration(color: Color(0xFF2C225B)),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(
+          width: 30,
         ),
-      ));
+        Container(
+          width: 50,
+          height: 50,
+          decoration: const ShapeDecoration(
+            color: Colors.white,
+            shape: OvalBorder(),
+          ),
+          child: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.arrow_back_ios_new)),
+        ),
+        const SizedBox(
+          width: 30,
+        ),
+        const Text(
+          'Attendances',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 25,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w600,
+            height: 0,
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 Widget _backButton(context) {
@@ -95,7 +115,7 @@ Widget _backButton(context) {
   );
 }
 
-Widget displayActivity(dynamic activity) {
+Widget displayActivity(Activity activity) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
@@ -114,12 +134,12 @@ Widget displayActivity(dynamic activity) {
       ),
       const SizedBox(height: 25),
       theActivity(
-        activityName: activity['name'],
+        activityName: activity.name,
         activityID: '011220',
-        activityLocation: activity['location'],
+        activityLocation: activity.location,
         activityOrgnzr: 'PPM NEGERI JOHOR',
-        enddate: DateTime.parse(activity['enddate']),
-        startdate: DateTime.parse(activity['startdate']),
+        enddate: activity.enddate,
+        startdate: activity.startdate,
       ),
     ],
   );

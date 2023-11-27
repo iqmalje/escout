@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:escout/backend/backend.dart';
+import 'package:escout/model/account.dart';
 import 'package:escout/pages/forgotpassword/verifyOTP.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -26,26 +27,25 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Scaffold(
             body: SingleChildScrollView(
               child: Center(
-                child: FutureBuilder<dynamic>(
+                child: FutureBuilder<Account>(
                     future: SupabaseB().getProfileInfo(),
                     builder: (context, snapshot) {
                       if (snapshot.data == null) {
                         return const CircularProgressIndicator();
                       }
 
-                      print(snapshot.data);
                       if (SupabaseB.isAdminToggled &&
-                          snapshot.data['roles'] == 'ADMIN') {
+                          snapshot.data!.roles == 'ADMIN') {
                         fullname.text = 'PPM NEGERI JOHOR';
                         mobilenumber.text = '07-111 5566';
                         email.text = 'ppmnegerijohor@gmail.com';
                       } else {
-                        fullname.text = snapshot.data['fullname'];
-                        email.text = snapshot.data['email'];
-                        mobilenumber.text = snapshot.data['phoneno'];
+                        fullname.text = snapshot.data!.fullname;
+                        email.text = snapshot.data!.email;
+                        mobilenumber.text = snapshot.data!.phoneno;
                       }
 
-                      if (snapshot.data['position'].length > 40) {
+                      if (snapshot.data!.position.length > 40) {
                         shorten = true;
                       } else {
                         shorten = false;
@@ -73,13 +73,13 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 18,
                           ),
                           Builder(builder: (context) {
-                            if (snapshot.data['roles'] != 'ADMIN') {
+                            if (snapshot.data!.roles != 'ADMIN') {
                               return Container();
                             }
                             return InkWell(
                               onTap: () {
                                 setState(() {
-                                  if (snapshot.data['roles'] != 'ADMIN') return;
+                                  if (snapshot.data!.roles != 'ADMIN') return;
                                   SupabaseB.isAdminToggled =
                                       !SupabaseB.isAdminToggled;
                                   if (!SupabaseB.isAdminToggled) {
@@ -87,10 +87,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                     mobilenumber.text = '07-111 5566';
                                     email.text = 'ppmnegerijohor@gmail.com';
                                   } else {
-                                    fullname.text = snapshot.data['fullname'];
-                                    email.text = snapshot.data['email'];
-                                    mobilenumber.text =
-                                        snapshot.data['phoneno'];
+                                    fullname.text = snapshot.data!.fullname;
+                                    email.text = snapshot.data!.email;
+                                    mobilenumber.text = snapshot.data!.phoneno;
                                   }
                                 });
                               },
@@ -123,7 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 18,
                           ),
                           Builder(builder: (context) {
-                            if (snapshot.data['roles'] != 'ADMIN') {
+                            if (snapshot.data!.roles != 'ADMIN') {
                               return Column(
                                 children: [
                                   const Text(
@@ -135,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       height: 0,
                                     ),
                                   ),
-                                  buildCard(snapshot),
+                                  buildCard(snapshot.data!),
                                 ],
                               );
                             }
@@ -151,7 +150,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       height: 0,
                                     ),
                                   ),
-                                  buildCard(snapshot),
+                                  buildCard(snapshot.data!),
                                 ],
                               );
                             } else {
@@ -457,7 +456,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Stack buildCard(AsyncSnapshot<dynamic> snapshot) {
+  Stack buildCard(Account account) {
     return Stack(
       children: [
         Image.asset('assets/images/card_profile.png'),
@@ -510,7 +509,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 child: CircleAvatar(
-                    backgroundImage: NetworkImage(snapshot.data['image_url'])),
+                    backgroundImage: NetworkImage(account.image_url)),
               ),
               const SizedBox(
                 height: 14,
@@ -524,7 +523,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       Flexible(
                         child: AutoSizeText(
-                          snapshot.data['fullname'],
+                          account.fullname,
                           textAlign: TextAlign.center,
                           maxLines: 2,
                           style: const TextStyle(
@@ -539,7 +538,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Builder(builder: (context) {
-                          if (snapshot.data['is_member']) {
+                          if (account.is_member) {
                             return const Icon(
                               Icons.verified,
                               size: 20,
@@ -561,7 +560,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 2.0),
                   child: AutoSizeText(
-                    snapshot.data['position'],
+                    account.position,
                     textAlign: TextAlign.center,
                     maxLines: 2,
                     style: const TextStyle(
@@ -598,7 +597,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           width: 76,
                           height: 18,
                           child: Text(
-                            ': ${snapshot.data['no_ahli']}',
+                            ': ${account.no_ahli}',
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 12,
@@ -633,7 +632,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           width: 76,
                           height: 18,
                           child: Text(
-                            ': ${snapshot.data['no_tauliah']}',
+                            ': ${account.no_tauliah}',
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 12,
@@ -665,7 +664,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         Text(
-                          ': ${snapshot.data['unit']}',
+                          ': ${account.unit}',
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,
@@ -696,7 +695,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         Text(
-                          ': ${snapshot.data['daerah']}',
+                          ': ${account.daerah}',
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,

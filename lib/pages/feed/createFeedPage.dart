@@ -111,12 +111,12 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                         if (pickedDate == null) return;
                         if (pickedDate.millisecondsSinceEpoch >=
                             enddate.millisecondsSinceEpoch) {
-                          print('bitchass');
+                          
                           return;
                         } else {
                           setState(() {
                             startdate = pickedDate;
-                            print(startdate);
+                            
                           });
                         }
                       },
@@ -163,13 +163,13 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
 
                         if (startdate.millisecondsSinceEpoch >=
                             pickedDate.millisecondsSinceEpoch) {
-                          print('bitchass');
+                          
                           return;
                         } else {
                           setState(() {
-                            print('enddate');
+                            
                             enddate = pickedDate;
-                            print(enddate);
+                            
                           });
                         }
                       },
@@ -241,12 +241,12 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                     if (pickedDate == null) return;
                     if (startdate.millisecondsSinceEpoch >=
                         registerenddate.millisecondsSinceEpoch) {
-                      print('bitchass');
+
                       return;
                     } else {
                       setState(() {
                         registerenddate = pickedDate;
-                        print(registerenddate);
+
                       });
                     }
                   },

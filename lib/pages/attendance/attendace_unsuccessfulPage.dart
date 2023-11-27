@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 class attendace_unsuccessfulPage extends StatefulWidget {
@@ -70,7 +68,8 @@ Widget unsuccesfulPopUp() {
             SizedBox(height: 10),
             Container(
                 height: 210,
-                child: Image.asset('assets/images/attendance_unsuccessful.png')),
+                child:
+                    Image.asset('assets/images/attendance_unsuccessful.png')),
             SizedBox(height: 15),
             Text(
               'Please try again to scan your\nScout ID.',
