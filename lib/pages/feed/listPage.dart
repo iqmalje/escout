@@ -140,7 +140,7 @@ Widget buildAPost(BuildContext context, Activity item) {
           child: Column(
             children: <Widget>[
               //feed header
-              Container(
+              Ink(
                 height: 50,
                 color: Colors.white,
                 child: Padding(
@@ -182,8 +182,11 @@ Widget buildAPost(BuildContext context, Activity item) {
               ),
 
               //feed image
-              Container(
-                color: Colors.lightBlue,
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                    maxHeight: 300,
+                    minHeight: 100,
+                    minWidth: MediaQuery.sizeOf(context).width),
                 child: Stack(children: <Widget>[
                   //event image
                   Image.network(item.imageurl),
@@ -230,39 +233,41 @@ Widget buildAPost(BuildContext context, Activity item) {
               ),
 
               //feed caption
-              Container(
+              ConstrainedBox(
                 constraints: BoxConstraints(
                     minWidth: MediaQuery.sizeOf(context).width, minHeight: 50),
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 15.0, bottom: 15),
+                child: Ink(
+                  color: Colors.white,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 25.0, right: 25),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          //caption title
-                          Text(
-                            item.name,
-                            style: const TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: .3,
+                    padding: const EdgeInsets.only(top: 15.0, bottom: 15),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 25.0, right: 25),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            //caption title
+                            Text(
+                              item.name,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: .3,
+                              ),
                             ),
-                          ),
 
-                          SizedBox(
-                            height: 10,
-                          ),
+                            const SizedBox(
+                              height: 10,
+                            ),
 
-                          Text(
-                            item.description ??= 'No description available.',
-                            textAlign: TextAlign.start,
-                            maxLines: 4,
-                            overflow: TextOverflow.ellipsis,
-                          )
-                          //caption subtitle
-                        ]),
+                            Text(
+                              item.description ??= 'No description available.',
+                              textAlign: TextAlign.start,
+                              maxLines: 4,
+                              overflow: TextOverflow.ellipsis,
+                            )
+                            //caption subtitle
+                          ]),
+                    ),
                   ),
                 ),
               )
