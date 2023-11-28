@@ -1,13 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+import '../../model/activity.dart';
 
 class Detailsprogram extends StatefulWidget {
-  const Detailsprogram({super.key});
+  Activity activity;
+  Detailsprogram({super.key, required this.activity});
 
   @override
-  State<Detailsprogram> createState() => _DetailsprogramState();
+  State<Detailsprogram> createState() => _DetailsprogramState(activity);
 }
 
 class _DetailsprogramState extends State<Detailsprogram> {
+  Activity activity;
+
+  List<String> monthName = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  List<String> monthAbbreviations = [];
+
+  @override
+  void initState() {
+    monthAbbreviations =
+        monthName.map((month) => month.substring(0, 3)).toList();
+    super.initState();
+  }
+
+  _DetailsprogramState(this.activity);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -72,11 +103,11 @@ class _DetailsprogramState extends State<Detailsprogram> {
                           height: 36,
                         ),
                         const SizedBox(width: 12),
-                        const Column(
+                        Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(
+                            const Text(
                               'PPM NEGERI JOHOR',
                               style: TextStyle(
                                 color: Colors.black,
@@ -84,12 +115,12 @@ class _DetailsprogramState extends State<Detailsprogram> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 3,
                             ),
                             Text(
-                              '7 October 2023, 10:06 PM ',
-                              style: TextStyle(
+                              '${activity.created_at.day} ${monthName[activity.created_at.month - 1]} ${activity.created_at.year}, ${DateFormat('hh:mm a').format(activity.created_at)} ',
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 10,
                                 fontWeight: FontWeight.normal,
@@ -105,7 +136,7 @@ class _DetailsprogramState extends State<Detailsprogram> {
                     color: Colors.lightBlue,
                     child: Stack(children: <Widget>[
                       //event image
-                      Image.network("https://via.placeholder.com/390x200"),
+                      Image.network(activity.imageurl),
 
                       //event type details
                       Positioned(
@@ -133,9 +164,9 @@ class _DetailsprogramState extends State<Detailsprogram> {
                             const SizedBox(width: 7),
 
                             //event type: name
-                            const Text(
-                              'CAMPING',
-                              style: TextStyle(
+                            Text(
+                              activity.category,
+                              style: const TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
@@ -163,16 +194,16 @@ class _DetailsprogramState extends State<Detailsprogram> {
                         )
                       ],
                     ),
-                    child: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15.0, vertical: 25),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15.0, vertical: 25),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                            'Johor Rovers Vigil 2023 & Serving For The Future',
-                            style: TextStyle(
+                            activity.name,
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 16,
                               fontFamily: 'Poppins',
@@ -180,18 +211,18 @@ class _DetailsprogramState extends State<Detailsprogram> {
                               height: 0,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Row(
                             children: [
-                              Icon(Icons.location_on),
-                              SizedBox(
+                              const Icon(Icons.location_on),
+                              const SizedBox(
                                 width: 10,
                               ),
                               Text(
-                                'KEM JUBLI INTAN TANJUNG LABUH BATU PAHAT',
-                                style: TextStyle(
+                                activity.location,
+                                style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 12,
                                   fontFamily: 'Poppins',
@@ -203,13 +234,15 @@ class _DetailsprogramState extends State<Detailsprogram> {
                           ),
                           Row(
                             children: [
-                              Icon(Icons.calendar_month),
-                              SizedBox(
+                              const Icon(Icons.calendar_month),
+                              const SizedBox(
                                 width: 10,
                               ),
                               Text(
-                                '30 Oct - 2 Nov 2023',
-                                style: TextStyle(
+                                //'30 Oct - 2 Nov 2023',
+
+                                '${activity.startdate.day} ${monthAbbreviations[activity.startdate.month]} - ${activity.enddate.day} ${monthAbbreviations[activity.enddate.month]} ${activity.enddate.year}',
+                                style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 12,
                                   fontFamily: 'Poppins',
@@ -221,13 +254,13 @@ class _DetailsprogramState extends State<Detailsprogram> {
                           ),
                           Row(
                             children: [
-                              Icon(Icons.paid_rounded),
-                              SizedBox(
+                              const Icon(Icons.paid_rounded),
+                              const SizedBox(
                                 width: 10,
                               ),
                               Text(
-                                'RM100',
-                                style: TextStyle(
+                                'RM ${(activity.fee ??= 0).toStringAsFixed(2)}',
+                                style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 12,
                                   fontFamily: 'Poppins',
@@ -239,13 +272,15 @@ class _DetailsprogramState extends State<Detailsprogram> {
                           ),
                           Row(
                             children: [
-                              Icon(Icons.calendar_today_rounded),
-                              SizedBox(
+                              const Icon(Icons.calendar_today_rounded),
+                              const SizedBox(
                                 width: 10,
                               ),
                               Text(
-                                'Open until 8 September 2023',
-                                style: TextStyle(
+                                activity.registrationenddate != null
+                                    ? 'Open until ${activity.registrationenddate!.day} ${monthName[activity.registrationenddate!.month - 1]} ${activity.registrationenddate!.year}'
+                                    : 'Open',
+                                style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 12,
                                   fontFamily: 'Poppins',
@@ -278,10 +313,10 @@ class _DetailsprogramState extends State<Detailsprogram> {
                         ),
                       ],
                     ),
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'Description',
                           style: TextStyle(
                             color: Colors.black,
@@ -290,12 +325,12 @@ class _DetailsprogramState extends State<Detailsprogram> {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text.rich(
                           TextSpan(
-                            text:
-                                'Ayuh warga kelana Johor, kita sama-sama memeriahkan lagi Johor Rovers Vigil 2023 dan Serving for The Future yang akan berlangsung tidak lama lagi. Program 2 dalam 1 ini akan berlangsung selama 3 hari 2 malam. \n\nBanyak aktiviti menarik yang akan diadakan sepanjang program ini berlangsung. Oleh itu jangan lepaskan peluang keemasan ini dan rasakan kebangkitan Kelana Johor. Sebarang pertanyaan boleh hubungi Pen. Pesuruhjaya Daerah (Unit Kelana) masing-masing, atau hubungi kami melalui FB page dan Instagram rasmi kami atau Saudara Mohd Saifullah 0103638985Timbalan Pengerusi Sekteriat Pengakap Kelana Johor selaku Pengarah Program Johor Rovers Vigil 2023 & Serving For The Nature.\n\n',
-                            style: TextStyle(
+                            text: activity.description ??
+                                'No description available.',
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 11,
                               fontFamily: 'Poppins',

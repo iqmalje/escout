@@ -129,8 +129,10 @@ Widget buildAPost(BuildContext context, Activity item) {
     child: InkWell(
       onTap: () {
         print('Hello World');
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => Detailsprogram()));
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => Detailsprogram(
+                  activity: item,
+                )));
       },
       child: Padding(
         padding: const EdgeInsets.only(top: 10.0),
