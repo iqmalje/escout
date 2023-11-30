@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:escout/backend/backend.dart';
 import 'package:escout/pages/homepage/temppage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -15,7 +16,8 @@ class CreateFeedPage extends StatefulWidget {
 
 class _CreateFeedPageState extends State<CreateFeedPage> {
   ImagePicker imagePicker = ImagePicker();
-
+  String dropdownValue = 'Meeting';
+  List<String> list = ['Meeting', 'Camping'];
   XFile? imagePicked;
   bool isFeed = false;
 
@@ -61,13 +63,60 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                 'icon': null
               }),
               //program category
-              textField({
-                'controller': category,
-                'onChange': (String val) {},
-                'label': 'Program Category',
-                'hintText': 'Program category',
-                'icon': Icons.arrow_drop_down_outlined
-              }),
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0, left: 25, right: 25),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Program Category',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: .3,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      height: 35,
+                      child: Container(
+                        decoration: ShapeDecoration(
+                          color: Color.fromRGBO(237, 237, 237, 100),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(3)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 17),
+                          child: DropdownButton<String>(
+                            value: dropdownValue,
+                            isExpanded: true,
+                            icon: const Icon(Icons.arrow_drop_down),
+                            elevation: 16,
+                            style: const TextStyle(color: Colors.black),
+                            underline: Container(
+                              height: 0,
+                            ),
+                            onChanged: (String? value) {
+                              // This is called when the user selects an item.
+                              setState(() {
+                                dropdownValue = value!;
+                              });
+                            },
+                            items: list
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
               //program location
               textField({
                 'controller': location,
@@ -109,7 +158,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                                 DateTime.now().add(const Duration(days: 365)));
 
                         if (pickedDate == null) return;
-                        if (pickedDate.millisecondsSinceEpoch >=
+                        if (pickedDate.millisecondsSinceEpoch >
                             enddate.millisecondsSinceEpoch) {
                           return;
                         } else {
@@ -159,7 +208,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
 
                         if (pickedDate == null) return;
 
-                        if (startdate.millisecondsSinceEpoch >=
+                        if (startdate.millisecondsSinceEpoch >
                             pickedDate.millisecondsSinceEpoch) {
                           return;
                         } else {
@@ -207,7 +256,8 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                 'onChange': (String val) {},
                 'label': 'Program Fee',
                 'hintText': 'Program fee (RM)',
-                'icon': null
+                'icon': null,
+                'keyboardType': TextInputType.number
               }),
               //program end date registration
               const Padding(
@@ -235,7 +285,8 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
 
                     if (pickedDate == null) return;
                     if (startdate.millisecondsSinceEpoch >=
-                        registerenddate.millisecondsSinceEpoch) {
+                        pickedDate.millisecondsSinceEpoch) {
+                      print('test');
                       return;
                     } else {
                       setState(() {
@@ -455,6 +506,8 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
             child: TextField(
               controller: textItems['controller'],
               onChanged: textItems['onChange'],
+              keyboardType: textItems['keyboardType'],
+
               decoration: InputDecoration(
                 hintText: textItems['hintText'],
                 hintStyle: const TextStyle(
@@ -466,7 +519,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                 fillColor: const Color.fromRGBO(237, 237, 237, 100),
                 filled: true,
                 suffixIcon: Padding(
-                  padding: const EdgeInsets.only(right: 17),
+                  padding: const EdgeInsets.only(right: 17, left: 17),
                   child: textItems['icon'] != null
                       ? Icon(
                           textItems['icon'],
@@ -485,7 +538,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
 
   Switch switchButton() {
     return Switch(
-      activeColor: Color.fromARGB(255, 255, 255, 255),
+      activeColor: const Color.fromARGB(255, 255, 255, 255),
       activeTrackColor: const Color(0xFF2E3B78),
       value: isFeed,
       onChanged: (newSwitch) {
@@ -533,7 +586,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
             });
 
             Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => TempPage()),
+                MaterialPageRoute(builder: (context) => const TempPage()),
                 (route) => false);
           },
           child: const Text('POST',
@@ -543,7 +596,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                   fontWeight: FontWeight.bold,
                   color: Colors.white)),
           style: ElevatedButton.styleFrom(
-            primary: Color(0xFF2E3B78),
+            primary: const Color(0xFF2E3B78),
             elevation: 0,
             fixedSize: const Size(355, 50),
           ),

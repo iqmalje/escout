@@ -1,4 +1,4 @@
-// ignore_for_file: no_logic_in_create_state, must_be_immutable
+// ignore_for_file: no_logic_in_create_state, must_be_immutable, camel_case_types
 
 import 'package:escout/model/activity.dart';
 import 'package:escout/pages/attendance/recordAttendance.dart';
@@ -7,18 +7,23 @@ import 'package:flutter/material.dart';
 class attendancePage3 extends StatefulWidget {
   Activity activity;
   String attendancekey;
+  DateTime timePicked;
   attendancePage3(
-      {super.key, required this.activity, required this.attendancekey});
+      {super.key,
+      required this.activity,
+      required this.attendancekey,
+      required this.timePicked});
 
   @override
   State<attendancePage3> createState() =>
-      _attendancePage3State(activity, attendancekey);
+      _attendancePage3State(activity, attendancekey, timePicked);
 }
 
 class _attendancePage3State extends State<attendancePage3> {
   Activity activity;
   String attendancekey;
-  _attendancePage3State(this.activity, this.attendancekey);
+  DateTime timePicked;
+  _attendancePage3State(this.activity, this.attendancekey, this.timePicked);
   @override
   Widget build(BuildContext context) {
     var _mediaQuery = MediaQuery.of(context);
@@ -34,7 +39,7 @@ class _attendancePage3State extends State<attendancePage3> {
             color: Colors.white,
             child: Column(children: <Widget>[
               _appBar(context),
-              displayActivity(activity),
+              displayActivity(activity, timePicked),
               const SizedBox(height: 30),
               openAttendanceButton(
                   context, activity.activityid, attendancekey, activity),
@@ -115,7 +120,7 @@ Widget _backButton(context) {
   );
 }
 
-Widget displayActivity(Activity activity) {
+Widget displayActivity(Activity activity, DateTime timePicked) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
@@ -140,6 +145,7 @@ Widget displayActivity(Activity activity) {
         activityOrgnzr: 'PPM NEGERI JOHOR',
         enddate: activity.enddate,
         startdate: activity.startdate,
+        timePicked: timePicked,
       ),
     ],
   );
@@ -151,7 +157,7 @@ class theActivity extends StatefulWidget {
   final String activityLocation;
   //final DateTime activityDate;
   final String activityOrgnzr;
-  DateTime startdate, enddate;
+  DateTime startdate, enddate, timePicked;
 
   theActivity(
       {required this.activityName,
@@ -159,18 +165,25 @@ class theActivity extends StatefulWidget {
       required this.activityLocation,
       required this.activityOrgnzr,
       required this.startdate,
-      required this.enddate});
+      required this.enddate,
+      required this.timePicked});
 
   @override
-  State<theActivity> createState() => _theActivityState(activityName,
-      activityID, activityLocation, activityOrgnzr, startdate, enddate);
+  State<theActivity> createState() => _theActivityState(
+      activityName,
+      activityID,
+      activityLocation,
+      activityOrgnzr,
+      startdate,
+      enddate,
+      timePicked);
 }
 
 class _theActivityState extends State<theActivity> {
   String activityName, activityID, activityLocation, activityOrgnzr;
-  DateTime startdate, enddate;
+  DateTime startdate, enddate, timePicked;
   _theActivityState(this.activityName, this.activityID, this.activityLocation,
-      this.activityOrgnzr, this.startdate, this.enddate);
+      this.activityOrgnzr, this.startdate, this.enddate, this.timePicked);
   List<String> monthName = [
     'January',
     'February',
@@ -243,7 +256,7 @@ class _theActivityState extends State<theActivity> {
                   width: 10,
                 ),
                 Text(
-                  '${startdate.day} - ${enddate.day} ${monthName[enddate.month - 1]} 2023',
+                  '${timePicked.day} ${monthName[timePicked.month - 1]} 2023',
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 11,

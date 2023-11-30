@@ -20,6 +20,8 @@ class _CreateActivityPage extends State<CreateActivityPage> {
       category = TextEditingController(),
       location = TextEditingController();
 
+  String dropdownValue = 'Camping';
+  List<String> list = <String>['Meeting', 'Camping'];
   DateTime startdate = DateTime.now(),
       enddate = DateTime.now().add(const Duration(days: 1));
   final ImagePicker picker = ImagePicker();
@@ -30,84 +32,85 @@ class _CreateActivityPage extends State<CreateActivityPage> {
       color: const Color(0xFF2E3B78),
       child: SafeArea(
         bottom: false,
-        child: SingleChildScrollView(
-          child: Scaffold(
-            body: Column(
-              //blue bow column
-              children: [
-                Container(
-                  //blue box container
-                  width: MediaQuery.sizeOf(context).width,
-                  height: 90,
-                  decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
+        child: Scaffold(
+          body: ConstrainedBox(
+            constraints:
+                BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height),
+            child: SingleChildScrollView(
+              child: Column(
+                //blue bow column
+                children: [
+                  Container(
+                    //blue box container
+                    width: MediaQuery.sizeOf(context).width,
+                    height: 90,
+                    decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
 
-                  child: Row(
-                    children: [
-                      InkWell(
-                        borderRadius: BorderRadius.circular(100),
-                        onTap: () {},
-                        child: Ink(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: Colors.white,
-                          ),
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.arrow_back,
-                              size: 35,
-                              color: Color.fromARGB(255, 255, 255, 255),
+                    child: Row(
+                      children: [
+                        InkWell(
+                          borderRadius: BorderRadius.circular(100),
+                          onTap: () {},
+                          child: Ink(
+                            width: 60,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              color: Colors.white,
                             ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.arrow_back,
+                                size: 35,
+                                color: Color.fromARGB(255, 255, 255, 255),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                      const Center(
-                        child: Text(
-                          'Create Activity',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 255, 255, 255),
-                            fontSize: 24,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
+                        const Center(
+                          child: Text(
+                            'Create Activity',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 255, 255, 255),
+                              fontSize: 24,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                InkWell(
-                  onTap: () async {
-                    XFile? image =
-                        await picker.pickImage(source: ImageSource.gallery);
-
-                    if (image == null) return;
-                    setState(() {
-                      imagePicked = image;
-                    });
-                  },
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minWidth: MediaQuery.sizeOf(context).width,
-                      maxHeight: 400,
+                      ],
                     ),
-                    child: Ink(
-                      decoration: const BoxDecoration(color: Color(0xFFECECEC)),
-                      child: Builder(builder: (context) {
-                        if (imagePicked == null) {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                  child:
-                                      Image.asset('assets/images/upload.png')),
-                              const Positioned(
-                                left: 142,
-                                top: 111,
-                                child: Text(
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      XFile? image =
+                          await picker.pickImage(source: ImageSource.gallery);
+
+                      if (image == null) return;
+                      setState(() {
+                        imagePicked = image;
+                      });
+                    },
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minWidth: MediaQuery.sizeOf(context).width,
+                        maxHeight: 200,
+                      ),
+                      child: Ink(
+                        decoration:
+                            const BoxDecoration(color: Color(0xFFECECEC)),
+                        child: Builder(builder: (context) {
+                          if (imagePicked == null) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                    child: Image.asset(
+                                        'assets/images/upload.png')),
+                                const Text(
                                   'Upload an image',
                                   style: TextStyle(
                                     color: Color(0xFFD9D9D9),
@@ -117,23 +120,21 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                                     height: 0,
                                   ),
                                 ),
-                              ),
-                            ],
-                          );
-                        } else {
-                          return FittedBox(
-                              fit: BoxFit.fill,
-                              child: Image.file(File(imagePicked!.path)));
-                        }
-                      }),
+                              ],
+                            );
+                          } else {
+                            return FittedBox(
+                                fit: BoxFit.fill,
+                                child: Image.file(File(imagePicked!.path)));
+                          }
+                        }),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Expanded(
-                  child: Padding(
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: MediaQuery.sizeOf(context).width * 0.1),
                     child: Column(
@@ -207,44 +208,40 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                           ),
                         ),
                         Container(
-                          width: MediaQuery.sizeOf(context).width * 0.8,
-                          height: 40,
-                          decoration: ShapeDecoration(
-                            color: const Color(0xFFECECEC),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(3)),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 6),
-                            child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 5.0),
-                                  child: TextField(
-                                    controller: category,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 11,
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0,
-                                    ),
-                                    decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'Program Category',
-                                      hintStyle: TextStyle(
-                                        color: Color(0xFF9397A0),
-                                        fontSize: 11,
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w400,
-                                        height: 0,
-                                      ),
-                                    ),
-                                  ),
-                                )),
-                          ),
-                        ),
+                            width: MediaQuery.sizeOf(context).width * 0.8,
+                            height: 40,
+                            decoration: ShapeDecoration(
+                              color: const Color(0xFFECECEC),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(3)),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: DropdownButton<String>(
+                                value: dropdownValue,
+                                isExpanded: true,
+                                icon: const Icon(Icons.arrow_drop_down),
+                                elevation: 16,
+                                style: const TextStyle(color: Colors.black),
+                                underline: Container(
+                                  height: 0,
+                                ),
+                                onChanged: (String? value) {
+                                  // This is called when the user selects an item.
+                                  setState(() {
+                                    dropdownValue = value!;
+                                  });
+                                },
+                                items: list.map<DropdownMenuItem<String>>(
+                                    (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                            )),
                         const SizedBox(
                           height: 20,
                         ),
@@ -420,6 +417,9 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                             ),
                           ],
                         ),
+                        const SizedBox(
+                          height: 20,
+                        ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 20.0),
                           child: InkWell(
@@ -444,7 +444,7 @@ class _CreateActivityPage extends State<CreateActivityPage> {
 
                               await SupabaseB().addEvent({
                                 'name': name.text,
-                                'category': category.text,
+                                'category': dropdownValue,
                                 'location': location.text,
                                 'startdate':
                                     DateFormat('yyyy-MM-dd').format(startdate),
@@ -452,6 +452,8 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                                     DateFormat('yyyy-MM-dd').format(enddate),
                                 'file': File(imagePicked!.path)
                               });
+
+                              Navigator.of(context).pop();
                             },
                             child: Ink(
                               width: MediaQuery.sizeOf(context).width * 0.8,
@@ -479,8 +481,8 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                       ],
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

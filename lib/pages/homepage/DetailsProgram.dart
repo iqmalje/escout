@@ -241,7 +241,7 @@ class _DetailsprogramState extends State<Detailsprogram> {
                               Text(
                                 //'30 Oct - 2 Nov 2023',
 
-                                '${activity.startdate.day} ${monthAbbreviations[activity.startdate.month]} - ${activity.enddate.day} ${monthAbbreviations[activity.enddate.month]} ${activity.enddate.year}',
+                                '${activity.startdate.day} ${monthAbbreviations[activity.startdate.month - 1]} - ${activity.enddate.day} ${monthAbbreviations[activity.enddate.month - 1]} ${activity.enddate.year}',
                                 style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 12,
@@ -259,7 +259,11 @@ class _DetailsprogramState extends State<Detailsprogram> {
                                 width: 10,
                               ),
                               Text(
-                                'RM ${(activity.fee ??= 0).toStringAsFixed(2)}',
+                                activity.fee == null
+                                    ? 'Free'
+                                    : activity.fee! != 0
+                                        ? 'RM ${(activity.fee!).toStringAsFixed(2)}'
+                                        : 'Free',
                                 style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 12,

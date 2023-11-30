@@ -453,6 +453,7 @@ class _DetailsActivityState extends State<DetailsActivity> {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => attendancePage3(
                   activity: activity,
+                  timePicked: date,
                   attendancekey: '${date.day}${date.month}${date.year}')));
         },
         borderRadius: BorderRadius.circular(5),

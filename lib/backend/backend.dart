@@ -32,7 +32,7 @@ class SupabaseB {
   Future<List<dynamic>> getAttendance(String activityid) async {
     var data = await supabase.from('attendance').select('*').match(
         {'activityid': activityid, 'accountid': supabase.auth.currentUser!.id});
-    
+
     return data;
   }
 
@@ -101,7 +101,6 @@ class SupabaseB {
   Future<void> addAttendance(String activityid, String cardid) async {
     //get accountid from cardid
     try {
-      
       var accid = await supabase
           .from('accounts')
           .select('accountid, fullname')
@@ -116,7 +115,6 @@ class SupabaseB {
       });
     } catch (e) {
       print(e);
-      
     }
   }
 
@@ -137,7 +135,7 @@ class SupabaseB {
         .from('activities')
         .insert({
           'name': items['name'],
-          'category': items['category'],
+          'category': items['category'].toString().toUpperCase(),
           'location': items['location'],
           'startdate': items['startdate'],
           'enddate': items['enddate'],
@@ -202,7 +200,7 @@ class SupabaseB {
         .from('activities')
         .insert({
           'name': items['name'],
-          'category': items['category'],
+          'category': items['category'].toString().toUpperCase(),
           'location': items['location'],
           'startdate': items['startdate'],
           'enddate': items['enddate'],
@@ -235,7 +233,7 @@ class SupabaseB {
           .select('accountid, fullname')
           .eq('no_ahli', scoutID)
           .single();
-      
+
       await supabase.from('attendance').insert({
         'activityid': activityid,
         'accountid': accid['accountid'],
@@ -245,7 +243,6 @@ class SupabaseB {
       });
     } catch (e) {
       print(e);
-      
     }
   }
 }

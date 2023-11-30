@@ -31,7 +31,7 @@ class Account {
     roles = item['roles'];
     image_url = item['image_url'];
     position = item['position'];
-    cardid = item['cardid'];
+    cardid = item['cardid'] ??= 'None';
     is_member = item['is_member'];
     created_at =
         DateTime.parse(item['created_at']).add(const Duration(hours: 8));

@@ -24,7 +24,7 @@ class Activity {
     created_by = item['created_by'];
     description = item['description'];
     status = item['status'];
-    fee = item['fee'];
+    fee = double.tryParse(item['fee'].toString());
 
     created_at =
         DateTime.parse(item['created_at']).add(const Duration(hours: 8));
