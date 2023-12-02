@@ -240,6 +240,9 @@ class _DetailsActivityState extends State<DetailsActivity> {
                     return buildAttendedList(context, activity.activityid);
                   }
                 }),
+                const SizedBox(
+                  height: 10,
+                ),
                 Builder(builder: (context) {
                   if (SupabaseB.isAdminToggled &&
                       activity.status == 'ONGOING') {
@@ -413,21 +416,23 @@ class _DetailsActivityState extends State<DetailsActivity> {
   }
 
   Widget buildDateSelector(BuildContext context) {
-    return Expanded(
-      child: Column(
-        children: [
-          const Text(
-            'Select the date of activity',
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 12,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w500,
-              height: 0,
-            ),
+    return Column(
+      children: [
+        const Text(
+          'Select the date of activity',
+          textAlign: TextAlign.left,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 12,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w500,
+            height: 0,
           ),
-          ListView.builder(
+        ),
+        SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.2,
+          child: ListView.builder(
+              scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemCount: activity.dateInvolved.length,
               padding: EdgeInsets.symmetric(
@@ -435,8 +440,8 @@ class _DetailsActivityState extends State<DetailsActivity> {
               itemBuilder: (context, index) {
                 return buildDate(context, index);
               }),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -448,33 +453,35 @@ class _DetailsActivityState extends State<DetailsActivity> {
 
     return Padding(
       padding: const EdgeInsets.only(top: 10.0),
-      child: InkWell(
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => attendancePage3(
-                  activity: activity,
-                  timePicked: date,
-                  attendancekey: '${date.day}${date.month}${date.year}')));
-        },
-        borderRadius: BorderRadius.circular(5),
-        child: Ink(
-          width: MediaQuery.sizeOf(context).width * 0.85,
-          height: 40,
-          decoration: ShapeDecoration(
-            color: const Color(0xFF2C225B),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-          ),
-          child: Center(
-            child: Text(
-              '${date.day} ${monthAbbreviations[date.month - 1]} ${date.year}',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 11,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600,
-                height: 0,
+      child: Material(
+        child: InkWell(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => attendancePage3(
+                    activity: activity,
+                    timePicked: date,
+                    attendancekey: '${date.day}${date.month}${date.year}')));
+          },
+          borderRadius: BorderRadius.circular(5),
+          child: Ink(
+            width: MediaQuery.sizeOf(context).width * 0.85,
+            height: 40,
+            decoration: ShapeDecoration(
+              color: const Color(0xFF2C225B),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5)),
+            ),
+            child: Center(
+              child: Text(
+                '${date.day} ${monthAbbreviations[date.month - 1]} ${date.year}',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 11,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600,
+                  height: 0,
+                ),
               ),
             ),
           ),

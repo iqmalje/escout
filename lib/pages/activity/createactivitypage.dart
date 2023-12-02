@@ -22,8 +22,7 @@ class _CreateActivityPage extends State<CreateActivityPage> {
 
   String dropdownValue = 'Camping';
   List<String> list = <String>['Meeting', 'Camping'];
-  DateTime startdate = DateTime.now(),
-      enddate = DateTime.now().add(const Duration(days: 1));
+  DateTime? startdate, enddate;
   final ImagePicker picker = ImagePicker();
   XFile? imagePicked;
   @override
@@ -41,50 +40,7 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                 child: Column(
                   //blue bow column
                   children: [
-                    Container(
-                      //blue box container
-                      width: MediaQuery.sizeOf(context).width,
-                      height: 90,
-                      decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
-
-                      child: Row(
-                        children: [
-                          InkWell(
-                            borderRadius: BorderRadius.circular(100),
-                            onTap: () {},
-                            child: Ink(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100),
-                                color: Colors.white,
-                              ),
-                              child: IconButton(
-                                icon: const Icon(
-                                  Icons.arrow_back,
-                                  size: 35,
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                ),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ),
-                          ),
-                          const Center(
-                            child: Text(
-                              'Create Activity',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 255, 255, 255),
-                                fontSize: 24,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    _appBar(context),
                     InkWell(
                       onTap: () async {
                         XFile? image =
@@ -97,9 +53,8 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                       },
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
-                          minWidth: MediaQuery.sizeOf(context).width,
-                          maxHeight: 200,
-                        ),
+                            minWidth: MediaQuery.sizeOf(context).width,
+                            minHeight: 180),
                         child: Ink(
                           decoration:
                               const BoxDecoration(color: Color(0xFFECECEC)),
@@ -153,45 +108,80 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                               ),
                             ),
                           ),
-                          Container(
-                            width: MediaQuery.sizeOf(context).width * 0.8,
-                            //height: 40,
-                            decoration: ShapeDecoration(
-                              color: const Color(0xFFECECEC),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(3)),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 6),
-                              child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5.0),
-                                    child: TextField(
-                                      minLines: 1,
-                                      maxLines: 5,
-                                      controller: name,
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 11,
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w400,
-                                        height: 0,
-                                      ),
-                                      decoration: const InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: 'Program Name',
-                                        hintStyle: TextStyle(
-                                          color: Color(0xFF9397A0),
-                                          fontSize: 11,
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.w400,
-                                          height: 0,
-                                        ),
-                                      ),
-                                    ),
-                                  )),
+                          // Container(
+                          //   width: MediaQuery.sizeOf(context).width * 0.8,
+                          //   //height: 40,
+                          //   decoration: ShapeDecoration(
+                          //     color: const Color(0xFFECECEC),
+                          //     shape: RoundedRectangleBorder(
+                          //         borderRadius: BorderRadius.circular(3)),
+                          //   ),
+                          //   child: Padding(
+                          //     padding: const EdgeInsets.only(left: 6),
+                          //     child: Align(
+                          //         alignment: Alignment.centerLeft,
+                          //         child: Padding(
+                          //           padding: const EdgeInsets.symmetric(
+                          //               horizontal: 5.0),
+                          //           child: TextField(
+                          //             minLines: 1,
+                          //             maxLines: 5,
+                          //             controller: name,
+                          //             style: const TextStyle(
+                          //               color: Colors.black,
+                          //               fontSize: 11,
+                          //               fontFamily: 'Poppins',
+                          //               fontWeight: FontWeight.w400,
+                          //               height: 0,
+                          //             ),
+                          //             decoration: const InputDecoration(
+                          //               border: InputBorder.none,
+                          //               hintText: 'Program Name',
+                          //               hintStyle: TextStyle(
+                          //                 color: Color(0xFF9397A0),
+                          //                 fontSize: 11,
+                          //                 fontFamily: 'Poppins',
+                          //                 fontWeight: FontWeight.w400,
+                          //                 height: 0,
+                          //               ),
+                          //             ),
+                          //           ),
+                          //         )),
+                          //   ),
+                          // ),
+                          ConstrainedBox(
+                            constraints: BoxConstraints(minHeight: 40),
+                            child: Container(
+                              decoration: ShapeDecoration(
+                                color: const Color(0xFFECECEC),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(3)),
+                              ),
+                              width: MediaQuery.sizeOf(context).width * 0.8,
+                              child: TextField(
+                                controller: name,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 10),
+                                  hintText: 'Program Name',
+                                  hintStyle: TextStyle(
+                                    color: Color(0xFF9397A0),
+                                    fontSize: 14,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
+                                    height: 0,
+                                  ),
+                                ),
+                                minLines: 1,
+                                maxLines: 5,
+                              ),
                             ),
                           ),
                           const SizedBox(
@@ -280,7 +270,7 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                                       controller: location,
                                       style: const TextStyle(
                                         color: Colors.black,
-                                        fontSize: 11,
+                                        fontSize: 14,
                                         fontFamily: 'Poppins',
                                         fontWeight: FontWeight.w400,
                                         height: 0,
@@ -290,7 +280,7 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                                         hintText: 'Program Location',
                                         hintStyle: TextStyle(
                                           color: Color(0xFF9397A0),
-                                          fontSize: 11,
+                                          fontSize: 14,
                                           fontFamily: 'Poppins',
                                           fontWeight: FontWeight.w400,
                                           height: 0,
@@ -322,17 +312,22 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                                 onTap: () async {
                                   DateTime? pickedDate = await showDatePicker(
                                       context: context,
-                                      initialDate: DateTime.now(),
+                                      initialDate: startdate ??= DateTime.now(),
                                       firstDate: DateTime.now(),
-                                      lastDate: startdate
+                                      lastDate: DateTime.now()
                                           .add(const Duration(days: 365)));
 
                                   if (pickedDate == null) return;
 
                                   //check if end date is later or equal to start date
-
-                                  if (startdate.millisecondsSinceEpoch >=
-                                      enddate.millisecondsSinceEpoch) {
+                                  if (enddate == null) {
+                                    setState(() {
+                                      startdate = pickedDate;
+                                    });
+                                    return;
+                                  }
+                                  if (pickedDate.millisecondsSinceEpoch >
+                                      enddate!.millisecondsSinceEpoch) {
                                   } else {
                                     setState(() {
                                       startdate = pickedDate;
@@ -353,11 +348,15 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          DateFormat('dd/MM/yyyy')
-                                              .format(startdate),
-                                          style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 11,
+                                          startdate == null
+                                              ? 'Start date'
+                                              : DateFormat('dd/MM/yyyy')
+                                                  .format(startdate!),
+                                          style: TextStyle(
+                                            color: startdate == null
+                                                ? const Color(0xFF9397A0)
+                                                : Colors.black,
+                                            fontSize: 14,
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.w400,
                                             height: 0,
@@ -368,21 +367,30 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                                   ]),
                                 ),
                               ),
+                              const SizedBox(
+                                width: 5,
+                              ),
                               GestureDetector(
                                 onTap: () async {
                                   DateTime? pickedDate = await showDatePicker(
                                       context: context,
-                                      initialDate: DateTime.now(),
+                                      initialDate: enddate ??= DateTime.now(),
                                       firstDate: DateTime.now(),
-                                      lastDate: startdate
+                                      lastDate: DateTime.now()
                                           .add(const Duration(days: 365)));
 
                                   if (pickedDate == null) return;
 
                                   //check if end date is less or equal to start date
+                                  if (startdate == null) {
+                                    setState(() {
+                                      enddate = pickedDate;
+                                    });
 
-                                  if (startdate.millisecondsSinceEpoch >=
-                                      enddate.millisecondsSinceEpoch) {
+                                    return;
+                                  }
+                                  if (startdate!.millisecondsSinceEpoch >
+                                      pickedDate.millisecondsSinceEpoch) {
                                   } else {
                                     setState(() {
                                       enddate = pickedDate;
@@ -403,11 +411,15 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          DateFormat('dd/MM/yyyy')
-                                              .format(enddate),
-                                          style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 11,
+                                          enddate == null
+                                              ? 'End date'
+                                              : DateFormat('dd/MM/yyyy')
+                                                  .format(enddate!),
+                                          style: TextStyle(
+                                            color: enddate == null
+                                                ? const Color(0xFF9397A0)
+                                                : Colors.black,
+                                            fontSize: 14,
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.w400,
                                             height: 0,
@@ -428,7 +440,6 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                             child: InkWell(
                               onTap: () async {
                                 if (name.text.isEmpty ||
-                                    category.text.isEmpty ||
                                     location.text.isEmpty) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
@@ -445,14 +456,22 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                                   return;
                                 }
 
+                                if (startdate == null || enddate == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Please choose the dates!')));
+                                  return;
+                                }
+
                                 await SupabaseB().addEvent({
                                   'name': name.text,
                                   'category': dropdownValue,
                                   'location': location.text,
                                   'startdate': DateFormat('yyyy-MM-dd')
-                                      .format(startdate),
+                                      .format(startdate!),
                                   'enddate':
-                                      DateFormat('yyyy-MM-dd').format(enddate),
+                                      DateFormat('yyyy-MM-dd').format(enddate!),
                                   'file': File(imagePicked!.path)
                                 });
 
@@ -489,6 +508,51 @@ class _CreateActivityPage extends State<CreateActivityPage> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _appBar(context) {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(100),
+      child: Container(
+        width: MediaQuery.sizeOf(context).width,
+        height: 90,
+        decoration: const BoxDecoration(color: Color(0xFF2C225B)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(
+              width: 30,
+            ),
+            Container(
+              width: 50,
+              height: 50,
+              decoration: const ShapeDecoration(
+                color: Colors.white,
+                shape: OvalBorder(),
+              ),
+              child: IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: const Icon(Icons.arrow_back_ios_new)),
+            ),
+            const SizedBox(
+              width: 30,
+            ),
+            const Text(
+              'Create Activity',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 25,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                height: 0,
+              ),
+            ),
+          ],
         ),
       ),
     );

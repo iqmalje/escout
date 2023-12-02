@@ -100,7 +100,12 @@ class SupabaseB {
 
   Future<void> addAttendance(String activityid, String cardid) async {
     //get accountid from cardid
+
     try {
+      if (cardid[0] == 'J') {
+        await addAttendanceByScoutID(activityid, cardid);
+        return;
+      }
       var accid = await supabase
           .from('accounts')
           .select('accountid, fullname')
@@ -111,7 +116,7 @@ class SupabaseB {
         'accountid': accid['accountid'],
         'fullname': accid['fullname'],
         'attendancekey':
-            '${accid['accountid']}.${DateTime.now().day}${DateTime.now().month}${DateTime.now().year}'
+            '${accid['accountid']}.${DateTime.now().day}${DateTime.now().month}${DateTime.now().year}.$activityid'
       });
     } catch (e) {
       print(e);
@@ -163,7 +168,7 @@ class SupabaseB {
   /// Get a list of feed for the user
   Future<List<Activity>> getFeed() async {
     var feed =
-        await supabase.from('activities').select('*').match({'is_feed': true});
+        await supabase.from('activities').select('*').order('created_at');
 
     List<Activity> activities = [];
 
@@ -174,6 +179,7 @@ class SupabaseB {
   }
 
   Future<List<Activity>> getActivities({Map<String, dynamic>? filters}) async {
+    print(filters);
     List<dynamic> rawData = [];
     List<Activity> activities = [];
     if (filters == null) {
@@ -182,7 +188,7 @@ class SupabaseB {
       rawData = activities;
     } else {
       var activities = await supabase.rpc('filter_activities',
-          params: {'filter': '${filters['year']}-${filters['month']}%'});
+          params: {'filter': '${filters['year']}-${filters['month']}-%'});
 
       rawData = activities;
     }
@@ -241,7 +247,7 @@ class SupabaseB {
         'accountid': accid['accountid'],
         'fullname': accid['fullname'],
         'attendancekey':
-            '${accid['accountid']}.${DateTime.now().day}${DateTime.now().month}${DateTime.now().year}'
+            '${accid['accountid']}.${DateTime.now().day}${DateTime.now().month}${DateTime.now().year}.$activityid'
       });
     } catch (e) {
       print(e);

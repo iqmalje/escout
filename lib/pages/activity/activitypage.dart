@@ -6,7 +6,6 @@ import 'package:escout/pages/activity/detailsactivity.dart';
 import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class ActivityPage extends StatefulWidget {
   const ActivityPage({super.key});
@@ -33,8 +32,8 @@ class _ActivityPageState extends State<ActivityPage> {
     'November',
     'December',
   ];
-  int selectedMonth = 1;
-  int selectedYear = 2023;
+  int selectedMonth = DateTime.now().month;
+  int selectedYear = DateTime.now().year;
 
   Future<void> _selectDate(BuildContext context) async {
     selectedMonth = selectedDate.month;
@@ -216,7 +215,7 @@ class _ActivityPageState extends State<ActivityPage> {
                               'month': selectedMonth
                             })
                           : SupabaseB().getAttendedActivities(
-                              '$selectedYear-$selectedMonth%'),
+                              '$selectedYear-$selectedMonth-%'),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
                           return const Center(

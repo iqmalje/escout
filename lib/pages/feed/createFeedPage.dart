@@ -150,7 +150,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                       onTap: () async {
                         DateTime? pickedDate = await showDatePicker(
                             context: context,
-                            initialDate: DateTime.now(),
+                            initialDate: startdate ??= DateTime.now(),
                             firstDate: DateTime.now(),
                             lastDate:
                                 DateTime.now().add(const Duration(days: 365)));
@@ -210,7 +210,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                       onTap: () async {
                         DateTime? pickedDate = await showDatePicker(
                             context: context,
-                            initialDate: DateTime.now(),
+                            initialDate: enddate ??= DateTime.now(),
                             firstDate: DateTime.now(),
                             lastDate:
                                 DateTime.now().add(const Duration(days: 365)));
@@ -297,7 +297,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                   onTap: () async {
                     DateTime? pickedDate = await showDatePicker(
                         context: context,
-                        initialDate: DateTime.now(),
+                        initialDate: registerenddate ??= DateTime.now(),
                         firstDate: DateTime.now(),
                         lastDate:
                             DateTime.now().add(const Duration(days: 365)));
@@ -360,24 +360,22 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
               const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.only(left: 25.0, right: 25),
-                child: SizedBox(
-                  child: TextField(
-                    controller: description,
-                    //onChanged: (){}
-                    minLines: 1,
-                    maxLines: 15,
-                    decoration: InputDecoration(
-                      hintText: 'Program description',
-                      hintStyle: const TextStyle(
-                          fontSize: 14.0,
-                          color: Color.fromRGBO(147, 151, 160, 100)),
-                      contentPadding: const EdgeInsets.only(left: 20),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(9),
-                          borderSide: BorderSide.none),
-                      fillColor: const Color.fromRGBO(237, 237, 237, 100),
-                      filled: true,
-                    ),
+                child: TextField(
+                  controller: description,
+                  //onChanged: (){}
+                  minLines: 1,
+                  maxLines: 15,
+                  decoration: InputDecoration(
+                    hintText: 'Program description',
+                    hintStyle: const TextStyle(
+                        fontSize: 14.0,
+                        color: Color.fromRGBO(147, 151, 160, 100)),
+                    contentPadding: const EdgeInsets.only(left: 20, right: 20),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(9),
+                        borderSide: BorderSide.none),
+                    fillColor: const Color.fromRGBO(237, 237, 237, 100),
+                    filled: true,
                   ),
                 ),
               ),
@@ -392,7 +390,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
-                      'Add the program in the acitivity list',
+                      'Add the program in the activity list',
                       style: TextStyle(
                           fontStyle: FontStyle.italic,
                           fontWeight: FontWeight.bold,
@@ -521,33 +519,32 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
             ),
           ),
           const SizedBox(height: 10),
-          SizedBox(
-            //height: 35,
-            child: TextField(
-              minLines: 1,
-              maxLines: 10,
-              controller: textItems['controller'],
-              onChanged: textItems['onChange'],
-              keyboardType: textItems['keyboardType'],
-              decoration: InputDecoration(
-                hintText: textItems['hintText'],
-                hintStyle: const TextStyle(
-                    fontSize: 14.0, color: Color.fromRGBO(147, 151, 160, 100)),
-                contentPadding: const EdgeInsets.only(left: 20),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(9),
-                    borderSide: BorderSide.none),
-                fillColor: const Color.fromRGBO(237, 237, 237, 100),
-                filled: true,
-                suffixIcon: Padding(
-                  padding: const EdgeInsets.only(right: 17, left: 17),
-                  child: textItems['icon'] != null
-                      ? Icon(
-                          textItems['icon'],
-                          color: const Color.fromRGBO(147, 151, 160, 100),
-                          size: 19,
-                        )
-                      : null,
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: 20,
+            ),
+            child: Container(
+              width: MediaQuery.sizeOf(context).width * 0.9,
+              decoration: ShapeDecoration(
+                color: const Color(0xFFECECEC),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: TextField(
+                  minLines: 1,
+                  maxLines: 10,
+                  controller: textItems['controller'],
+                  onChanged: textItems['onChange'],
+                  keyboardType: textItems['keyboardType'],
+                  decoration: InputDecoration(
+                    hintText: textItems['hintText'],
+                    hintStyle: const TextStyle(
+                        fontSize: 14.0,
+                        color: Color.fromRGBO(147, 151, 160, 100)),
+                    border: InputBorder.none,
+                  ),
                 ),
               ),
             ),
@@ -602,7 +599,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
               'startdate':
                   '${startdate!.year}-${startdate!.month}-${startdate!.day}',
               'enddate': '${enddate!.year}-${enddate!.month}-${enddate!.day}',
-              'is_feed': isFeed,
+              'is_feed': !isFeed,
               'fee': fee.text.isEmpty ? '0' : fee.text,
               'registrationenddate':
                   '${registerenddate!.year}-${registerenddate!.month}-${registerenddate!.day}',

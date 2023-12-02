@@ -4,6 +4,7 @@ import 'package:escout/pages/feed/createFeedPage.dart';
 import 'package:escout/pages/homepage/DetailsProgram.dart';
 import 'package:escout/pages/homepage/homepage.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class listPage extends StatefulWidget {
   const listPage({super.key});
@@ -168,7 +169,7 @@ Widget buildAPost(BuildContext context, Activity item) {
                           height: 3,
                         ),
                         Text(
-                          '${item.created_at.day} ${monthName[item.created_at.month - 1]} ${item.created_at.year}, ${item.created_at.hour + 8}:${item.created_at.minute.toString().padLeft(2, '0')}',
+                          '${item.created_at.day} ${monthName[item.created_at.month - 1]} ${item.created_at.year}, ${DateFormat('hh:mm a').format(item.created_at)}',
                           style: const TextStyle(
                             color: Colors.black,
                             fontSize: 10,
@@ -189,7 +190,7 @@ Widget buildAPost(BuildContext context, Activity item) {
                     minWidth: MediaQuery.sizeOf(context).width),
                 child: Stack(children: <Widget>[
                   //event image
-                  Image.network(item.imageurl),
+                  Center(child: Image.network(item.imageurl)),
 
                   //event type details
                   Positioned(
