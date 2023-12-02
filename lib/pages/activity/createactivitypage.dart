@@ -418,42 +418,43 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                                   ]),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 20.0),
-                          child: InkWell(
-                            onTap: () async {
-                              if (name.text.isEmpty || location.text.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            'Please fill in all the fields!')));
-                                return;
-                              }
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 20.0),
+                            child: InkWell(
+                              onTap: () async {
+                                if (name.text.isEmpty ||
+                                    category.text.isEmpty ||
+                                    location.text.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Please fill in all the fields!')));
+                                  return;
+                                }
 
-                              if (imagePicked == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            'Please pick an image first!')));
-                                return;
-                              }
-                              print("THIS IS DROPDOWN ${dropdownValue}");
-                              await SupabaseB().addEvent({
-                                'name': name.text,
-                                'category': dropdownValue,
-                                'location': location.text,
-                                'startdate':
-                                    DateFormat('yyyy-MM-dd').format(startdate),
-                                'enddate':
-                                    DateFormat('yyyy-MM-dd').format(enddate),
-                                'file': File(imagePicked!.path)
-                              });
+                                if (imagePicked == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Please pick an image first!')));
+                                  return;
+                                }
+
+                                await SupabaseB().addEvent({
+                                  'name': name.text,
+                                  'category': dropdownValue,
+                                  'location': location.text,
+                                  'startdate': DateFormat('yyyy-MM-dd')
+                                      .format(startdate),
+                                  'enddate':
+                                      DateFormat('yyyy-MM-dd').format(enddate),
+                                  'file': File(imagePicked!.path)
+                                });
 
                                 Navigator.of(context).pop();
                               },
