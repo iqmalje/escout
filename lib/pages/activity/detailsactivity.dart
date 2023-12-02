@@ -38,7 +38,7 @@ class _DetailsActivityState extends State<DetailsActivity> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFF2C225B),
+      color: const Color(0xFF2E3B78),
       child: SafeArea(
         child: Scaffold(
           appBar: PreferredSize(
@@ -46,7 +46,7 @@ class _DetailsActivityState extends State<DetailsActivity> {
             child: Container(
               width: MediaQuery.sizeOf(context).width,
               height: 90,
-              decoration: const BoxDecoration(color: Color(0xFF2C225B)),
+              decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -123,7 +123,7 @@ class _DetailsActivityState extends State<DetailsActivity> {
                                 activity.category,
                                 style: const TextStyle(
                                   color: Colors.black,
-                                  fontSize: 10,
+                                  fontSize: 12,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w400,
                                   height: 0,
@@ -141,7 +141,6 @@ class _DetailsActivityState extends State<DetailsActivity> {
                 ),
                 Container(
                   width: MediaQuery.sizeOf(context).width * 0.85,
-                  height: 120,
                   decoration: ShapeDecoration(
                     color: const Color(0xFFFAFAFA),
                     shape: RoundedRectangleBorder(
@@ -166,11 +165,14 @@ class _DetailsActivityState extends State<DetailsActivity> {
                           activity.name,
                           style: const TextStyle(
                             color: Colors.black,
-                            fontSize: 12,
+                            fontSize: 14,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w500,
                             height: 0,
                           ),
+                        ),
+                        const SizedBox(
+                          height: 10,
                         ),
                         Row(
                           children: [
@@ -182,7 +184,7 @@ class _DetailsActivityState extends State<DetailsActivity> {
                               activity.location,
                               style: const TextStyle(
                                 color: Colors.black,
-                                fontSize: 11,
+                                fontSize: 12,
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w400,
                                 height: 0,
@@ -200,7 +202,7 @@ class _DetailsActivityState extends State<DetailsActivity> {
                               '${activity.startdate.day} - ${activity.enddate.day} ${monthName[activity.enddate.month - 1]} 2023',
                               style: const TextStyle(
                                 color: Colors.black,
-                                fontSize: 11,
+                                fontSize: 12,
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w400,
                                 height: 0,
@@ -218,7 +220,7 @@ class _DetailsActivityState extends State<DetailsActivity> {
                               'PPM NEGERI JOHOR',
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 11,
+                                fontSize: 12,
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w400,
                                 height: 0,
@@ -289,7 +291,7 @@ class _DetailsActivityState extends State<DetailsActivity> {
                             width: 135,
                             height: 40,
                             decoration: ShapeDecoration(
-                              color: const Color(0xFF3B3F65),
+                              color: const Color(0xFF2E3B78),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -453,35 +455,33 @@ class _DetailsActivityState extends State<DetailsActivity> {
 
     return Padding(
       padding: const EdgeInsets.only(top: 10.0),
-      child: Material(
-        child: InkWell(
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => attendancePage3(
-                    activity: activity,
-                    timePicked: date,
-                    attendancekey: '${date.day}${date.month}${date.year}')));
-          },
-          borderRadius: BorderRadius.circular(5),
-          child: Ink(
-            width: MediaQuery.sizeOf(context).width * 0.85,
-            height: 40,
-            decoration: ShapeDecoration(
-              color: const Color(0xFF2C225B),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5)),
-            ),
-            child: Center(
-              child: Text(
-                '${date.day} ${monthAbbreviations[date.month - 1]} ${date.year}',
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 11,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
-                  height: 0,
-                ),
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => attendancePage3(
+                  activity: activity,
+                  timePicked: date,
+                  attendancekey: '${date.day}${date.month}${date.year}')));
+        },
+        borderRadius: BorderRadius.circular(5),
+        child: Ink(
+          width: MediaQuery.sizeOf(context).width * 0.85,
+          height: 40,
+          decoration: ShapeDecoration(
+            color: const Color(0xFF2E3B78),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+          ),
+          child: Center(
+            child: Text(
+              '${date.day} ${monthAbbreviations[date.month - 1]} ${date.year}',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 11,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                height: 0,
               ),
             ),
           ),
