@@ -30,7 +30,7 @@ class _attendancePage3State extends State<attendancePage3> {
 
     return MaterialApp(
       home: Container(
-        color: const Color(0xFF2C225B),
+        color: const Color(0xFF2E3B78),
         child: SafeArea(
           child: Scaffold(
               body: Container(
@@ -57,7 +57,7 @@ Widget _appBar(context) {
   return Container(
     width: MediaQuery.sizeOf(context).width,
     height: 90,
-    decoration: const BoxDecoration(color: Color(0xFF2C225B)),
+    decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -130,11 +130,11 @@ Widget displayActivity(Activity activity, DateTime timePicked) {
         child: Text(
           'Activity',
           style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-            letterSpacing: .3,
-          ),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+              letterSpacing: .2,
+              fontFamily: 'Poppins'),
         ),
       ),
       const SizedBox(height: 25),
@@ -202,7 +202,6 @@ class _theActivityState extends State<theActivity> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.sizeOf(context).width * 0.85,
-      height: 120,
       decoration: ShapeDecoration(
         color: const Color(0xFFFAFAFA),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
@@ -225,11 +224,14 @@ class _theActivityState extends State<theActivity> {
               activityName,
               style: const TextStyle(
                 color: Colors.black,
-                fontSize: 12,
+                fontSize: 14,
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w500,
                 height: 0,
               ),
+            ),
+            const SizedBox(
+              height: 10,
             ),
             Row(
               children: [
@@ -241,7 +243,7 @@ class _theActivityState extends State<theActivity> {
                   activityLocation,
                   style: const TextStyle(
                     color: Colors.black,
-                    fontSize: 11,
+                    fontSize: 12,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w400,
                     height: 0,
@@ -259,7 +261,7 @@ class _theActivityState extends State<theActivity> {
                   '${timePicked.day} ${monthName[timePicked.month - 1]} 2023',
                   style: const TextStyle(
                     color: Colors.black,
-                    fontSize: 11,
+                    fontSize: 12,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w400,
                     height: 0,
@@ -277,7 +279,7 @@ class _theActivityState extends State<theActivity> {
                   'PPM NEGERI JOHOR',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 11,
+                    fontSize: 12,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w400,
                     height: 0,
@@ -323,7 +325,7 @@ Widget openAttendanceButton(context, activityid, secondkey, activity) {
               )));
     },
     style: ElevatedButton.styleFrom(
-      primary: const Color(0xFF2C225B),
+      primary: const Color(0xFF2E3B78),
       elevation: 0,
       fixedSize: const Size(355, 50),
       shape: RoundedRectangleBorder(
@@ -334,6 +336,8 @@ Widget openAttendanceButton(context, activityid, secondkey, activity) {
         style: TextStyle(
           fontSize: 14,
           letterSpacing: .3,
+          color: Color.fromARGB(255, 255, 255, 255),
+          fontFamily: 'Poppins',
         )),
   );
 }
@@ -359,6 +363,7 @@ Widget showParticipantButton() {
           color: Color(0xFF2C225B),
           fontSize: 14,
           letterSpacing: .3,
+          fontFamily: 'Poppins',
         )),
   );
 }

@@ -27,7 +27,7 @@ class _attendancePage2State extends State<attendancePage2> {
     var _mediaQuery = MediaQuery.of(context);
 
     return Container(
-      color: const Color(0xFF2C225B),
+      color: const Color(0xFF2E3B78),
       child: SafeArea(
         child: Scaffold(
             body: Container(

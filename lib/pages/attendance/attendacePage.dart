@@ -13,17 +13,15 @@ class _attendancePageState extends State<attendancePage> {
     var _mediaQuery = MediaQuery.of(context);
 
     return Scaffold(
-          body: Container(
-        width: _mediaQuery.size.width,
-        height: _mediaQuery.size.height,
-        color: Color.fromRGBO(237, 237, 237, 100),
-        child: Column(children: <Widget>[
-          _appBar(context),
-          _instruction(),
-
-        ]),
-      ));
-
+        body: Container(
+      width: _mediaQuery.size.width,
+      height: _mediaQuery.size.height,
+      color: const Color.fromRGBO(237, 237, 237, 100),
+      child: Column(children: <Widget>[
+        _appBar(context),
+        _instruction(),
+      ]),
+    ));
   }
 }
 
@@ -31,16 +29,16 @@ Widget _appBar(context) {
   return Container(
       height: 155,
       width: MediaQuery.of(context).size.width,
-      color: Color.fromRGBO(44, 34, 91, 100),
+      color: const Color.fromRGBO(44, 34, 91, 100),
       child: Padding(
         padding: const EdgeInsets.only(top: 50, right: 20),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             _backButton(context),
-            SizedBox(width: 25),
-            Padding(
-              padding: const EdgeInsets.only(top: 5.0),
+            const SizedBox(width: 25),
+            const Padding(
+              padding: EdgeInsets.only(top: 5.0),
               child: Text(
                 'Attendences',
                 style: TextStyle(
@@ -57,7 +55,7 @@ Widget _appBar(context) {
 
 Widget _backButton(context) {
   return Padding(
-    padding: EdgeInsets.only(top: 10, left: 25),
+    padding: const EdgeInsets.only(top: 10, left: 25),
     child: Container(
       width: 50,
       height: 50,
@@ -68,9 +66,9 @@ Widget _backButton(context) {
       child: Padding(
         padding: const EdgeInsets.only(left: 8.0),
         child: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
           iconSize: 25,
-          color: Color.fromRGBO(59, 63, 101, 100),
+          color: const Color.fromRGBO(59, 63, 101, 100),
           onPressed: () {},
         ),
       ),
@@ -83,7 +81,7 @@ Widget _instruction() {
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: <Widget>[
-      Text(
+      const Text(
         'Please tap your Scout ID here to\nrecord your attendace',
         style: TextStyle(
           color: Colors.black,
@@ -93,10 +91,10 @@ Widget _instruction() {
         ),
         textAlign: TextAlign.center,
       ),
-      SizedBox(height: 25),
+      const SizedBox(height: 25),
       Image.asset('assets/images/scanCardAttendance.png'),
-      SizedBox(height: 10),
-      Text(
+      const SizedBox(height: 10),
+      const Text(
         'Or',
         style: TextStyle(
           color: Colors.black,
@@ -106,9 +104,8 @@ Widget _instruction() {
           letterSpacing: .3,
         ),
       ),
-      SizedBox(height: 30) ,
+      const SizedBox(height: 30),
       addParticpantButton(buttonText: "Add participant manually")
-
     ],
   );
 }
@@ -123,21 +120,17 @@ class addParticpantButton extends StatefulWidget {
 }
 
 class _addParticpantButtonState extends State<addParticpantButton> {
-
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-      
-      },
-      child: Text(
-        widget.buttonText,
-        style: TextStyle(
-          fontSize: 14,
-          letterSpacing: .3,
-        )),
+      onPressed: () {},
+      child: Text(widget.buttonText,
+          style: const TextStyle(
+            fontSize: 14,
+            letterSpacing: .3,
+          )),
       style: ElevatedButton.styleFrom(
-        primary: Color.fromRGBO(44, 34, 91, 100),
+        primary: const Color.fromRGBO(44, 34, 91, 100),
         elevation: 0,
         fixedSize: const Size(330, 40),
       ),
