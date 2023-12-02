@@ -222,6 +222,7 @@ class _DetailsprogramState extends State<Detailsprogram> {
                               ),
                               Text(
                                 activity.location,
+                                overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 12,

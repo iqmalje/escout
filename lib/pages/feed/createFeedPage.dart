@@ -340,6 +340,8 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                   child: TextField(
                     controller: description,
                     //onChanged: (){}
+                    minLines: 1,
+                    maxLines: 15,
                     decoration: InputDecoration(
                       hintText: 'Program description',
                       hintStyle: const TextStyle(
@@ -496,8 +498,10 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
           ),
           const SizedBox(height: 10),
           SizedBox(
-            height: 35,
+            //height: 35,
             child: TextField(
+              minLines: 1,
+              maxLines: 10,
               controller: textItems['controller'],
               onChanged: textItems['onChange'],
               keyboardType: textItems['keyboardType'],
