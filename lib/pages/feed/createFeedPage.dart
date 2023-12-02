@@ -26,9 +26,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
       location = TextEditingController(),
       fee = TextEditingController(),
       description = TextEditingController();
-  DateTime startdate = DateTime.now(),
-      enddate = DateTime.now().add(const Duration(days: 1)),
-      registerenddate = DateTime.now().add(const Duration(days: 10));
+  DateTime? startdate, enddate, registerenddate;
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +79,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                       height: 35,
                       child: Container(
                         decoration: ShapeDecoration(
-                          color: Color.fromRGBO(237, 237, 237, 100),
+                          color: const Color.fromRGBO(237, 237, 237, 100),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(3)),
                         ),
@@ -158,8 +156,14 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                                 DateTime.now().add(const Duration(days: 365)));
 
                         if (pickedDate == null) return;
+                        if (enddate == null) {
+                          setState(() {
+                            startdate = pickedDate;
+                          });
+                          return;
+                        }
                         if (pickedDate.millisecondsSinceEpoch >
-                            enddate.millisecondsSinceEpoch) {
+                            enddate!.millisecondsSinceEpoch) {
                           return;
                         } else {
                           setState(() {
@@ -181,9 +185,14 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                DateFormat('dd/MM/yyyy').format(startdate),
-                                style: const TextStyle(
-                                  color: Color(0xFF9397A0),
+                                startdate != null
+                                    ? DateFormat('dd/MM/yyyy')
+                                        .format(startdate!)
+                                    : 'Start date',
+                                style: TextStyle(
+                                  color: startdate == null
+                                      ? const Color(0xFF9397A0)
+                                      : Colors.black,
                                   fontSize: 13,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w400,
@@ -207,8 +216,14 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                                 DateTime.now().add(const Duration(days: 365)));
 
                         if (pickedDate == null) return;
+                        if (startdate == null) {
+                          setState(() {
+                            enddate = pickedDate;
+                          });
 
-                        if (startdate.millisecondsSinceEpoch >
+                          return;
+                        }
+                        if (startdate!.millisecondsSinceEpoch >
                             pickedDate.millisecondsSinceEpoch) {
                           return;
                         } else {
@@ -231,9 +246,13 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                DateFormat('dd/MM/yyyy').format(enddate),
-                                style: const TextStyle(
-                                  color: Color(0xFF9397A0),
+                                enddate == null
+                                    ? 'End date'
+                                    : DateFormat('dd/MM/yyyy').format(enddate!),
+                                style: TextStyle(
+                                  color: enddate == null
+                                      ? Color(0xFF9397A0)
+                                      : Colors.black,
                                   fontSize: 13,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w400,
@@ -301,9 +320,14 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            DateFormat('dd/MM/yyyy').format(registerenddate),
-                            style: const TextStyle(
-                              color: Color(0xFF9397A0),
+                            registerenddate == null
+                                ? 'Registration end date'
+                                : DateFormat('dd/MM/yyyy')
+                                    .format(registerenddate!),
+                            style: TextStyle(
+                              color: registerenddate == null
+                                  ? Color(0xFF9397A0)
+                                  : Colors.black,
                               fontSize: 13,
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w400,
@@ -560,6 +584,12 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
               return;
             }
 
+            if (startdate == null ||
+                enddate == null ||
+                registerenddate == null) {
+              return;
+            }
+
             if (imagePicked == null) {
               ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Please pick an image')));
@@ -570,12 +600,12 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
               'category': dropdownValue,
               'location': location.text,
               'startdate':
-                  '${startdate.year}-${startdate.month}-${startdate.day}',
-              'enddate': '${enddate.year}-${enddate.month}-${enddate.day}',
+                  '${startdate!.year}-${startdate!.month}-${startdate!.day}',
+              'enddate': '${enddate!.year}-${enddate!.month}-${enddate!.day}',
               'is_feed': isFeed,
               'fee': fee.text.isEmpty ? '0' : fee.text,
               'registrationenddate':
-                  '${registerenddate.year}-${registerenddate.month}-${registerenddate.day}',
+                  '${registerenddate!.year}-${registerenddate!.month}-${registerenddate!.day}',
               'description': description.text,
               'file': File(imagePicked!.path)
             });
