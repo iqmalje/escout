@@ -234,6 +234,8 @@ class SupabaseB {
           .eq('no_ahli', scoutID)
           .single();
 
+      print(accid);
+
       await supabase.from('attendance').insert({
         'activityid': activityid,
         'accountid': accid['accountid'],

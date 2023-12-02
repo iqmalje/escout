@@ -424,9 +424,7 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                           padding: const EdgeInsets.only(bottom: 20.0),
                           child: InkWell(
                             onTap: () async {
-                              if (name.text.isEmpty ||
-                                  category.text.isEmpty ||
-                                  location.text.isEmpty) {
+                              if (name.text.isEmpty || location.text.isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         content: Text(
@@ -441,7 +439,7 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                                             'Please pick an image first!')));
                                 return;
                               }
-
+                              print("THIS IS DROPDOWN ${dropdownValue}");
                               await SupabaseB().addEvent({
                                 'name': name.text,
                                 'category': dropdownValue,

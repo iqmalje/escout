@@ -280,18 +280,45 @@ class _DetailsprogramState extends State<Detailsprogram> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Text(
-                                activity.registrationenddate != null
-                                    ? 'Open until ${activity.registrationenddate!.day} ${monthName[activity.registrationenddate!.month - 1]} ${activity.registrationenddate!.year}'
-                                    : 'Open',
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0,
-                                ),
-                              )
+                              Builder(builder: (context) {
+                                if (activity.registrationenddate == null) {
+                                  return const Text(
+                                    'Open',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0,
+                                    ),
+                                  );
+                                } else if (DateTime.now()
+                                        .millisecondsSinceEpoch >
+                                    activity.registrationenddate!
+                                        .millisecondsSinceEpoch) {
+                                  return const Text(
+                                    'Closed',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0,
+                                    ),
+                                  );
+                                } else {
+                                  return Text(
+                                    'Open until ${activity.registrationenddate!.day} ${monthName[activity.registrationenddate!.month - 1]} ${activity.registrationenddate!.year}',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0,
+                                    ),
+                                  );
+                                }
+                              })
                             ],
                           )
                         ],

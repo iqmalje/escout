@@ -366,7 +366,7 @@ Widget addParticipant(TextEditingController scoutid) {
   );
 }
 
-Widget _addButton(TextEditingController scoutid, dynamic activity, context) {
+Widget _addButton(TextEditingController scoutid, Activity activity, context) {
   return Expanded(
       child: Align(
           alignment: Alignment.bottomCenter,
@@ -383,8 +383,8 @@ Widget _addButton(TextEditingController scoutid, dynamic activity, context) {
               ),
               onPressed: () async {
                 if (scoutid.text.isEmpty) return;
-                await SupabaseB().addAttendanceByScoutID(
-                    activity['activityid'], scoutid.text);
+                await SupabaseB()
+                    .addAttendanceByScoutID(activity.activityid, scoutid.text);
 
                 Navigator.of(context).pop();
               },

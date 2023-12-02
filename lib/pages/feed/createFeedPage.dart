@@ -284,15 +284,9 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                             DateTime.now().add(const Duration(days: 365)));
 
                     if (pickedDate == null) return;
-                    if (startdate.millisecondsSinceEpoch >=
-                        pickedDate.millisecondsSinceEpoch) {
-                      print('test');
-                      return;
-                    } else {
-                      setState(() {
-                        registerenddate = pickedDate;
-                      });
-                    }
+                    setState(() {
+                      registerenddate = pickedDate;
+                    });
                   },
                   child: Container(
                     height: 35,
@@ -507,7 +501,6 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
               controller: textItems['controller'],
               onChanged: textItems['onChange'],
               keyboardType: textItems['keyboardType'],
-
               decoration: InputDecoration(
                 hintText: textItems['hintText'],
                 hintStyle: const TextStyle(
@@ -556,10 +549,8 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
         child: ElevatedButton(
           onPressed: () async {
             if (name.text.isEmpty ||
-                category.text.isEmpty ||
                 location.text.isEmpty ||
-                description.text.isEmpty ||
-                fee.text.isEmpty) {
+                description.text.isEmpty) {
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   content: Text('Please fill in all the fields!')));
               return;
@@ -572,13 +563,13 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
 
             await SupabaseB().createFeed({
               'name': name.text,
-              'category': category.text,
+              'category': dropdownValue,
               'location': location.text,
               'startdate':
                   '${startdate.year}-${startdate.month}-${startdate.day}',
               'enddate': '${enddate.year}-${enddate.month}-${enddate.day}',
               'is_feed': isFeed,
-              'fee': fee.text,
+              'fee': fee.text.isEmpty ? '0' : fee.text,
               'registrationenddate':
                   '${registerenddate.year}-${registerenddate.month}-${registerenddate.day}',
               'description': description.text,
@@ -589,17 +580,17 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                 MaterialPageRoute(builder: (context) => const TempPage()),
                 (route) => false);
           },
+          style: ElevatedButton.styleFrom(
+            primary: const Color(0xFF2E3B78),
+            elevation: 0,
+            fixedSize: const Size(355, 50),
+          ),
           child: const Text('POST',
               style: TextStyle(
                   fontSize: 14,
                   letterSpacing: .3,
                   fontWeight: FontWeight.bold,
                   color: Colors.white)),
-          style: ElevatedButton.styleFrom(
-            primary: const Color(0xFF2E3B78),
-            elevation: 0,
-            fixedSize: const Size(355, 50),
-          ),
         ),
       ),
     );
