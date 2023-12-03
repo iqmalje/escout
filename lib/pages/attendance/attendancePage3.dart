@@ -239,14 +239,17 @@ class _theActivityState extends State<theActivity> {
                 const SizedBox(
                   width: 10,
                 ),
-                Text(
-                  activityLocation,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 12,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                    height: 0,
+                Flexible(
+                  child: Text(
+                    activityLocation,
+                    overflow: TextOverflow.fade,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                      height: 0,
+                    ),
                   ),
                 )
               ],
