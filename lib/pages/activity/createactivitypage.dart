@@ -251,43 +251,39 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                               ),
                             ),
                           ),
-                          Container(
-                            width: MediaQuery.sizeOf(context).width * 0.8,
-                            height: 40,
-                            decoration: ShapeDecoration(
-                              color: const Color(0xFFECECEC),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(3)),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 6),
-                              child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5.0),
-                                    child: TextField(
-                                      controller: location,
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w400,
-                                        height: 0,
-                                      ),
-                                      decoration: const InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: 'Program Location',
-                                        hintStyle: TextStyle(
-                                          color: Color(0xFF9397A0),
-                                          fontSize: 14,
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.w400,
-                                          height: 0,
-                                        ),
-                                      ),
-                                    ),
-                                  )),
+                          ConstrainedBox(
+                            constraints: BoxConstraints(minHeight: 40),
+                            child: Container(
+                              decoration: ShapeDecoration(
+                                color: const Color(0xFFECECEC),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(3)),
+                              ),
+                              width: MediaQuery.sizeOf(context).width * 0.8,
+                              child: TextField(
+                                controller: location,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 10),
+                                  hintText: 'Program Location',
+                                  hintStyle: TextStyle(
+                                    color: Color(0xFF9397A0),
+                                    fontSize: 14,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
+                                    height: 0,
+                                  ),
+                                ),
+                                minLines: 1,
+                                maxLines: 5,
+                              ),
                             ),
                           ),
                           const SizedBox(

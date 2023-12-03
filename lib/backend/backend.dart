@@ -144,8 +144,9 @@ class SupabaseB {
           'location': items['location'],
           'startdate': items['startdate'],
           'enddate': items['enddate'],
-          'is_feed': false,
-          'created_by': accid
+          'is_show_activity': true,
+          'created_by': accid,
+          'is_show_feed': false,
         })
         .select('activityid')
         .single();
@@ -167,8 +168,10 @@ class SupabaseB {
 
   /// Get a list of feed for the user
   Future<List<Activity>> getFeed() async {
-    var feed =
-        await supabase.from('activities').select('*').order('created_at');
+    var feed = await supabase
+        .from('activities')
+        .select('*')
+        .match({'is_show_feed': true}).order('created_at');
 
     List<Activity> activities = [];
 
@@ -210,11 +213,12 @@ class SupabaseB {
           'location': items['location'],
           'startdate': items['startdate'],
           'enddate': items['enddate'],
-          'is_feed': items['is_feed'],
+          'is_show_activity': items['is_show_activity'],
           'created_by': accid,
           'fee': items['fee'],
           'registrationenddate': items['registrationenddate'],
           'description': items['description'],
+          'is_show_feed': true,
         })
         .select('activityid')
         .single();
