@@ -181,17 +181,19 @@ class _DetailsActivityState extends State<DetailsActivity> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Text(
-                                activity.location,
-                                overflow: TextOverflow.fade,
-                                maxLines: 1,
-                                softWrap: false,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0,
+                              Flexible(
+                                child: Text(
+                                  activity.location,
+                                  overflow: TextOverflow.fade,
+                                  maxLines: 1,
+                                  softWrap: false,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 12,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
+                                    height: 0,
+                                  ),
                                 ),
                               )
                             ],
@@ -350,74 +352,72 @@ class _DetailsActivityState extends State<DetailsActivity> {
             timeAttended.add(DateTime.parse(thing['time_attended'])
                 .add(const Duration(hours: 8)));
           }
-          return Expanded(
-            child: Column(
-              children: [
-                Container(
-                  constraints: BoxConstraints(
-                    minHeight: 70,
-                    minWidth: MediaQuery.sizeOf(context).width * 0.85,
-                  ),
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    shadows: const [
-                      BoxShadow(
-                        color: Color(0x3F000000),
-                        blurRadius: 2,
-                        offset: Offset(0, 2),
-                        spreadRadius: 0,
-                      )
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'You successfully attended this event. ',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 12,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w600,
-                              height: 0,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          ConstrainedBox(
-                              constraints: BoxConstraints(
-                                  minHeight: 0,
-                                  maxWidth:
-                                      MediaQuery.sizeOf(context).width * 0.85,
-                                  maxHeight: 180),
-                              child: ListView(
-                                shrinkWrap: true,
-                                children: List.generate(
-                                    attendance.length,
-                                    (index) => Center(
-                                            child: Text(
-                                          'Attendance Record: ${DateFormat('dd/MM/yyyy; hh:mm a').format(timeAttended[index])}',
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 10,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w400,
-                                            height: 0,
-                                          ),
-                                        ))),
-                              ))
-                        ]),
-                  ),
+          return Column(
+            children: [
+              Container(
+                constraints: BoxConstraints(
+                  minHeight: 70,
+                  minWidth: MediaQuery.sizeOf(context).width * 0.85,
                 ),
-              ],
-            ),
+                decoration: ShapeDecoration(
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  shadows: const [
+                    BoxShadow(
+                      color: Color(0x3F000000),
+                      blurRadius: 2,
+                      offset: Offset(0, 2),
+                      spreadRadius: 0,
+                    )
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'You successfully attended this event. ',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 12,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w600,
+                            height: 0,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        ConstrainedBox(
+                            constraints: BoxConstraints(
+                                minHeight: 0,
+                                maxWidth:
+                                    MediaQuery.sizeOf(context).width * 0.85,
+                                maxHeight: 180),
+                            child: ListView(
+                              shrinkWrap: true,
+                              children: List.generate(
+                                  attendance.length,
+                                  (index) => Center(
+                                          child: Text(
+                                        'Attendance Record: ${DateFormat('dd/MM/yyyy; hh:mm a').format(timeAttended[index])}',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 10,
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w400,
+                                          height: 0,
+                                        ),
+                                      ))),
+                            ))
+                      ]),
+                ),
+              ),
+            ],
           );
         });
   }

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:escout/backend/backend.dart';
-import 'package:escout/pages/activity/activitypage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/widgets.dart';

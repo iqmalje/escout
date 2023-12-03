@@ -1,15 +1,13 @@
-// ignore_for_file: must_be_immutable
 
-import 'package:escout/pages/attendance/attendancePage2.dart';
 import 'package:flutter/material.dart';
 
 import '../../backend/backend.dart';
 
 class RecordAttendance extends StatefulWidget {
-  String activityid;
-  String secondkey;
-  dynamic activity;
-  RecordAttendance(
+  final String activityid;
+  final String secondkey;
+  final dynamic activity;
+  const RecordAttendance(
       {super.key,
       required this.activityid,
       required this.secondkey,
@@ -32,6 +30,7 @@ class _RecordAttendanceState extends State<RecordAttendance> {
 
   List<dynamic> attendees = [];
 
+  @override
   void initState() {
     super.initState();
   }

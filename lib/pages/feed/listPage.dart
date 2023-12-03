@@ -2,7 +2,6 @@ import 'package:escout/backend/backend.dart';
 import 'package:escout/model/activity.dart';
 import 'package:escout/pages/feed/createFeedPage.dart';
 import 'package:escout/pages/homepage/DetailsProgram.dart';
-import 'package:escout/pages/homepage/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
