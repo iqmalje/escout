@@ -515,7 +515,7 @@ class _CreateActivityPage extends State<CreateActivityPage> {
       child: Container(
         width: MediaQuery.sizeOf(context).width,
         height: 90,
-        decoration: const BoxDecoration(color: Color(0xFF2C225B)),
+        decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

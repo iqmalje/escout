@@ -83,44 +83,109 @@ class _DetailsActivityState extends State<DetailsActivity> {
               ),
             ),
           ),
-          body: SizedBox(
-            width: MediaQuery.sizeOf(context).width,
-            child: Column(
-              children: [
-                Stack(
-                  children: [
-                    Image.network(
-                      activity.imageurl,
-                      width: MediaQuery.sizeOf(context).width,
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: 90,
-                          height: 20,
-                          decoration: ShapeDecoration(
-                            color: Colors.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(3)),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 10,
-                                height: 10,
-                                decoration: const ShapeDecoration(
-                                  color: Colors.black,
-                                  shape: OvalBorder(),
+          body: SingleChildScrollView(
+            child: SizedBox(
+              width: MediaQuery.sizeOf(context).width,
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      Image.network(
+                        activity.imageurl,
+                        width: MediaQuery.sizeOf(context).width,
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: 90,
+                            height: 20,
+                            decoration: ShapeDecoration(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(3)),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: 10,
+                                  height: 10,
+                                  decoration: const ShapeDecoration(
+                                    color: Colors.black,
+                                    shape: OvalBorder(),
+                                  ),
                                 ),
-                              ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  activity.category,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 12,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
+                                    height: 0,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Container(
+                    width: MediaQuery.sizeOf(context).width * 0.85,
+                    decoration: ShapeDecoration(
+                      color: const Color(0xFFFAFAFA),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      shadows: const [
+                        BoxShadow(
+                          color: Color(0x3F000000),
+                          blurRadius: 2,
+                          offset: Offset(0, 2),
+                          spreadRadius: 0,
+                        )
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15.0, vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            activity.name,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500,
+                              height: 0,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              const Icon(Icons.location_on),
                               const SizedBox(
-                                width: 5,
+                                width: 10,
                               ),
                               Text(
-                                activity.category,
+                                activity.location,
+                                overflow: TextOverflow.fade,
+                                maxLines: 1,
+                                softWrap: false,
                                 style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 12,
@@ -131,196 +196,136 @@ class _DetailsActivityState extends State<DetailsActivity> {
                               )
                             ],
                           ),
-                        ),
+                          Row(
+                            children: [
+                              const Icon(Icons.calendar_month),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                '${activity.startdate.day} - ${activity.enddate.day} ${monthName[activity.enddate.month - 1]} 2023',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                  height: 0,
+                                ),
+                              )
+                            ],
+                          ),
+                          const Row(
+                            children: [
+                              Icon(Icons.account_circle),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'PPM NEGERI JOHOR',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                  height: 0,
+                                ),
+                              )
+                            ],
+                          )
+                        ],
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                Container(
-                  width: MediaQuery.sizeOf(context).width * 0.85,
-                  decoration: ShapeDecoration(
-                    color: const Color(0xFFFAFAFA),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    shadows: const [
-                      BoxShadow(
-                        color: Color(0x3F000000),
-                        blurRadius: 2,
-                        offset: Offset(0, 2),
-                        spreadRadius: 0,
-                      )
-                    ],
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15.0, vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          activity.name,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w500,
-                            height: 0,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            const Icon(Icons.location_on),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              activity.location,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 12,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                              ),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Icon(Icons.calendar_month),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              '${activity.startdate.day} - ${activity.enddate.day} ${monthName[activity.enddate.month - 1]} 2023',
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 12,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                              ),
-                            )
-                          ],
-                        ),
-                        const Row(
-                          children: [
-                            Icon(Icons.account_circle),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'PPM NEGERI JOHOR',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 12,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
+                  const SizedBox(
+                    height: 15,
                   ),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Builder(builder: (context) {
-                  if (SupabaseB.isAdminToggled) {
-                    return buildDateSelector(context);
-                  } else {
-                    return buildAttendedList(context, activity.activityid);
-                  }
-                }),
-                const SizedBox(
-                  height: 10,
-                ),
-                Builder(builder: (context) {
-                  if (SupabaseB.isAdminToggled &&
-                      activity.status == 'ONGOING') {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        InkWell(
-                          onTap: () {},
-                          borderRadius: BorderRadius.circular(10),
-                          child: Ink(
-                            width: 135,
-                            height: 40,
-                            decoration: ShapeDecoration(
-                              color: const Color(0xFFECECEC),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                  Builder(builder: (context) {
+                    if (SupabaseB.isAdminToggled) {
+                      return buildDateSelector(context);
+                    } else {
+                      return buildAttendedList(context, activity.activityid);
+                    }
+                  }),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Builder(builder: (context) {
+                    if (SupabaseB.isAdminToggled &&
+                        activity.status == 'ONGOING') {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          InkWell(
+                            onTap: () {},
+                            borderRadius: BorderRadius.circular(10),
+                            child: Ink(
+                              width: 135,
+                              height: 40,
+                              decoration: ShapeDecoration(
+                                color: const Color(0xFFECECEC),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                'Cancel',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w600,
-                                  height: 0,
+                              child: const Center(
+                                child: Text(
+                                  'Cancel',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                    height: 0,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        InkWell(
-                          onTap: () async {
-                            await SupabaseB()
-                                .updateActivityDone(activity.activityid);
-                            setState(() {
-                              activity.status = "DONE";
-                            });
-                          },
-                          borderRadius: BorderRadius.circular(10),
-                          child: Ink(
-                            width: 135,
-                            height: 40,
-                            decoration: ShapeDecoration(
-                              color: const Color(0xFF2E3B78),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                          InkWell(
+                            onTap: () async {
+                              await SupabaseB()
+                                  .updateActivityDone(activity.activityid);
+                              setState(() {
+                                activity.status = "DONE";
+                              });
+                            },
+                            borderRadius: BorderRadius.circular(10),
+                            child: Ink(
+                              width: 135,
+                              height: 40,
+                              decoration: ShapeDecoration(
+                                color: const Color(0xFF2E3B78),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                'Completed',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w600,
-                                  height: 0,
+                              child: const Center(
+                                child: Text(
+                                  'Completed',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                    height: 0,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        )
-                      ],
-                    );
-                  } else {
-                    return Container();
-                  }
-                }),
-                const SizedBox(
-                  height: 20,
-                )
-              ],
+                          )
+                        ],
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }),
+                  const SizedBox(
+                    height: 20,
+                  )
+                ],
+              ),
             ),
           ),
         ),

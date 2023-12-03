@@ -1,4 +1,4 @@
-import 'package:facilitypage/facilityAccessed.dart';
+//import 'package:facilitypage/facilityAccessed.dart';
 import 'package:flutter/material.dart';
 
 class detailsFacilityScout extends StatefulWidget {
@@ -21,9 +21,9 @@ class _detailsFacilityScoutState extends State<detailsFacilityScout> {
       child: Column(children: <Widget>[
         _appBar(context),
         facilityImage(),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         facilityInfo(),
-        SizedBox(height: 15 ),
+        const SizedBox(height: 15),
         facilityAccessed(),
       ]),
     ));
@@ -104,7 +104,7 @@ facilityImage() => Builder(
           child: Container(
             height: 200,
             width: MediaQuery.of(context).size.width,
-            color: Color.fromRGBO(237, 237, 237, 100),
+            color: const Color.fromRGBO(237, 237, 237, 100),
           ),
         );
       },
@@ -123,13 +123,12 @@ facilityInfo() => Builder(
                 color: Colors.grey.withOpacity(0.5),
                 spreadRadius: 2,
                 blurRadius: 7,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
-          child: Padding(
-            padding:
-                const EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
+          child: const Padding(
+            padding: EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               //facility name
@@ -240,12 +239,12 @@ facilityAccessed() => Builder(
                 color: Colors.grey.withOpacity(0.5),
                 spreadRadius: 2,
                 blurRadius: 7,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
+          child: const Padding(
+            padding: EdgeInsets.fromLTRB(40, 15, 40, 15),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
