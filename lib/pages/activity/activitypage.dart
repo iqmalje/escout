@@ -132,11 +132,12 @@ class _ActivityPageState extends State<ActivityPage> {
                   icon: const Icon(
                     Icons.add,
                   ),
-                  onPressed: () {
-                    Navigator.push(
+                  onPressed: () async {
+                    await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const CreateActivityPage()));
+                    setState(() {});
                   },
                 ),
               );

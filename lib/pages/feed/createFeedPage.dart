@@ -19,7 +19,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
   String dropdownValue = 'Meeting';
   List<String> list = ['Meeting', 'Camping'];
   XFile? imagePicked;
-  bool isFeed = false;
+  bool isShowActivity = false;
 
   TextEditingController name = TextEditingController(),
       category = TextEditingController(),
@@ -558,10 +558,10 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
     return Switch(
       activeColor: const Color.fromARGB(255, 255, 255, 255),
       activeTrackColor: const Color(0xFF2E3B78),
-      value: isFeed,
+      value: isShowActivity,
       onChanged: (newSwitch) {
         setState(() {
-          isFeed = newSwitch;
+          isShowActivity = newSwitch;
         });
       },
     );
@@ -599,7 +599,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
               'startdate':
                   '${startdate!.year}-${startdate!.month}-${startdate!.day}',
               'enddate': '${enddate!.year}-${enddate!.month}-${enddate!.day}',
-              'is_feed': !isFeed,
+              'is_show_activity': isShowActivity,
               'fee': fee.text.isEmpty ? '0' : fee.text,
               'registrationenddate':
                   '${registerenddate!.year}-${registerenddate!.month}-${registerenddate!.day}',
