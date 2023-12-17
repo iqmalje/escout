@@ -184,7 +184,7 @@ class _DetailsActivityState extends State<DetailsActivity> {
                               Flexible(
                                 child: Text(
                                   activity.location,
-                                  overflow: TextOverflow.fade,
+                                  overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   softWrap: false,
                                   style: const TextStyle(

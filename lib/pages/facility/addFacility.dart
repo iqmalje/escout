@@ -1,29 +1,205 @@
+// ignore_for_file: must_be_immutable
+
+import 'dart:io';
+
+import 'package:escout/backend/backend.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class addFacilityPage extends StatefulWidget {
-  const addFacilityPage({super.key});
+  bool isEditMode;
+  dynamic facilityItem;
+  addFacilityPage({super.key, this.isEditMode = false, this.facilityItem});
 
   @override
-  State<addFacilityPage> createState() => _addFacilityPageState();
+  State<addFacilityPage> createState() =>
+      _addFacilityPageState(isEditMode, facilityItem);
 }
 
 class _addFacilityPageState extends State<addFacilityPage> {
+  bool isEditMode = false;
+  dynamic facilityItem;
+  _addFacilityPageState(this.isEditMode, this.facilityItem);
+
+  late TextEditingController name = TextEditingController(),
+      address1 = TextEditingController(),
+      address2 = TextEditingController(),
+      city = TextEditingController(),
+      state = TextEditingController(),
+      pic = TextEditingController(),
+      postcode = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    name = TextEditingController(text: facilityItem['name'] ??= '');
+    address1 = TextEditingController(text: facilityItem['address1'] ??= '');
+    address2 = TextEditingController(text: facilityItem['address2'] ??= '');
+    city = TextEditingController(text: facilityItem['city'] ??= '');
+    state = TextEditingController(text: facilityItem['state'] ??= '');
+    pic = TextEditingController(text: facilityItem['pic'] ??= '');
+    postcode = TextEditingController(
+        text: facilityItem['postcode'] != null
+            ? facilityItem['postcode'].toString()
+            : '');
+  }
+
+  XFile? imagePicked;
+
   @override
   Widget build(BuildContext context) {
-    var _mediaQuery = MediaQuery.of(context);
+    return Container(
+      color: const Color(0xFF2E3B78),
+      child: SafeArea(
+        child: Scaffold(
+            body: SingleChildScrollView(
+          child: Container(
+            color: Colors.white,
+            child: Column(children: <Widget>[
+              _appBar(context),
+              uploadImage(),
+              facilityDetails(
+                name: name,
+                address1: address1,
+                address2: address2,
+                city: city,
+                postcode: postcode,
+                state: state,
+                pic: pic,
+              ),
+              //create button
+              cButton(),
+            ]),
+          ),
+        )),
+      ),
+    );
+  }
 
-    return Scaffold(
-        body: Container(
-      width: _mediaQuery.size.width,
-      height: _mediaQuery.size.height,
-      color: Colors.white,
-      child: Column(children: <Widget>[
-        _appBar(context),
-        facilityDetails(),
-        //create button
-        cButton(),
-      ]),
-    ));
+  Widget cButton() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 50),
+      child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 30),
+            child: ElevatedButton(
+              onPressed: () async {
+                if (isEditMode) {
+                  await SupabaseB().updateFacility(
+                      facilityItem['facility'],
+                      {
+                        'name': name.text,
+                        'address1': address1.text,
+                        'address2': address2.text,
+                        'city': city.text,
+                        'postcode': postcode.text,
+                        'state': state.text,
+                        'pic': pic.text
+                      },
+                      newImage:
+                          imagePicked == null ? null : File(imagePicked!.path));
+                } else {
+                  await SupabaseB().createFacility({
+                    'name': name.text,
+                    'address1': address1.text,
+                    'address2': address2.text,
+                    'city': city.text,
+                    'postcode': postcode.text,
+                    'state': state.text,
+                    'pic': pic.text,
+                    'image': File(imagePicked!.path)
+                  });
+                }
+                Navigator.of(context).pop();
+              },
+              style: ElevatedButton.styleFrom(
+                primary: const Color(0xFF2E3B78),
+                elevation: 0,
+                fixedSize: const Size(300, 50),
+              ),
+              child: Text(isEditMode ? 'EDIT' : 'CREATE',
+                  style: const TextStyle(
+                      fontSize: 14,
+                      letterSpacing: .3,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white)),
+            ),
+          )),
+    );
+  }
+
+  Widget uploadImage() {
+    print(imagePicked == null);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: Container(
+        height: 200,
+        width: MediaQuery.of(context).size.width,
+        color: const Color.fromRGBO(237, 237, 237, 100),
+        child: Builder(builder: (context) {
+          if (imagePicked == null) {
+            if (isEditMode) {
+              return GestureDetector(
+                onTap: () async {
+                  XFile? imagepicked = await ImagePicker()
+                      .pickImage(source: ImageSource.gallery);
+
+                  if (imagepicked != null) {
+                    setState(() {
+                      imagePicked = imagepicked;
+                    });
+                  }
+                },
+                child: Image.network(
+                    SupabaseB().getFacilityImage(facilityItem['facility'])),
+              );
+            }
+            return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  IconButton(
+                    onPressed: () async {
+                      XFile? imagepicked = await ImagePicker()
+                          .pickImage(source: ImageSource.gallery);
+
+                      if (imagepicked != null) {
+                        setState(() {
+                          imagePicked = imagepicked;
+                        });
+                      }
+                    },
+                    icon: const Icon(Icons.upload_file),
+                    color: const Color.fromRGBO(217, 217, 217, 100),
+                    iconSize: 35,
+                  ),
+                  const Text(
+                    'Upload an image',
+                    style: TextStyle(
+                        color: Color.fromRGBO(217, 217, 217, 100),
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                        letterSpacing: .3),
+                  ),
+                ]);
+          } else {
+            return GestureDetector(
+                onTap: () async {
+                  XFile? imagepicked = await ImagePicker()
+                      .pickImage(source: ImageSource.gallery);
+
+                  if (imagepicked != null) {
+                    setState(() {
+                      imagePicked = imagepicked;
+                    });
+                  }
+                },
+                child: Image.file(File(imagePicked!.path)));
+          }
+        }),
+      ),
+    );
   }
 }
 
@@ -31,7 +207,7 @@ Widget _appBar(context) {
   return Container(
     width: MediaQuery.sizeOf(context).width,
     height: 90,
-    decoration: const BoxDecoration(color: Color(0xFF2C225B)),
+    decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -95,13 +271,18 @@ Widget _backButton(context) {
 }
 
 class uploadProgramImage extends StatefulWidget {
-  const uploadProgramImage({super.key});
+  XFile imagePicked;
+  uploadProgramImage({super.key, required this.imagePicked});
 
   @override
-  State<uploadProgramImage> createState() => _uploadProgramImageState();
+  State<uploadProgramImage> createState() =>
+      _uploadProgramImageState(imagePicked);
 }
 
 class _uploadProgramImageState extends State<uploadProgramImage> {
+  XFile imagePicked;
+
+  _uploadProgramImageState(this.imagePicked);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -109,18 +290,23 @@ class _uploadProgramImageState extends State<uploadProgramImage> {
       child: Container(
         height: 200,
         width: MediaQuery.of(context).size.width,
-        color: Color.fromRGBO(237, 237, 237, 100),
+        color: const Color.fromRGBO(237, 237, 237, 100),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.upload_file),
-                color: Color.fromRGBO(217, 217, 217, 100),
+                onPressed: () async {
+                  XFile? imagepicked = await ImagePicker()
+                      .pickImage(source: ImageSource.gallery);
+
+                  if (imagepicked != null) imagePicked = imagepicked;
+                },
+                icon: const Icon(Icons.upload_file),
+                color: const Color.fromRGBO(217, 217, 217, 100),
                 iconSize: 35,
               ),
-              Text(
+              const Text(
                 'Upload an image',
                 style: TextStyle(
                     color: Color.fromRGBO(217, 217, 217, 100),
@@ -139,16 +325,16 @@ Widget textField(Map textItems) {
     padding: const EdgeInsets.only(top: 20.0, left: 25, right: 25),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [ 
+      children: [
         Text(
           textItems['label'],
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
             letterSpacing: .3,
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         SizedBox(
           height: 45,
           width: 360,
@@ -157,13 +343,13 @@ Widget textField(Map textItems) {
             onChanged: textItems['onChange'],
             decoration: InputDecoration(
               hintText: textItems['hintText'],
-              hintStyle: TextStyle(
+              hintStyle: const TextStyle(
                   fontSize: 14.0, color: Color.fromRGBO(147, 151, 160, 100)),
-              contentPadding: EdgeInsets.only(left: 20),
+              contentPadding: const EdgeInsets.only(left: 20),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(9),
                   borderSide: BorderSide.none),
-              fillColor: Color.fromRGBO(237, 237, 237, 100),
+              fillColor: const Color.fromRGBO(237, 237, 237, 100),
               filled: true,
             ),
           ),
@@ -173,70 +359,96 @@ Widget textField(Map textItems) {
   );
 }
 
-Widget cButton() {
-  return Expanded(
-      child: Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 30),
-            child: ElevatedButton(
-              onPressed: () {},
-              child: Text('CREATE',
-                  style: TextStyle(
-                    fontSize: 14,
-                    letterSpacing: .3,
-                    fontWeight: FontWeight.bold,
-                  )),
-              style: ElevatedButton.styleFrom(
-                primary:  Color(0xFF2C225B),
-                elevation: 0,
-                fixedSize: const Size(365, 50),
-              ),
-            ),
-          )));
-}
-
 class facilityDetails extends StatefulWidget {
-  const facilityDetails({super.key});
+  TextEditingController name, address1, address2, city, state, pic;
+  TextEditingController postcode;
+
+  facilityDetails({
+    super.key,
+    required this.name,
+    required this.address1,
+    required this.address2,
+    required this.city,
+    required this.postcode,
+    required this.state,
+    required this.pic,
+  });
 
   @override
-  State<facilityDetails> createState() => _facilityDetailsState();
+  State<facilityDetails> createState() => _facilityDetailsState(
+      name, address1, address2, city, postcode, state, pic);
 }
 
 class _facilityDetailsState extends State<facilityDetails> {
+  TextEditingController name, address1, address2, city, state, pic;
+  TextEditingController postcode;
+
+  _facilityDetailsState(
+    this.name,
+    this.address1,
+    this.address2,
+    this.city,
+    this.postcode,
+    this.state,
+    this.pic,
+  );
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         //image upload
-        uploadProgramImage(),
 
         //facility details
         //facility name
         textField({
-          'controller': new TextEditingController(),
+          'controller': name,
           'onChange': (String val) {},
           'label': 'Facility Name',
           'hintText': 'Facility name',
         }),
         //facility address
         textField({
-          'controller': new TextEditingController(),
+          'controller': address1,
           'onChange': (String val) {},
-          'label': 'Facility Address',
-          'hintText': 'Facility address',
+          'label': 'Facility Address Line 1',
+          'hintText': 'Facility address line 1',
+        }),
+        //facility address
+        textField({
+          'controller': address2,
+          'onChange': (String val) {},
+          'label': 'Facility Address Line 2',
+          'hintText': 'Facility address line 2',
+        }),
+        //facility address
+        textField({
+          'controller': city,
+          'onChange': (String val) {},
+          'label': 'City',
+          'hintText': 'City',
+        }),
+        //facility address
+        textField({
+          'controller': postcode,
+          'onChange': (String val) {},
+          'label': 'Postcode',
+          'hintText': 'Postcode',
+        }),
+        //facility address
+        textField({
+          'controller': state,
+          'onChange': (String val) {},
+          'label': 'State',
+          'hintText': 'State',
         }),
         //pic of facility
         textField({
-          'controller': new TextEditingController(),
+          'controller': pic,
           'onChange': (String val) {},
           'label': 'PIC of Facility',
           'hintText': 'Phone number (name)',
         }),
-
-
       ],
-      
     );
   }
 }
