@@ -48,27 +48,32 @@ class _addFacilityPageState extends State<addFacilityPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: SingleChildScrollView(
-      child: Container(
-        color: Colors.white,
-        child: Column(children: <Widget>[
-          _appBar(context),
-          uploadImage(),
-          facilityDetails(
-            name: name,
-            address1: address1,
-            address2: address2,
-            city: city,
-            postcode: postcode,
-            state: state,
-            pic: pic,
+    return Container(
+      color: const Color(0xFF2E3B78),
+      child: SafeArea(
+        child: Scaffold(
+            body: SingleChildScrollView(
+          child: Container(
+            color: Colors.white,
+            child: Column(children: <Widget>[
+              _appBar(context),
+              uploadImage(),
+              facilityDetails(
+                name: name,
+                address1: address1,
+                address2: address2,
+                city: city,
+                postcode: postcode,
+                state: state,
+                pic: pic,
+              ),
+              //create button
+              cButton(),
+            ]),
           ),
-          //create button
-          cButton(),
-        ]),
+        )),
       ),
-    ));
+    );
   }
 
   Widget cButton() {
@@ -109,12 +114,12 @@ class _addFacilityPageState extends State<addFacilityPage> {
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
-                primary: const Color(0xFF2C225B),
+                primary: const Color(0xFF2E3B78),
                 elevation: 0,
-                fixedSize: const Size(365, 50),
+                fixedSize: const Size(300, 50),
               ),
               child: Text(isEditMode ? 'EDIT' : 'CREATE',
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 14,
                       letterSpacing: .3,
                       fontWeight: FontWeight.bold,
@@ -202,7 +207,7 @@ Widget _appBar(context) {
   return Container(
     width: MediaQuery.sizeOf(context).width,
     height: 90,
-    decoration: const BoxDecoration(color: Color(0xFF2C225B)),
+    decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [

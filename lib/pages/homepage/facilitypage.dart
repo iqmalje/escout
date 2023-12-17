@@ -114,7 +114,7 @@ class _FacilityPageState extends State<FacilityPage> {
                     ? Container()
                     : CircleAvatar(
                         radius: 30,
-                        backgroundColor: const Color(0xFF2C225B),
+                        backgroundColor: const Color(0xFF2E3B78),
                         child: IconButton(
                           icon: const Icon(Icons.add),
                           color: Colors.white,
@@ -157,25 +157,27 @@ class _FacilityPageState extends State<FacilityPage> {
                             child: GestureDetector(
                               onTap: () => _selectDate(context),
                               child: Container(
-                                width: 110,
+                                width: 140,
                                 height: 30,
                                 decoration: const BoxDecoration(
-                                    color: Color.fromARGB(255, 174, 169, 169)),
-                                child: Row(
+                                    color: Color(0xFFEDEDED)),
+                                child: const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "${selectedDate.month}/${selectedDate.year}",
-                                      style: const TextStyle(
-                                        color: Colors.white,
+                                      //"${monthName[selectedDate.month - 1]} ${selectedDate.year.toString().substring(2)}",
+                                      "Bulan",
+                                      style: TextStyle(
+                                        color: Colors.black,
                                         fontSize: 16,
                                       ),
                                     ),
-                                    const SizedBox(
+                                    SizedBox(
                                         width:
                                             5), // Add some space between the text and the icon
-                                    const Icon(
+                                    Icon(
                                       Icons.calendar_today,
-                                      color: Colors.white,
+                                      color: Colors.black,
                                       size: 16,
                                     ),
                                   ],

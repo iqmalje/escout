@@ -21,33 +21,40 @@ class _detailsFacilityScoutState extends State<detailsFacilityScout> {
   Widget build(BuildContext context) {
     var _mediaQuery = MediaQuery.of(context);
 
-    return Scaffold(
-        body: FutureBuilder(
-            future: SupabaseB()
-                .getAttendedDates('75ddee9a-69f9-4630-8d3f-37ee28cf3c54'),
-            builder: (context, snapshot) {
-              print(snapshot.hasData);
-              if (!snapshot.hasData) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else {
-                return Container(
-                  width: _mediaQuery.size.width,
-                  height: _mediaQuery.size.height,
-                  color: Colors.white,
-                  child: Column(children: <Widget>[
-                    _appBar(context),
-                    facilityImage(
-                        SupabaseB().getFacilityImage(facilityItem['facility'])),
-                    const SizedBox(height: 20),
-                    facilityInfo(facilityItem),
-                    const SizedBox(height: 15),
-                    facilityAccessed(snapshot.data!),
-                  ]),
-                );
-              }
-            }));
+    return Container(
+      color: const Color(0xFF2E3B78),
+      child: SafeArea(
+        child: Scaffold(
+            body: SingleChildScrollView(
+          child: FutureBuilder(
+              future: SupabaseB()
+                  .getAttendedDates('75ddee9a-69f9-4630-8d3f-37ee28cf3c54'),
+              builder: (context, snapshot) {
+                print(snapshot.hasData);
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  return Container(
+                    width: _mediaQuery.size.width,
+                    height: _mediaQuery.size.height,
+                    color: Colors.white,
+                    child: Column(children: <Widget>[
+                      _appBar(context),
+                      facilityImage(SupabaseB()
+                          .getFacilityImage(facilityItem['facility'])),
+                      const SizedBox(height: 20),
+                      facilityInfo(facilityItem),
+                      const SizedBox(height: 15),
+                      facilityAccessed(snapshot.data!),
+                    ]),
+                  );
+                }
+              }),
+        )),
+      ),
+    );
   }
 }
 
@@ -55,7 +62,7 @@ Widget _appBar(context) {
   return Container(
     width: MediaQuery.sizeOf(context).width,
     height: 90,
-    decoration: const BoxDecoration(color: Color(0xFF2C225B)),
+    decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -149,7 +156,8 @@ facilityInfo(dynamic facilityItem) => Builder(
             ],
           ),
           child: Padding(
-            padding: EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
+            padding:
+                const EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               //facility name
@@ -157,22 +165,22 @@ facilityInfo(dynamic facilityItem) => Builder(
                 facilityItem['name'],
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 15,
                     color: Colors.black,
                     fontWeight: FontWeight.w600),
               ),
-              SizedBox(height: 13),
+              const SizedBox(height: 13),
 
               //facility address
               Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.navigation_rounded,
                     color: Color(0xFF2C225B),
                     size: 20,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Flexible(
@@ -180,7 +188,7 @@ facilityInfo(dynamic facilityItem) => Builder(
                       '${facilityItem['address1']}, ${facilityItem['address2']}, ${facilityItem['postcode']} ${facilityItem['city']}, ${facilityItem['state']}',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w400,
                         letterSpacing: .3,
@@ -189,14 +197,14 @@ facilityInfo(dynamic facilityItem) => Builder(
                   )
                 ],
               ),
-              SizedBox(height: 7),
+              const SizedBox(height: 7),
 
               //facility phone
-              Row(
+              const Row(
                 children: [
                   Icon(
                     Icons.phone,
-                    color: Color(0xFF2C225B),
+                    color: const Color(0xFF2C225B),
                     size: 20,
                   ),
                   SizedBox(
@@ -223,10 +231,10 @@ facilityInfo(dynamic facilityItem) => Builder(
                   ),
                 ],
               ),
-              SizedBox(height: 7),
+              const SizedBox(height: 7),
 
               //facility admin
-              Row(
+              const Row(
                 children: [
                   Icon(
                     Icons.account_circle_rounded,
@@ -246,7 +254,7 @@ facilityInfo(dynamic facilityItem) => Builder(
                   ),
                 ],
               ),
-              SizedBox(height: 7),
+              const SizedBox(height: 7),
             ]),
           ),
         );
@@ -276,7 +284,7 @@ Widget facilityAccessed(List<dynamic> attendances) => Builder(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
-                    'Facility Access Timestamps',
+                    'Facility Accessed',
                     style: TextStyle(
                         fontWeight: FontWeight.w500,
                         letterSpacing: .3,

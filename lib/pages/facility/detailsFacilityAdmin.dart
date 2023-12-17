@@ -20,27 +20,34 @@ class _detailsFacilityAdminState extends State<detailsFacilityAdmin> {
   Widget build(BuildContext context) {
     var _mediaQuery = MediaQuery.of(context);
 
-    return Scaffold(
-        body: Container(
-      width: _mediaQuery.size.width,
-      height: _mediaQuery.size.height,
-      color: Colors.white,
-      child: Column(children: <Widget>[
-        _appBar(context),
-        facilityImage(SupabaseB().getFacilityImage(facilityItem['facility'])),
-        facilityInfo(),
-        const SizedBox(height: 13),
-        const Text(
-          'October 2023',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            letterSpacing: .3,
-          ),
-        ),
-        selectDate(),
-      ]),
-    ));
+    return Container(
+      // ignore: prefer_const_constructors
+      color: Color(0xFF2E3B78),
+      child: SafeArea(
+        child: Scaffold(
+            body: Container(
+          width: _mediaQuery.size.width,
+          height: _mediaQuery.size.height,
+          color: Colors.white,
+          child: Column(children: <Widget>[
+            _appBar(context),
+            facilityImage(
+                SupabaseB().getFacilityImage(facilityItem['facility'])),
+            facilityInfo(),
+            const SizedBox(height: 13),
+            const Text(
+              'October 2023', //TODO: Should be resposive to respective month
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                letterSpacing: .3,
+              ),
+            ),
+            selectDate(),
+          ]),
+        )),
+      ),
+    );
   }
 
   facilityImage(String url) => Builder(
@@ -237,7 +244,7 @@ class _detailsFacilityAdminState extends State<detailsFacilityAdmin> {
           }));
         },
         style: ElevatedButton.styleFrom(
-          primary: const Color(0xFF2C225B),
+          primary: const Color(0xFF2E3B78),
         ),
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -267,7 +274,7 @@ Widget _appBar(context) {
   return Container(
     width: MediaQuery.sizeOf(context).width,
     height: 90,
-    decoration: const BoxDecoration(color: Color(0xFF2C225B)),
+    decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
