@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:escout/model/account.dart';
 import 'package:escout/model/activity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -123,6 +125,21 @@ class SupabaseB {
     }
   }
 
+  Future<dynamic> getFacilities() async {
+    var data = await supabase.from('facilities').select('*');
+    print(data);
+    return data;
+  }
+
+  Future<dynamic> getAttendedDates(String facilityid) async {
+    var data = await supabase
+        .from('facilityaccess')
+        .select('starttime, endtime')
+        .eq('accessed_by', supabase.auth.currentUser!.id);
+
+    return data;
+  }
+
   /// Since adding an event requires many params, it is better
   /// for developers to send out a Map instead, below is the required info
   /// for a map.
@@ -164,6 +181,94 @@ class SupabaseB {
           .from('activities')
           .getPublicUrl('${activity['activityid']}/cover.png')
     }).eq('activityid', activity['activityid']);
+  }
+
+  Future<void> createFacility(Map<String, dynamic> items) async {
+    print(items);
+    var accid = supabase.auth.currentUser!.id;
+
+    var facilityid = await supabase
+        .from('facilities')
+        .insert({
+          'created_by': accid,
+          'handled_by': accid,
+          'name': items['name'],
+          'address1': items['address1'],
+          'address2': items['address2'],
+          'city': items['city'],
+          'state': items['state'],
+          'postcode': int.parse(items['postcode']),
+          'pic': items['pic']
+        })
+        .select('facility')
+        .single();
+
+    await supabase.storage
+        .from('facilities')
+        .upload('${facilityid['facility']}/cover.png', items['image']);
+  }
+
+  Future<dynamic> getNumberAccess(String facilityid, DateTime datetime) async {
+    var data = await supabase.rpc('get_number_access', params: {
+      'fid': facilityid,
+      'date': '${datetime.year}-${datetime.month}-${datetime.day}%'
+    });
+
+    return data;
+  }
+
+  Future<dynamic> getTotalAccess(String facilityid, DateTime datetime) async {
+    var data = await supabase.rpc('get_total_access', params: {
+      'fid': facilityid,
+      'date': '${datetime.year}-${datetime.month}-${datetime.day}%'
+    });
+
+    print(data);
+    return data;
+  }
+
+  Future<dynamic> getAllAccess(String facilityid, DateTime datetime) async {
+    var data = await supabase.rpc('get_all_access', params: {
+      'fid': facilityid,
+      'date': '${datetime.year}-${datetime.month}-${datetime.day}%'
+    });
+
+    return data;
+  }
+
+  Future<void> updateFacility(String facilityid, Map<String, dynamic> items,
+      {File? newImage}) async {
+    print('$facilityid = 75ddee9a-69f9-4630-8d3f-37ee28cf3c54');
+    var data = await supabase
+        .from('facilities')
+        .update({
+          'name': items['name'],
+          'address1': items['address1'],
+          'address2': items['address2'],
+          'city': items['city'],
+          'state': items['state'],
+          'postcode': int.parse(items['postcode']),
+          'pic': items['pic']
+        })
+        .eq('facility', facilityid)
+        .select('*');
+
+    if (newImage != null) {
+      await supabase.storage
+          .from('facilities')
+          .remove(['$facilityid/cover.png']);
+      print('DAH DELETE');
+      await supabase.storage
+          .from('facilities')
+          .upload('$facilityid/cover.png', newImage);
+    }
+    print(data);
+  }
+
+  String getFacilityImage(String facilityid) {
+    return supabase.storage
+        .from('facilities')
+        .getPublicUrl('$facilityid/cover.png');
   }
 
   /// Get a list of feed for the user

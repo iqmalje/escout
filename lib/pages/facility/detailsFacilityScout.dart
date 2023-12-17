@@ -1,32 +1,53 @@
 //import 'package:facilitypage/facilityAccessed.dart';
+import 'package:escout/backend/backend.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class detailsFacilityScout extends StatefulWidget {
-  const detailsFacilityScout({super.key});
+  final dynamic facilityItem;
+
+  const detailsFacilityScout({super.key, required this.facilityItem});
 
   @override
-  State<detailsFacilityScout> createState() => _detailsFacilityScoutState();
+  State<detailsFacilityScout> createState() =>
+      _detailsFacilityScoutState(facilityItem);
 }
 
 class _detailsFacilityScoutState extends State<detailsFacilityScout> {
+  final dynamic facilityItem;
+
+  _detailsFacilityScoutState(this.facilityItem);
   @override
   Widget build(BuildContext context) {
     var _mediaQuery = MediaQuery.of(context);
 
     return Scaffold(
-        body: Container(
-      width: _mediaQuery.size.width,
-      height: _mediaQuery.size.height,
-      color: Colors.white,
-      child: Column(children: <Widget>[
-        _appBar(context),
-        facilityImage(),
-        const SizedBox(height: 20),
-        facilityInfo(),
-        const SizedBox(height: 15),
-        facilityAccessed(),
-      ]),
-    ));
+        body: FutureBuilder(
+            future: SupabaseB()
+                .getAttendedDates('75ddee9a-69f9-4630-8d3f-37ee28cf3c54'),
+            builder: (context, snapshot) {
+              print(snapshot.hasData);
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return Container(
+                  width: _mediaQuery.size.width,
+                  height: _mediaQuery.size.height,
+                  color: Colors.white,
+                  child: Column(children: <Widget>[
+                    _appBar(context),
+                    facilityImage(
+                        SupabaseB().getFacilityImage(facilityItem['facility'])),
+                    const SizedBox(height: 20),
+                    facilityInfo(facilityItem),
+                    const SizedBox(height: 15),
+                    facilityAccessed(snapshot.data!),
+                  ]),
+                );
+              }
+            }));
   }
 }
 
@@ -97,24 +118,24 @@ Widget _backButton(context) {
   );
 }
 
-facilityImage() => Builder(
+facilityImage(String url) => Builder(
       builder: (BuildContext context) {
         return Padding(
           padding: const EdgeInsets.only(bottom: 5.0),
           child: Container(
-            height: 200,
             width: MediaQuery.of(context).size.width,
             color: const Color.fromRGBO(237, 237, 237, 100),
+            child: Image.network(url),
           ),
         );
       },
     );
 
-facilityInfo() => Builder(
+facilityInfo(dynamic facilityItem) => Builder(
       builder: (BuildContext context) {
         return Container(
-          height: 190,
-          width: 370,
+          constraints: BoxConstraints(
+              minHeight: 100, maxWidth: MediaQuery.sizeOf(context).width * 0.9),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(6),
@@ -127,13 +148,15 @@ facilityInfo() => Builder(
               ),
             ],
           ),
-          child: const Padding(
+          child: Padding(
             padding: EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               //facility name
               Text(
-                'BILIK MESYUARAT DI PEJABAT PERSEKUTUAN\nPENGAKAP MALAYSIA NEGERI JOHOR',
+                facilityItem['name'],
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                     fontSize: 15,
                     color: Colors.black,
@@ -152,12 +175,16 @@ facilityInfo() => Builder(
                   SizedBox(
                     width: 10,
                   ),
-                  Text(
-                    'No. 22-01, Jalan Kolam Air 1, Taman Nong Chik\nHeights, 80100 Johor Bahru, Johor',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w400,
-                      letterSpacing: .3,
+                  Flexible(
+                    child: Text(
+                      '${facilityItem['address1']}, ${facilityItem['address2']}, ${facilityItem['postcode']} ${facilityItem['city']}, ${facilityItem['state']}',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                        letterSpacing: .3,
+                      ),
                     ),
                   )
                 ],
@@ -226,11 +253,11 @@ facilityInfo() => Builder(
       },
     );
 
-facilityAccessed() => Builder(
+Widget facilityAccessed(List<dynamic> attendances) => Builder(
       builder: (BuildContext context) {
         return Container(
-          height: 100,
-          width: 370,
+          width: MediaQuery.sizeOf(context).width * 0.9,
+          constraints: const BoxConstraints(minHeight: 100),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(6),
@@ -243,17 +270,31 @@ facilityAccessed() => Builder(
               ),
             ],
           ),
-          child: const Padding(
-            padding: EdgeInsets.fromLTRB(40, 15, 40, 15),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Facility Access Timestamps',
                     style: TextStyle(
                         fontWeight: FontWeight.w500,
                         letterSpacing: .3,
                         fontSize: 15),
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.only(top: 10),
+                    itemBuilder: (context, index) {
+                      DateTime starttime = DateTime.parse(attendances[index]
+                                  ['starttime']
+                              .toString()
+                              .replaceFirst('T', ' '))
+                          .add(const Duration(hours: 8));
+                      return Text(
+                          '${index + 1}.   ${DateFormat('dd-MM-yyyy hh:mm a').format(starttime)}');
+                    },
+                    itemCount: attendances.length,
                   )
                 ]),
           ),
