@@ -66,6 +66,10 @@ class SupabaseB {
     await supabase.auth.signOut();
   }
 
+  Future<void> deleteFacility(String facilityid) async {
+    await supabase.from('facilities').delete().eq('facility', facilityid);
+  }
+
   /// It will return the model Account, this is based on user's login info
   /// If user is not logged in to the application, an error will be thrown out!
   Future<Account> getProfileInfo() async {
@@ -131,12 +135,19 @@ class SupabaseB {
     return data;
   }
 
-  Future<dynamic> getAttendedDates(String facilityid) async {
-    var data = await supabase
-        .from('facilityaccess')
-        .select('starttime, endtime')
-        .eq('accessed_by', supabase.auth.currentUser!.id);
+  Future<dynamic> getAttendedDates(
+      String facilityid, DateTime timePicked) async {
+    print("PATUT KAT SINI DOH");
 
+    print(
+        ' ${supabase.auth.currentUser!.id} $facilityid ${timePicked.year}-${timePicked.month}-${timePicked.day}%');
+    var data = await supabase.rpc('get_access_by_date', params: {
+      'uid': supabase.auth.currentUser!.id,
+      'fid': facilityid,
+      'date': '${timePicked.year}-${timePicked.month}-${timePicked.day}%'
+    });
+
+    print("DATA = $data");
     return data;
   }
 

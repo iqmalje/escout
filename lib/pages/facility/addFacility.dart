@@ -32,16 +32,36 @@ class _addFacilityPageState extends State<addFacilityPage> {
   @override
   void initState() {
     super.initState();
-    name = TextEditingController(text: facilityItem['name'] ??= '');
-    address1 = TextEditingController(text: facilityItem['address1'] ??= '');
-    address2 = TextEditingController(text: facilityItem['address2'] ??= '');
-    city = TextEditingController(text: facilityItem['city'] ??= '');
-    state = TextEditingController(text: facilityItem['state'] ??= '');
-    pic = TextEditingController(text: facilityItem['pic'] ??= '');
-    postcode = TextEditingController(
-        text: facilityItem['postcode'] != null
-            ? facilityItem['postcode'].toString()
-            : '');
+    if (facilityItem != null) {
+      name = TextEditingController(
+          text: facilityItem['name'] != null
+              ? facilityItem['name'].toString()
+              : '');
+      address1 = TextEditingController(
+          text: facilityItem['address1'] != null
+              ? facilityItem['address1'].toString()
+              : '');
+      address2 = TextEditingController(
+          text: facilityItem['address2'] != null
+              ? facilityItem['address2'].toString()
+              : '');
+      city = TextEditingController(
+          text: facilityItem['city'] != null
+              ? facilityItem['city'].toString()
+              : '');
+      state = TextEditingController(
+          text: facilityItem['state'] != null
+              ? facilityItem['state'].toString()
+              : '');
+      pic = TextEditingController(
+          text: facilityItem['pic'] != null
+              ? facilityItem['pic'].toString()
+              : '');
+      postcode = TextEditingController(
+          text: facilityItem['postcode'] != null
+              ? facilityItem['postcode'].toString()
+              : '');
+    }
   }
 
   XFile? imagePicked;
@@ -129,6 +149,48 @@ class _addFacilityPageState extends State<addFacilityPage> {
     );
   }
 
+  Widget _appBar(context) {
+    return Container(
+      width: MediaQuery.sizeOf(context).width,
+      height: 90,
+      decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const SizedBox(
+            width: 30,
+          ),
+          Container(
+            width: 50,
+            height: 50,
+            decoration: const ShapeDecoration(
+              color: Colors.white,
+              shape: OvalBorder(),
+            ),
+            child: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(Icons.arrow_back_ios_new)),
+          ),
+          const SizedBox(
+            width: 30,
+          ),
+          Text(
+            isEditMode ? 'Edit Facility' : 'Add Facility',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 25,
+              //fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+              height: 0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget uploadImage() {
     print(imagePicked == null);
     return Padding(
@@ -201,48 +263,6 @@ class _addFacilityPageState extends State<addFacilityPage> {
       ),
     );
   }
-}
-
-Widget _appBar(context) {
-  return Container(
-    width: MediaQuery.sizeOf(context).width,
-    height: 90,
-    decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        const SizedBox(
-          width: 30,
-        ),
-        Container(
-          width: 50,
-          height: 50,
-          decoration: const ShapeDecoration(
-            color: Colors.white,
-            shape: OvalBorder(),
-          ),
-          child: IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: const Icon(Icons.arrow_back_ios_new)),
-        ),
-        const SizedBox(
-          width: 30,
-        ),
-        const Text(
-          'Add Facility',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 25,
-            //fontFamily: 'Poppins',
-            fontWeight: FontWeight.w600,
-            height: 0,
-          ),
-        ),
-      ],
-    ),
-  );
 }
 
 Widget _backButton(context) {
@@ -328,6 +348,7 @@ Widget textField(Map textItems) {
       children: [
         Text(
           textItems['label'],
+          maxLines: 2,
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
@@ -336,11 +357,12 @@ Widget textField(Map textItems) {
         ),
         const SizedBox(height: 10),
         SizedBox(
-          height: 45,
           width: 360,
           child: TextField(
             controller: textItems['controller'],
             onChanged: textItems['onChange'],
+            minLines: 1,
+            maxLines: 5,
             decoration: InputDecoration(
               hintText: textItems['hintText'],
               hintStyle: const TextStyle(

@@ -34,16 +34,75 @@ class _detailsFacilityAdminState extends State<detailsFacilityAdmin> {
             facilityImage(
                 SupabaseB().getFacilityImage(facilityItem['facility'])),
             facilityInfo(),
-            const SizedBox(height: 13),
-            const Text(
-              'October 2023', //TODO: Should be resposive to respective month
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                letterSpacing: .3,
-              ),
-            ),
             selectDate(),
+            const SizedBox(
+              height: 50,
+            ),
+            Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 30.0),
+              child: Material(
+                child: InkWell(
+                  onTap: () async {
+                    var confirmDelete = await showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text(
+                              'Are you sure to delete this facility?',
+                              style: TextStyle(
+                                  fontFamily: 'Poppins', fontSize: 18),
+                            ),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(false);
+                                  },
+                                  child: Text('No')),
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(true);
+                                  },
+                                  child: Text('Yes')),
+                            ],
+                          );
+                        });
+
+                    if (confirmDelete == null || confirmDelete == false) return;
+
+                    await SupabaseB().deleteFacility(facilityItem['facility']);
+
+                    Navigator.of(context).pop();
+                  },
+                  child: Ink(
+                    width: MediaQuery.sizeOf(context).width * 0.9,
+                    height: 40,
+                    decoration: ShapeDecoration(
+                      // ignore: prefer_const_constructors
+                      color: Color(0xFFD9D9D9),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Delete Facility',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w600,
+                            height: 0,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            )
           ]),
         )),
       ),
@@ -69,17 +128,16 @@ class _detailsFacilityAdminState extends State<detailsFacilityAdmin> {
           return Padding(
             padding: const EdgeInsets.only(top: 15, right: 25, left: 25),
             child: Container(
-              height: 230,
-              width: 375,
+              constraints: BoxConstraints(minWidth: 375, maxHeight: 250),
               //decoration: BoxDecoration(color: Colors.red),
               child:
                   Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
                 EditButton(),
-                const SizedBox(height: 7),
+                const SizedBox(height: 10),
                 Container(
                   constraints: BoxConstraints(
-                      minWidth: MediaQuery.sizeOf(context).width * 0.8,
-                      minHeight: 190),
+                    minWidth: MediaQuery.sizeOf(context).width * 0.8,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(6),
@@ -101,6 +159,7 @@ class _detailsFacilityAdminState extends State<detailsFacilityAdmin> {
                           //facility name
                           Text(
                             facilityItem['name'],
+                            maxLines: 2,
                             style: const TextStyle(
                                 fontSize: 15,
                                 color: Colors.black,
@@ -110,6 +169,7 @@ class _detailsFacilityAdminState extends State<detailsFacilityAdmin> {
 
                           //facility address
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Icon(
                                 Icons.navigation_rounded,
@@ -119,12 +179,15 @@ class _detailsFacilityAdminState extends State<detailsFacilityAdmin> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Text(
-                                '${facilityItem['address1']}, ${facilityItem['address2']}, ${facilityItem['postcode']} ${facilityItem['city']}, ${facilityItem['state']}',
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400,
-                                  letterSpacing: .3,
+                              Flexible(
+                                child: Text(
+                                  '${facilityItem['address1']}, ${facilityItem['address2']}, ${facilityItem['postcode']} ${facilityItem['city']}, ${facilityItem['state']}',
+                                  maxLines: 5,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400,
+                                    letterSpacing: .3,
+                                  ),
                                 ),
                               )
                             ],
@@ -166,7 +229,7 @@ class _detailsFacilityAdminState extends State<detailsFacilityAdmin> {
                                 width: 10,
                               ),
                               Text(
-                                'PPM DAERAH BATU PAHAT',
+                                'PPM NEGERI JOHOR',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w400,
@@ -185,49 +248,100 @@ class _detailsFacilityAdminState extends State<detailsFacilityAdmin> {
         },
       );
   Widget selectDate() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(25, 13, 25, 0),
-      child: TextField(
-        //controller:
-        //onChanged:
-        decoration: InputDecoration(
-          hintText: 'Select date of facility access',
-          hintStyle: const TextStyle(
-              fontSize: 14.0, color: Color.fromRGBO(147, 151, 160, 100)),
-          contentPadding: const EdgeInsets.only(left: 20),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(9),
-              borderSide: BorderSide.none),
-          fillColor: const Color.fromRGBO(251, 251, 251, 100),
-          filled: true,
-          suffixIcon: Padding(
-              padding: const EdgeInsets.only(right: 17),
-              child: IconButton(
-                icon: const Icon(
-                  Icons.calendar_today_rounded,
-                  color: Color.fromRGBO(147, 151, 160, 100),
-                  size: 19,
-                ),
-                onPressed: () async {
-                  DateTime? datePicked = await showDatePicker(
-                      context: context,
-                      firstDate: DateTime.fromMillisecondsSinceEpoch(0),
-                      lastDate: DateTime.now().add(const Duration(days: 365)));
+    return Material(
+      child: InkWell(
+        onTap: () async {
+          DateTime? datePicked = await showDatePicker(
+              context: context,
+              firstDate: DateTime.fromMillisecondsSinceEpoch(0),
+              lastDate: DateTime.now().add(const Duration(days: 365)));
 
-                  if (datePicked != null) {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) {
-                      return facilityAccessed(
-                        facilityItem: facilityItem,
-                        timePicked: datePicked,
-                      );
-                    }));
-                  }
-                },
-              )),
+          if (datePicked != null) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return facilityAccessed(
+                facilityItem: facilityItem,
+                timePicked: datePicked,
+              );
+            }));
+          }
+        },
+        borderRadius: BorderRadius.circular(5),
+        child: Ink(
+          width: MediaQuery.sizeOf(context).width * 0.9,
+          height: 50,
+          decoration: ShapeDecoration(
+            color: const Color(0xFF2E3B78),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+          ),
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Select date of facility access',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w500,
+                  height: 0,
+                ),
+              ),
+              SizedBox(
+                width: 30,
+              ),
+              Icon(
+                Icons.calendar_month,
+                color: Colors.white,
+              )
+            ],
+          ),
         ),
       ),
     );
+    // return Padding(
+    //   padding: const EdgeInsets.fromLTRB(25, 13, 25, 0),
+    //   child: TextField(
+    //     //controller:
+    //     //onChanged:
+    //     decoration: InputDecoration(
+    //       hintText: 'Select date of facility access',
+    //       hintStyle: const TextStyle(
+    //           fontSize: 14.0, color: Color.fromRGBO(147, 151, 160, 100)),
+    //       contentPadding: const EdgeInsets.only(left: 20),
+    //       border: OutlineInputBorder(
+    //           borderRadius: BorderRadius.circular(9),
+    //           borderSide: BorderSide.none),
+    //       fillColor: const Color.fromRGBO(251, 251, 251, 100),
+    //       filled: true,
+    //       suffixIcon: Padding(
+    //           padding: const EdgeInsets.only(right: 17),
+    //           child: IconButton(
+    //             icon: const Icon(
+    //               Icons.calendar_today_rounded,
+    //               color: Color.fromRGBO(147, 151, 160, 100),
+    //               size: 19,
+    //             ),
+    //             onPressed: () async {
+    //               DateTime? datePicked = await showDatePicker(
+    //                   context: context,
+    //                   firstDate: DateTime.fromMillisecondsSinceEpoch(0),
+    //                   lastDate: DateTime.now().add(const Duration(days: 365)));
+
+    //               if (datePicked != null) {
+    //                 Navigator.of(context)
+    //                     .push(MaterialPageRoute(builder: (context) {
+    //                   return facilityAccessed(
+    //                     facilityItem: facilityItem,
+    //                     timePicked: datePicked,
+    //                   );
+    //                 }));
+    //               }
+    //             },
+    //           )),
+    //     ),
+    //   ),
+    // );
   }
 
   Widget EditButton() {

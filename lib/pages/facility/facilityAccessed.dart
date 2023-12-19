@@ -21,62 +21,69 @@ class _facilityAccessedState extends State<facilityAccessed> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        _appBar(context),
-        const SizedBox(height: 25),
-        const Padding(
-          padding: EdgeInsets.only(left: 30),
-          child: Text(
-            'Facility',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-              letterSpacing: .3,
+    return Container(
+      // ignore: prefer_const_constructors
+      color: Color(0xFF2E3B78),
+      child: SafeArea(
+        child: Scaffold(
+          body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            _appBar(context),
+            const SizedBox(height: 25),
+            const Padding(
+              padding: EdgeInsets.only(left: 30),
+              child: Text(
+                'Facility',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Poppins'),
+              ),
             ),
-          ),
+            const SizedBox(height: 13),
+            facilityInfo(),
+            const SizedBox(height: 20),
+            _accessedDate(),
+            const SizedBox(height: 20),
+
+            //Total of facility’s accessed
+            FutureBuilder(
+                future: SupabaseB()
+                    .getTotalAccess(facilityItem['facility'], timePicked),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return accessedInfo({
+                    'info': 'Total of facility’s accessed',
+                    'accessedCount': snapshot.data.toString()
+                  });
+                }),
+            const SizedBox(height: 15),
+
+            //Number of people accessed
+            FutureBuilder(
+                future: SupabaseB()
+                    .getNumberAccess(facilityItem['facility'], timePicked),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return accessedInfo({
+                    'info': 'Number of people accessed',
+                    'accessedCount': snapshot.data.toString()
+                  });
+                }),
+            const SizedBox(
+              height: 10,
+            ),
+            showAllButton(),
+          ]),
         ),
-        const SizedBox(height: 13),
-        facilityInfo(),
-        const SizedBox(height: 20),
-        _accessedDate(),
-        const SizedBox(height: 20),
-
-        //Total of facility’s accessed
-        FutureBuilder(
-            future: SupabaseB()
-                .getTotalAccess(facilityItem['facility'], timePicked),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              return accessedInfo({
-                'info': 'Total of facility’s accessed',
-                'accessedCount': snapshot.data.toString()
-              });
-            }),
-        const SizedBox(height: 15),
-
-        //Number of people accessed
-        FutureBuilder(
-            future: SupabaseB()
-                .getNumberAccess(facilityItem['facility'], timePicked),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              return accessedInfo({
-                'info': 'Number of people accessed',
-                'accessedCount': snapshot.data.toString()
-              });
-            }),
-
-        showAllButton(),
-      ]),
+      ),
     );
   }
 
@@ -86,8 +93,7 @@ class _facilityAccessedState extends State<facilityAccessed> {
             padding: const EdgeInsets.only(left: 25, right: 25),
             child: Container(
               constraints: BoxConstraints(
-                  maxWidth: MediaQuery.sizeOf(context).width * 0.9,
-                  minHeight: 190),
+                  maxWidth: MediaQuery.sizeOf(context).width * 0.9),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(6),
@@ -118,6 +124,7 @@ class _facilityAccessedState extends State<facilityAccessed> {
 
                       //facility address
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Icon(
                             Icons.navigation_rounded,
@@ -127,12 +134,14 @@ class _facilityAccessedState extends State<facilityAccessed> {
                           const SizedBox(
                             width: 10,
                           ),
-                          Text(
-                            '${facilityItem['address1']}, ${facilityItem['address2']}, ${facilityItem['postcode']} ${facilityItem['city']}, ${facilityItem['state']}',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w400,
-                              letterSpacing: .3,
+                          Flexible(
+                            child: Text(
+                              '${facilityItem['address1']}, ${facilityItem['address2']}, ${facilityItem['postcode']} ${facilityItem['city']}, ${facilityItem['state']}',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400,
+                                letterSpacing: .3,
+                              ),
                             ),
                           )
                         ],
@@ -174,7 +183,7 @@ class _facilityAccessedState extends State<facilityAccessed> {
                             width: 10,
                           ),
                           Text(
-                            'PPM DAERAH BATU PAHAT',
+                            'PPM NEGERI JOHOR',
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w400,
@@ -197,8 +206,11 @@ class _facilityAccessedState extends State<facilityAccessed> {
       child: Row(
         children: [
           Text(
-            'Date ${DateFormat('dd MMMM yyyy (EEEE)').format(timePicked)}',
-            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+            'Date: ${DateFormat('dd MMMM yyyy (EEEE)').format(timePicked)}',
+            style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Poppins'),
           )
         ],
       ),
@@ -224,7 +236,7 @@ class _facilityAccessedState extends State<facilityAccessed> {
           ],
         ),
         child: Padding(
-          padding: const EdgeInsets.only(right: 40, left: 10),
+          padding: const EdgeInsets.only(right: 40, left: 15),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -233,14 +245,15 @@ class _facilityAccessedState extends State<facilityAccessed> {
                 style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
-                    letterSpacing: .3),
+                    letterSpacing: .3,
+                    fontFamily: 'Poppins'),
               ),
               Text(
                 infoText['accessedCount'],
                 style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                ),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins'),
               ),
             ],
           ),
@@ -250,32 +263,35 @@ class _facilityAccessedState extends State<facilityAccessed> {
   }
 
   Widget showAllButton() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 25, right: 25, top: 20),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          primary: Colors.transparent,
-          elevation: 0,
-          fixedSize: const Size(370, 45),
-          side: const BorderSide(
-            width: 2,
-            color: Color(0xFF2C225B),
-            style: BorderStyle.solid,
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 25, right: 25, top: 20),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.transparent,
+            elevation: 0,
+            fixedSize: const Size(300, 45),
+            side: const BorderSide(
+              width: 2,
+              color: Color(0xFF2C225B),
+              style: BorderStyle.solid,
+            ),
           ),
-        ),
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => AllFacilityAccess(
-                    facilityItem: facilityItem,
-                    timePicked: timePicked,
-                  )));
-        },
-        child: const Text(
-          'Show all the people accessed',
-          style: TextStyle(
-            decoration: TextDecoration.underline,
-            color: Color(0xFF2C225B),
-            fontSize: 14,
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => AllFacilityAccess(
+                      facilityItem: facilityItem,
+                      timePicked: timePicked,
+                    )));
+          },
+          child: const Text(
+            'Show all the people accessed',
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+              color: Color(0xFF2C225B),
+              fontFamily: 'Poppins',
+              fontSize: 12,
+            ),
           ),
         ),
       ),
@@ -287,7 +303,7 @@ Widget _appBar(context) {
   return Container(
     width: MediaQuery.sizeOf(context).width,
     height: 90,
-    decoration: const BoxDecoration(color: Color(0xFF2C225B)),
+    decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [

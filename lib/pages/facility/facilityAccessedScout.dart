@@ -1,23 +1,23 @@
-//import 'package:facilitypage/facilityAccessed.dart';
 import 'package:escout/backend/backend.dart';
-import 'package:escout/pages/facility/facilityAccessedScout.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class detailsFacilityScout extends StatefulWidget {
+class facilityAccessScout extends StatefulWidget {
+  final DateTime timePicked;
   final dynamic facilityItem;
-
-  const detailsFacilityScout({super.key, required this.facilityItem});
+  const facilityAccessScout(
+      {super.key, required this.timePicked, required this.facilityItem});
 
   @override
-  State<detailsFacilityScout> createState() =>
-      _detailsFacilityScoutState(facilityItem);
+  State<facilityAccessScout> createState() =>
+      _facilityAccessScoutState(facilityItem, timePicked);
 }
 
-class _detailsFacilityScoutState extends State<detailsFacilityScout> {
+class _facilityAccessScoutState extends State<facilityAccessScout> {
   final dynamic facilityItem;
-  DateTime timePicked = DateTime.now();
-  _detailsFacilityScoutState(this.facilityItem);
+  final DateTime timePicked;
+
+  _facilityAccessScoutState(this.facilityItem, this.timePicked);
   @override
   Widget build(BuildContext context) {
     var _mediaQuery = MediaQuery.of(context);
@@ -48,10 +48,25 @@ class _detailsFacilityScoutState extends State<detailsFacilityScout> {
                       const SizedBox(height: 20),
                       facilityInfo(facilityItem),
                       const SizedBox(height: 15),
-                      selectDate(),
                       const SizedBox(
                         height: 20,
                       ),
+                      Text(
+                        'Date: ${DateFormat('dd MMMM yyyy (EEEE)').format(timePicked)}',
+                        textAlign: TextAlign.center,
+                        // ignore: prefer_const_constructors
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                          height: 0,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      enterExit(snapshot.data),
                     ]),
                   );
                 }
@@ -59,103 +74,6 @@ class _detailsFacilityScoutState extends State<detailsFacilityScout> {
         )),
       ),
     );
-  }
-
-  Widget selectDate() {
-    return Material(
-      child: InkWell(
-        onTap: () async {
-          DateTime? datePicked = await showDatePicker(
-              context: context,
-              firstDate: DateTime.fromMillisecondsSinceEpoch(0),
-              lastDate: DateTime.now().add(const Duration(days: 365)));
-
-          if (datePicked != null) {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return facilityAccessScout(
-                facilityItem: facilityItem,
-                timePicked: datePicked,
-              );
-            }));
-          }
-        },
-        borderRadius: BorderRadius.circular(5),
-        child: Ink(
-          width: MediaQuery.sizeOf(context).width * 0.9,
-          height: 50,
-          decoration: ShapeDecoration(
-            color: const Color(0xFF2E3B78),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-          ),
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Select date of facility access',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w500,
-                  height: 0,
-                ),
-              ),
-              SizedBox(
-                width: 30,
-              ),
-              Icon(
-                Icons.calendar_month,
-                color: Colors.white,
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-    // return Padding(
-    //   padding: const EdgeInsets.fromLTRB(25, 13, 25, 0),
-    //   child: TextField(
-    //     //controller:
-    //     //onChanged:
-    //     decoration: InputDecoration(
-    //       hintText: 'Select date of facility access',
-    //       hintStyle: const TextStyle(
-    //           fontSize: 14.0, color: Color.fromRGBO(147, 151, 160, 100)),
-    //       contentPadding: const EdgeInsets.only(left: 20),
-    //       border: OutlineInputBorder(
-    //           borderRadius: BorderRadius.circular(9),
-    //           borderSide: BorderSide.none),
-    //       fillColor: const Color.fromRGBO(251, 251, 251, 100),
-    //       filled: true,
-    //       suffixIcon: Padding(
-    //           padding: const EdgeInsets.only(right: 17),
-    //           child: IconButton(
-    //             icon: const Icon(
-    //               Icons.calendar_today_rounded,
-    //               color: Color.fromRGBO(147, 151, 160, 100),
-    //               size: 19,
-    //             ),
-    //             onPressed: () async {
-    //               DateTime? datePicked = await showDatePicker(
-    //                   context: context,
-    //                   firstDate: DateTime.fromMillisecondsSinceEpoch(0),
-    //                   lastDate: DateTime.now().add(const Duration(days: 365)));
-
-    //               if (datePicked != null) {
-    //                 Navigator.of(context)
-    //                     .push(MaterialPageRoute(builder: (context) {
-    //                   return facilityAccessed(
-    //                     facilityItem: facilityItem,
-    //                     timePicked: datePicked,
-    //                   );
-    //                 }));
-    //               }
-    //             },
-    //           )),
-    //     ),
-    //   ),
-    // );
   }
 }
 
@@ -187,7 +105,7 @@ Widget _appBar(context) {
           width: 30,
         ),
         const Text(
-          'Details Facility',
+          'Facility Accessed',
           style: TextStyle(
             color: Colors.white,
             fontSize: 25,
@@ -411,6 +329,121 @@ Widget facilityAccessed(List<dynamic> attendances) => Builder(
                     )
                   ]),
             ),
+          ),
+        );
+      },
+    );
+
+enterExit(dynamic data) => Builder(
+      builder: (BuildContext context) {
+        return Container(
+          width: MediaQuery.sizeOf(context).width * 0.9,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(6),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 7,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  //enter exit header
+                  const Padding(
+                    padding: EdgeInsets.only(left: 100, right: 100),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Enter',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                        Text(
+                          'Exit',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  //divider
+                  const Divider(
+                    height: 25,
+                    color: Colors.black,
+                    thickness: 1.5,
+                    indent: 60,
+                    endIndent: 60,
+                  ),
+                  SizedBox(
+                    height: 100,
+                    child: ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        DateTime starttime =
+                            DateTime.parse(data[index]['starttime'])
+                                .add(const Duration(hours: 8));
+
+                        DateTime? endtime = DateTime.tryParse(
+                            data[index]['endtime'].toString());
+
+                        print('endtime = $endtime');
+                        if (endtime != null) {
+                          endtime = endtime.add(const Duration(hours: 8));
+                        }
+
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              left: 90, right: 90, bottom: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                DateFormat('hh:mm a').format(starttime),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              Builder(builder: (context) {
+                                if (data[index]['endtime'] == null) {
+                                  return const Text(
+                                    'None',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14,
+                                    ),
+                                  );
+                                } else {
+                                  return Text(
+                                    DateFormat('hh:mm a').format(endtime!),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14,
+                                    ),
+                                  );
+                                }
+                              }),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  //time
+                ]),
           ),
         );
       },

@@ -59,7 +59,7 @@ class _AllFacilityAccessState extends State<AllFacilityAccess> {
                     width: 30,
                   ),
                   const Text(
-                    'Participants',
+                    'People Accessed',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 25,
@@ -181,13 +181,15 @@ class _AllFacilityAccessState extends State<AllFacilityAccess> {
                                           10,
                                   color: Colors.black,
                                 ),
-                                ListView.builder(
-                                    itemCount: snapshot.data.length,
-                                    shrinkWrap: true,
-                                    itemBuilder: (context, index) {
-                                      return buildAttendees(
-                                          context, index, snapshot.data[index]);
-                                    }),
+                                Expanded(
+                                  child: ListView.builder(
+                                      itemCount: snapshot.data.length,
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, index) {
+                                        return buildAttendees(context, index,
+                                            snapshot.data[index]);
+                                      }),
+                                ),
                               ],
                             ),
                           ),
@@ -235,36 +237,48 @@ class _AllFacilityAccessState extends State<AllFacilityAccess> {
     );
   }
 
-  Row buildAttendees(BuildContext context, int index, dynamic item) {
+  Widget buildAttendees(BuildContext context, int index, dynamic item) {
     DateTime time = DateTime.parse(item['starttime']).add(Duration(hours: 8));
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SizedBox(
-          width: MediaQuery.sizeOf(context).width * 0.8 * 0.1,
-          child: Text(
-            (index + 1).toString(),
-            textAlign: TextAlign.center,
+    return Material(
+      child: InkWell(
+        onTap: () {
+          print(item);
+        },
+        child: Ink(
+          child: SizedBox(
+            height: 30,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.8 * 0.1,
+                  child: Text(
+                    (index + 1).toString(),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.8 * 0.65,
+                  child: Text(
+                    item['fullname'],
+                    textAlign: TextAlign.start,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.8 * 0.25,
+                  child: Text(
+                    time.hour > 12
+                        ? '${time.hour - 12}:${time.minute.toString().padLeft(2, '0')} PM'
+                        : '${time.hour}:${time.minute.toString().padLeft(2, '0')} AM',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-        SizedBox(
-          width: MediaQuery.sizeOf(context).width * 0.8 * 0.65,
-          child: Text(
-            item['fullname'],
-            textAlign: TextAlign.start,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        SizedBox(
-          width: MediaQuery.sizeOf(context).width * 0.8 * 0.25,
-          child: Text(
-            time.hour > 12
-                ? '${time.hour - 12}:${time.minute.toString().padLeft(2, '0')} PM'
-                : '${time.hour}:${time.minute.toString().padLeft(2, '0')} AM',
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

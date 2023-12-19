@@ -100,109 +100,72 @@ class _FacilityPageState extends State<FacilityPage> {
     return Container(
       color: const Color(0xFF2E3B78),
       child: SafeArea(
-        bottom: false,
-        child: FutureBuilder(
-            future: SupabaseB().getFacilities(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              return Scaffold(
-                floatingActionButton: !SupabaseB.isAdminToggled
-                    ? Container()
-                    : CircleAvatar(
-                        radius: 30,
-                        backgroundColor: const Color(0xFF2E3B78),
-                        child: IconButton(
-                          icon: const Icon(Icons.add),
-                          color: Colors.white,
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => addFacilityPage()));
-                          },
-                        ),
-                      ),
-                body: Column(
-                  //blue bow column
-                  children: [
-                    Container(
-                      //blue box container
-                      width: MediaQuery.sizeOf(context).width,
-                      height: 90,
-                      decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
-                      child: const Center(
-                        child: Text(
-                          'Facility',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 255, 255, 255),
-                            fontSize: 24,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+          bottom: false,
+          child: Scaffold(
+            floatingActionButton: !SupabaseB.isAdminToggled
+                ? Container()
+                : CircleAvatar(
+                    radius: 30,
+                    backgroundColor: const Color(0xFF2E3B78),
+                    child: IconButton(
+                      icon: const Icon(Icons.add),
+                      color: Colors.white,
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => addFacilityPage()));
+                        setState(() {});
+                      },
+                    ),
+                  ),
+            body: Column(
+              //blue bow column
+              children: [
+                Container(
+                  //blue box container
+                  width: MediaQuery.sizeOf(context).width,
+                  height: 90,
+                  decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
+                  child: const Center(
+                    child: Text(
+                      'Facility',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        fontSize: 24,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(
-                      height: 18,
-                    ),
-                    Padding(
-                      //padding for the edge of column below the blue box
-                      padding: const EdgeInsets.symmetric(horizontal: 36.0),
-                      child: Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: GestureDetector(
-                              onTap: () => _selectDate(context),
-                              child: Container(
-                                width: 140,
-                                height: 30,
-                                decoration: const BoxDecoration(
-                                    color: Color(0xFFEDEDED)),
-                                child: const Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      //"${monthName[selectedDate.month - 1]} ${selectedDate.year.toString().substring(2)}",
-                                      "Bulan",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                        width:
-                                            5), // Add some space between the text and the icon
-                                    Icon(
-                                      Icons.calendar_today,
-                                      color: Colors.black,
-                                      size: 16,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 18,
-                          ),
-                          ListView.builder(
-                            itemCount: snapshot.data.length,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return buildFacility(snapshot.data[index]);
-                            },
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              );
-            }),
-      ),
+                const SizedBox(
+                  height: 18,
+                ),
+                FutureBuilder(
+                    future: SupabaseB().getFacilities(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData)
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      return Padding(
+                        //padding for the edge of column below the blue box
+                        padding: const EdgeInsets.symmetric(horizontal: 36.0),
+                        child: Column(
+                          children: [
+                            ListView.builder(
+                              itemCount: snapshot.data.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return buildFacility(snapshot.data[index]);
+                              },
+                            )
+                          ],
+                        ),
+                      );
+                    }),
+              ],
+            ),
+          )),
     );
   }
 
@@ -232,6 +195,7 @@ class _FacilityPageState extends State<FacilityPage> {
                     );
                   },
                 ));
+                setState(() {});
               } else {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) {
@@ -240,6 +204,7 @@ class _FacilityPageState extends State<FacilityPage> {
                     );
                   },
                 ));
+                setState(() {});
               }
             },
             borderRadius: BorderRadius.circular(5),
