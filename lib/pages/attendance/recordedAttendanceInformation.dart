@@ -19,22 +19,7 @@ class _recordAttendanceInformationState
       body: Center(
         child: Column(
           children: [
-            Container(
-              width: MediaQuery.sizeOf(context).width,
-              height: 90,
-              decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
-              child: const Center(
-                child: Text(
-                  'Attendee Profile',
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 24,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
+            _appBar(context),
             const SizedBox(
               height: 18,
             ),
@@ -322,4 +307,71 @@ class _recordAttendanceInformationState
       ),
     );
   }
+}
+
+Widget _appBar(context) {
+  return Container(
+    width: MediaQuery.sizeOf(context).width,
+    height: 90,
+    decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(
+          width: 30,
+        ),
+        Container(
+          width: 50,
+          height: 50,
+          decoration: const ShapeDecoration(
+            color: Colors.white,
+            shape: OvalBorder(),
+          ),
+          child: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.arrow_back_ios_new)),
+        ),
+        const SizedBox(
+          width: 30,
+        ),
+        const Text(
+          'Person Details',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 25,
+            //fontFamily: 'Poppins',
+            fontWeight: FontWeight.w600,
+            height: 0,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _backButton(context) {
+  return Padding(
+    padding: const EdgeInsets.only(top: 10, left: 25),
+    child: Container(
+      width: 50,
+      height: 50,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        color: Colors.white,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          iconSize: 25,
+          color: const Color.fromRGBO(59, 63, 101, 100),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
+    ),
+  );
 }
