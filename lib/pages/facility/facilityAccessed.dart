@@ -56,6 +56,7 @@ class _facilityAccessedState extends State<facilityAccessed> {
                     );
                   }
                   return accessedInfo({
+                    
                     'info': 'Total of facility’s accessed',
                     'accessedCount': snapshot.data.toString()
                   });

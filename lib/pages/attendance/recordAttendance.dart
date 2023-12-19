@@ -229,7 +229,7 @@ class _RecordAttendanceState extends State<RecordAttendance> {
                               builder: (context, snapshot) {
                                 if (!snapshot.hasData) {
                                   return const CircularProgressIndicator();
-                                }
+                                } 
 
                                 //separate based on date
 

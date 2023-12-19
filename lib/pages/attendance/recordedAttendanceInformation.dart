@@ -1,14 +1,18 @@
+// ignore_for_file: camel_case_types
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+class recordAttendanceInformation extends StatefulWidget {
+  const recordAttendanceInformation({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<recordAttendanceInformation> createState() =>
+      _recordAttendanceInformationState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _recordAttendanceInformationState
+    extends State<recordAttendanceInformation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
