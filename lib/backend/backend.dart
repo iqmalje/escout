@@ -31,9 +31,9 @@ class SupabaseB {
         .update({'status': 'DONE'}).eq('activityid', activityid);
   }
 
-  Future<List<dynamic>> getAttendance(String activityid) async {
+  Future<List<dynamic>> getAttendance(String activityid, {String? id}) async {
     var data = await supabase.from('attendance').select('*').match(
-        {'activityid': activityid, 'accountid': supabase.auth.currentUser!.id});
+        {'activityid': activityid, 'accountid': id ?? supabase.auth.currentUser!.id});
 
     return data;
   }
@@ -136,13 +136,13 @@ class SupabaseB {
   }
 
   Future<dynamic> getAttendedDates(
-      String facilityid, DateTime timePicked) async {
+      String facilityid, DateTime timePicked, {String? id}) async {
     print("PATUT KAT SINI DOH");
 
     print(
         ' ${supabase.auth.currentUser!.id} $facilityid ${timePicked.year}-${timePicked.month}-${timePicked.day}%');
     var data = await supabase.rpc('get_access_by_date', params: {
-      'uid': supabase.auth.currentUser!.id,
+      'uid': id ?? supabase.auth.currentUser!.id,
       'fid': facilityid,
       'date': '${timePicked.year}-${timePicked.month}-${timePicked.day}%'
     });
@@ -192,6 +192,17 @@ class SupabaseB {
           .from('activities')
           .getPublicUrl('${activity['activityid']}/cover.png')
     }).eq('activityid', activity['activityid']);
+  }
+
+  Future<dynamic> getScoutDetails(String scoutid) async {
+    var data = await supabase
+        .from('accounts')
+        .select(
+            'no_ahli, no_tauliah, unit, daerah,  is_member,position, image_url')
+        .eq('accountid', scoutid)
+        .single();
+
+    return data;
   }
 
   Future<void> createFacility(Map<String, dynamic> items) async {
