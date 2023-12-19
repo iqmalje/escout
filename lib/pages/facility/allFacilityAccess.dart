@@ -1,3 +1,4 @@
+import 'package:escout/pages/facility/FacilityAccessedInformation.dart';
 import 'package:flutter/material.dart';
 
 import '../../backend/backend.dart';
@@ -242,7 +243,12 @@ class _AllFacilityAccessState extends State<AllFacilityAccess> {
     return Material(
       child: InkWell(
         onTap: () {
-          print(item);
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => FacilityAccessedInformation(
+                    attendeeItem: item,
+                    facilityID: facilityItem['facility'],
+                    timePicked: timePicked,
+                  )));
         },
         child: Ink(
           child: SizedBox(

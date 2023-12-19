@@ -3,40 +3,20 @@ import 'package:escout/backend/backend.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class FacilityAccessedInformation extends StatefulWidget {
+class AttendanceInformation extends StatefulWidget {
   final dynamic attendeeItem;
-  final String facilityID;
-  final DateTime timePicked;
-  const FacilityAccessedInformation(
-      {super.key,
-      required this.attendeeItem,
-      required this.facilityID,
-      required this.timePicked});
+  const AttendanceInformation({super.key, required this.attendeeItem});
 
   @override
-  State<FacilityAccessedInformation> createState() =>
-      _FacilityAccessedInformationState(attendeeItem, facilityID, timePicked);
+  State<AttendanceInformation> createState() =>
+      _AttendanceInformationState(attendeeItem);
 }
 
-class _FacilityAccessedInformationState
-    extends State<FacilityAccessedInformation> {
+class _AttendanceInformationState extends State<AttendanceInformation> {
   final dynamic attendeeItem;
-  final String facilityID;
-  final DateTime timePicked;
-  _FacilityAccessedInformationState(
-      this.attendeeItem, this.facilityID, this.timePicked);
+  _AttendanceInformationState(this.attendeeItem);
   @override
   Widget build(BuildContext context) {
-    DateTime starttime =
-        DateTime.parse(attendeeItem['starttime']).add(const Duration(hours: 8));
-
-    DateTime endtime = DateTime.now();
-    print(attendeeItem['endtime']);
-    if (attendeeItem['endtime'] != null) {
-      endtime =
-          DateTime.parse(attendeeItem['endtime']).add(const Duration(hours: 8));
-    }
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
@@ -75,7 +55,7 @@ class _FacilityAccessedInformationState
               ),
               FutureBuilder(
                   future:
-                      SupabaseB().getScoutDetails(attendeeItem['accessed_by']),
+                      SupabaseB().getScoutDetails(attendeeItem['accountid']),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return const Center(
@@ -369,7 +349,8 @@ class _FacilityAccessedInformationState
                 height: 10,
               ),
               FutureBuilder(
-                  future: SupabaseB().getAttendedDates(facilityID, timePicked),
+                  future: SupabaseB()
+                      .getAttendance(this.attendeeItem['activityid']),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return const Center(
@@ -377,7 +358,7 @@ class _FacilityAccessedInformationState
                       );
                     }
 
-                    return enterExit(snapshot.data);
+                    return successfulAttended(snapshot.data!);
                   })
             ],
           ),
@@ -386,119 +367,77 @@ class _FacilityAccessedInformationState
     );
   }
 
-  enterExit(dynamic data) => Builder(
-        builder: (BuildContext context) {
-          return Container(
-            width: MediaQuery.sizeOf(context).width * 0.9,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(6),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 7,
-                  offset: const Offset(0, 3),
+  Widget successfulAttended(List<dynamic> attendance) {
+    List<DateTime> timeAttended = [];
+    for (var thing in attendance) {
+      timeAttended.add(
+          DateTime.parse(thing['time_attended']).add(const Duration(hours: 8)));
+    }
+    return Column(
+      children: [
+        Container(
+          constraints: BoxConstraints(
+            minHeight: 70,
+            minWidth: MediaQuery.sizeOf(context).width * 0.85,
+          ),
+          decoration: ShapeDecoration(
+            color: Colors.white,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            shadows: const [
+              BoxShadow(
+                color: Color(0x3F000000),
+                blurRadius: 2,
+                offset: Offset(0, 2),
+                spreadRadius: 0,
+              )
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              const Text(
+                'You successfully attended this event. ',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600,
+                  height: 0,
                 ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    //enter exit header
-                    const Padding(
-                      padding: EdgeInsets.only(left: 100, right: 100),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Enter',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ),
-                          Text(
-                            'Exit',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    //divider
-                    const Divider(
-                      height: 25,
-                      color: Colors.black,
-                      thickness: 1.5,
-                      indent: 60,
-                      endIndent: 60,
-                    ),
-                    SizedBox(
-                      height: 100,
-                      child: ListView.builder(
-                        itemCount: data.length,
-                        padding: EdgeInsets.zero,
-                        itemBuilder: (BuildContext context, int index) {
-                          DateTime starttime =
-                              DateTime.parse(data[index]['starttime'])
-                                  .add(const Duration(hours: 8));
-
-                          DateTime? endtime = DateTime.tryParse(
-                              data[index]['endtime'].toString());
-
-                          print('endtime = $endtime');
-                          if (endtime != null) {
-                            endtime = endtime.add(const Duration(hours: 8));
-                          }
-
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                left: 90, right: 90, bottom: 15),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  DateFormat('hh:mm a').format(starttime),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                Builder(builder: (context) {
-                                  if (data[index]['endtime'] == null) {
-                                    return const Text(
-                                      'None',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14,
-                                      ),
-                                    );
-                                  } else {
-                                    return Text(
-                                      DateFormat('hh:mm a').format(endtime!),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14,
-                                      ),
-                                    );
-                                  }
-                                }),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    //time
-                  ]),
-            ),
-          );
-        },
-      );
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              ConstrainedBox(
+                  constraints: BoxConstraints(
+                      minHeight: 0,
+                      maxWidth: MediaQuery.sizeOf(context).width * 0.85,
+                      maxHeight: 180),
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    children: List.generate(
+                        attendance.length,
+                        (index) => Center(
+                                child: Text(
+                              'Attendance Record: ${DateFormat('dd/MM/yyyy; hh:mm a').format(timeAttended[index])}',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w400,
+                                height: 0,
+                              ),
+                            ))),
+                  ))
+            ]),
+          ),
+        ),
+      ],
+    );
+  }
 }

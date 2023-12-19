@@ -1,4 +1,4 @@
-
+import 'package:escout/pages/attendance/AttendanceInformation.dart';
 import 'package:flutter/material.dart';
 
 import '../../backend/backend.dart';
@@ -293,37 +293,51 @@ class _RecordAttendanceState extends State<RecordAttendance> {
     );
   }
 
-  Row buildAttendees(BuildContext context, int index) {
+  Widget buildAttendees(BuildContext context, int index) {
     DateTime time = DateTime.parse(attendees.elementAt(index)['time_attended'])
         .add(Duration(hours: 8));
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SizedBox(
-          width: MediaQuery.sizeOf(context).width * 0.8 * 0.1,
-          child: Text(
-            (index + 1).toString(),
-            textAlign: TextAlign.center,
+    return Material(
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => AttendanceInformation(
+                  attendeeItem: attendees.elementAt(index))));
+        },
+        child: Ink(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 3),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.8 * 0.1,
+                  child: Text(
+                    (index + 1).toString(),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.8 * 0.65,
+                  child: Text(
+                    attendees[index]['fullname'],
+                    textAlign: TextAlign.start,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.8 * 0.25,
+                  child: Text(
+                    time.hour > 12
+                        ? '${time.hour - 12}:${time.minute.toString().padLeft(2, '0')} PM'
+                        : '${time.hour}:${time.minute.toString().padLeft(2, '0')} AM',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-        SizedBox(
-          width: MediaQuery.sizeOf(context).width * 0.8 * 0.65,
-          child: Text(
-            attendees[index]['fullname'],
-            textAlign: TextAlign.start,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        SizedBox(
-          width: MediaQuery.sizeOf(context).width * 0.8 * 0.25,
-          child: Text(
-            time.hour > 12
-                ? '${time.hour - 12}:${time.minute.toString().padLeft(2, '0')} PM'
-                : '${time.hour}:${time.minute.toString().padLeft(2, '0')} AM',
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
