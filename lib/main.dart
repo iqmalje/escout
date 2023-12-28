@@ -1,5 +1,7 @@
 // ignore_for_file: unused_local_variable
 
+import 'package:escout/pages/misc/officers.dart';
+
 import 'backend/backend.dart';
 
 import 'package:escout/pages/homepage/temppage.dart';

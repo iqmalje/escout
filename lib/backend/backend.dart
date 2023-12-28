@@ -24,6 +24,15 @@ class SupabaseB {
     return activities;
   }
 
+  Future<void> addNewChat(String party1, String party2, String content) async {
+    await supabase.from('chats').insert({
+      'party1': party1,
+      'party2': party2,
+      'content': content,
+      'sent_by': supabase.auth.currentUser!.id
+    });
+  }
+
   /// Set the status of the activity to done
   Future<void> updateActivityDone(String activityid) async {
     await supabase
@@ -32,8 +41,24 @@ class SupabaseB {
   }
 
   Future<List<dynamic>> getAttendance(String activityid, {String? id}) async {
-    var data = await supabase.from('attendance').select('*').match(
-        {'activityid': activityid, 'accountid': id ?? supabase.auth.currentUser!.id});
+    var data = await supabase.from('attendance').select('*').match({
+      'activityid': activityid,
+      'accountid': id ?? supabase.auth.currentUser!.id
+    });
+
+    return data;
+  }
+
+  /// Fetch officers or admin account in DB
+  Future<List<dynamic>> getOfficers() async {
+    print('kita fetch');
+    var data = await supabase
+        .from('accounts')
+        .select('*')
+        .or('roles.eq.ADMIN,roles.eq.OFFICER')
+        .not('accountid', 'eq', supabase.auth.currentUser!.id);
+    print('dah fetch');
+    print(data);
 
     return data;
   }
@@ -135,8 +160,8 @@ class SupabaseB {
     return data;
   }
 
-  Future<dynamic> getAttendedDates(
-      String facilityid, DateTime timePicked, {String? id}) async {
+  Future<dynamic> getAttendedDates(String facilityid, DateTime timePicked,
+      {String? id}) async {
     print("PATUT KAT SINI DOH");
 
     print(

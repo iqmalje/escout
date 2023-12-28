@@ -29,6 +29,21 @@ class _TempPageState extends State<TempPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[index],
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(left: 30),
+        child: Align(
+          alignment: Alignment.bottomLeft,
+          child: CircleAvatar(
+            backgroundColor: const Color(0xFF2C225B),
+            radius: 30,
+            child: IconButton(
+              icon: const Icon(Icons.chat),
+              onPressed: () {},
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
       bottomNavigationBar: Container(
         height: 60,
         decoration: const BoxDecoration(color: Colors.white, boxShadow: [

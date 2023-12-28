@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:escout/backend/backend.dart';
 import 'package:escout/model/account.dart';
 import 'package:escout/pages/forgotpassword/verifyOTP.dart';
+import 'package:escout/pages/misc/officers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -208,6 +209,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   child: TextField(
                                     controller: fullname,
                                     readOnly: true,
+                                    
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
@@ -409,6 +411,37 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: const Center(
                                 child: Text(
                                   'Log Out',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                    height: 0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => OfficersNearbyPage()));
+                            },
+                            child: Ink(
+                              width: MediaQuery.sizeOf(context).width * 0.8,
+                              height: 40,
+                              decoration: ShapeDecoration(
+                                color: const Color(0xFF3B4367),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5)),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'Officers Nearby',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.white,
