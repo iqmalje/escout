@@ -4,6 +4,7 @@ import 'package:escout/pages/feed/listPage.dart';
 import 'package:escout/pages/homepage/facilitypage.dart';
 
 import 'package:escout/pages/homepage/profilepage.dart';
+import 'package:escout/pages/misc/chatAIpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -38,7 +39,10 @@ class _TempPageState extends State<TempPage> {
             radius: 30,
             child: IconButton(
               icon: const Icon(Icons.chat),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const ChatAIPage()));
+              },
               color: Colors.white,
             ),
           ),

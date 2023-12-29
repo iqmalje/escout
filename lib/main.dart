@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/signin': (context) => const SignInPage(),
       },
-      home: isSignedIn ? const ChatAIPage() : const SignInPage(),
+      home: isSignedIn ? const TempPage() : const SignInPage(),
     );
   }
 }
