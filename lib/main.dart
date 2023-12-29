@@ -1,5 +1,6 @@
 // ignore_for_file: unused_local_variable
 
+import 'package:escout/pages/misc/chatAIpage.dart';
 import 'package:escout/pages/misc/officers.dart';
 
 import 'backend/backend.dart';
@@ -57,7 +58,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/signin': (context) => const SignInPage(),
       },
-      home: isSignedIn ? const TempPage() : const SignInPage(),
+      home: isSignedIn ? const ChatAIPage() : const SignInPage(),
     );
   }
 }
