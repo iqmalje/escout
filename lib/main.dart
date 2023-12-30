@@ -1,16 +1,13 @@
 // ignore_for_file: unused_local_variable
 
-import 'package:escout/pages/misc/chatAIpage.dart';
-import 'package:escout/pages/misc/officers.dart';
-
-import 'backend/backend.dart';
-
 import 'package:escout/pages/homepage/temppage.dart';
 import 'package:escout/pages/signin/signinpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import 'backend/backend.dart';
 
 bool isSignedIn = false;
 void main() async {
@@ -26,6 +23,7 @@ void main() async {
     isSignedIn = true;
   }
   bool isAvailable = await NfcManager.instance.isAvailable();
+  
 
   //listen for auth
   final authSubscription =

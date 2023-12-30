@@ -4,7 +4,6 @@ import 'package:escout/model/account.dart';
 import 'package:escout/pages/forgotpassword/verifyOTP.dart';
 import 'package:escout/pages/misc/officers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -78,9 +77,42 @@ class _ProfilePageState extends State<ProfilePage> {
                               return Container();
                             }
                             return InkWell(
-                              onTap: () {
+                              onTap: () async {
+                                if (snapshot.data!.roles != 'ADMIN') return;
+
+                                bool? isToggle = await showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: Text(
+                                          SupabaseB.isAdminToggled
+                                              ? 'Are you sure to toggle off admin view?'
+                                              : 'Are you sure to toggle on admin view?',
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 20,
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w500,
+                                            height: 0,
+                                          ),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text('No')),
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop(true);
+                                              },
+                                              child: const Text('Yes')),
+                                        ],
+                                      );
+                                    });
+
+                                if (isToggle == null || !isToggle) return;
                                 setState(() {
-                                  if (snapshot.data!.roles != 'ADMIN') return;
                                   SupabaseB.isAdminToggled =
                                       !SupabaseB.isAdminToggled;
                                   if (!SupabaseB.isAdminToggled) {
@@ -209,7 +241,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                   child: TextField(
                                     controller: fullname,
                                     readOnly: true,
-                                    
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
@@ -429,7 +460,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           InkWell(
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => OfficersNearbyPage()));
+                                  builder: (context) =>
+                                      const OfficersNearbyPage()));
                             },
                             child: Ink(
                               width: MediaQuery.sizeOf(context).width * 0.8,

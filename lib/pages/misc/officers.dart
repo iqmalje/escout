@@ -12,45 +12,61 @@ class OfficersNearbyPage extends StatefulWidget {
 class _OfficersNearbyPageState extends State<OfficersNearbyPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(100),
-        child: Container(
-          //blue box container
-          width: MediaQuery.sizeOf(context).width,
-          height: 90,
-          decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
-          child: const Center(
-            child: Text(
-              'Officers nearby',
-              style: TextStyle(
-                color: Color.fromARGB(255, 255, 255, 255),
-                fontSize: 24,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600,
+    return Container(
+      color: const Color(0xFF2E3B78),
+      child: SafeArea(
+        child: Scaffold(
+          /*appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(100),
+            child: Container(
+              //blue box container
+              width: MediaQuery.sizeOf(context).width,
+              height: 90,
+              decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
+              child: const Center(
+                child: Text(
+                  'Officers nearby',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    fontSize: 24,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ),
+          ),*/
+          body: Column(
+            children: [
+              _appBar(context),
+              Expanded(
+                child: FutureBuilder(
+                    future: SupabaseB.isAdminToggled
+                        ? SupabaseB().getChatsAdmin()
+                        : SupabaseB().getOfficers(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 30),
+                        child: SizedBox.expand(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: List.generate(
+                                snapshot.data!.length,
+                                (index) => buildOfficer(
+                                    snapshot.data!.elementAt(index))),
+                          ),
+                        ),
+                      );
+                    }),
+              ),
+            ],
           ),
         ),
       ),
-      body: FutureBuilder(
-          future: SupabaseB().getOfficers(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            return Padding(
-              padding: const EdgeInsets.only(top: 50),
-              child: SizedBox.expand(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: List.generate(snapshot.data!.length,
-                      (index) => buildOfficer(snapshot.data!.elementAt(index))),
-                ),
-              ),
-            );
-          }),
     );
   }
 
@@ -127,8 +143,11 @@ class _OfficersNearbyPageState extends State<OfficersNearbyPage> {
               IconButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            ChatPage(otherPartyID: data['accountid'])));
+                        builder: (context) => ChatPage(
+                              otherPartyID: data['accountid'],
+                              imageURL: data['image_url'],
+                              otherPartyName: data['fullname'],
+                            )));
                   },
                   icon: const Icon(Icons.chat))
             ],
@@ -137,4 +156,45 @@ class _OfficersNearbyPageState extends State<OfficersNearbyPage> {
       ),
     );
   }
+}
+
+Widget _appBar(context) {
+  return Container(
+    width: MediaQuery.sizeOf(context).width,
+    height: 90,
+    decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(
+          width: 30,
+        ),
+        Container(
+          width: 50,
+          height: 50,
+          decoration: const ShapeDecoration(
+            color: Colors.white,
+            shape: OvalBorder(),
+          ),
+          child: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.arrow_back_ios_new)),
+        ),
+        const SizedBox(
+          width: 30,
+        ),
+        const Text(
+          'Officers nearby',
+          style: TextStyle(
+            color: Color.fromARGB(255, 255, 255, 255),
+            fontSize: 24,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w600,
+          ),
+        )
+      ],
+    ),
+  );
 }

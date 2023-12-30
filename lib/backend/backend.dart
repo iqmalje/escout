@@ -24,6 +24,32 @@ class SupabaseB {
     return activities;
   }
 
+  Future<List<dynamic>> getChatsAdmin() async {
+    // return all chat that involves current user
+
+    List<dynamic> chats = [];
+
+    var data = await supabase
+        .rpc('get_init_chat', params: {'uid': supabase.auth.currentUser!.id});
+
+    for (var c in data) {
+      if (c['party1'] == supabase.auth.currentUser!.id) {
+        // get other party's data
+        chats.add((await supabase
+            .from('accounts')
+            .select('*')
+            .match({'accountid': c['party2']}))[0]);
+      } else {
+        chats.add((await supabase
+            .from('accounts')
+            .select('*')
+            .match({'accountid': c['party1']}))[0]);
+      }
+    }
+
+    return chats;
+  }
+
   Future<void> addNewChat(String party1, String party2, String content) async {
     await supabase.from('chats').insert({
       'party1': party1,

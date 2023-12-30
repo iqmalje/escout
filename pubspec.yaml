@@ -41,6 +41,7 @@ dependencies:
   nfc_manager: ^3.3.0
   intl: ^0.18.1
   image_picker: ^1.0.4
+  animated_text_kit: ^4.2.2
 
 dev_dependencies:
   flutter_test:
