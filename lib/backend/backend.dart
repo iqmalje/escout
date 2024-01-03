@@ -368,8 +368,10 @@ class SupabaseB {
 
       rawData = activities;
     } else {
-      var activities = await supabase.rpc('filter_activities',
-          params: {'filter': '${filters['year']}-${filters['month']}-%'});
+      var activities = await supabase.rpc('filter_activities', params: {
+        'filter':
+            '${filters['year']}-${filters['month'].toString().padLeft(2, '0')}-%'
+      });
 
       rawData = activities;
     }
