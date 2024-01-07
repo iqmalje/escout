@@ -14,7 +14,8 @@ class Account {
       roles,
       image_url,
       position,
-      cardid;
+      cardid,
+      display_name;
   late bool is_member;
   late DateTime created_at;
 
@@ -35,5 +36,6 @@ class Account {
     is_member = item['is_member'];
     created_at =
         DateTime.parse(item['created_at']).add(const Duration(hours: 8));
+    display_name = item['card_name'];
   }
 }

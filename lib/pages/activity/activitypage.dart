@@ -216,7 +216,7 @@ class _ActivityPageState extends State<ActivityPage> {
                               'month': selectedMonth
                             })
                           : SupabaseB().getAttendedActivities(
-                              '$selectedYear-$selectedMonth-%'),
+                              '$selectedYear-${selectedMonth.toString().padLeft(2, '0')}-%'),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
                           return const Center(
@@ -247,9 +247,10 @@ class _ActivityPageState extends State<ActivityPage> {
     return Padding(
       padding: const EdgeInsets.only(top: 10.0),
       child: GestureDetector(
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
+        onTap: () async {
+          await Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => DetailsActivity(activity: item)));
+          setState(() {});
         },
         child: Container(
           width: 340,

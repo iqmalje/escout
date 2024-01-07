@@ -383,6 +383,18 @@ class SupabaseB {
     return activities;
   }
 
+  /// Delete activity functionality
+  Future<void> deleteActivity(Activity activity) async {
+    await supabase.storage
+        .from('activities')
+        .remove(['${activity.activityid}/cover.png']);
+
+    await supabase
+        .from('activities')
+        .delete()
+        .eq('activityid', activity.activityid);
+  }
+
   Future<void> createFeed(Map<String, dynamic> items) async {
     var accid = supabase.auth.currentUser!.id;
     var activity = await supabase

@@ -26,37 +26,36 @@ class _detailsFacilityScoutState extends State<detailsFacilityScout> {
       color: const Color(0xFF2E3B78),
       child: SafeArea(
         child: Scaffold(
-            body: SingleChildScrollView(
-          child: FutureBuilder(
-              future: SupabaseB()
-                  .getAttendedDates(facilityItem['facility'], timePicked),
-              builder: (context, snapshot) {
-                print(snapshot.hasData);
-                if (!snapshot.hasData) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  return Container(
-                    width: _mediaQuery.size.width,
-                    height: _mediaQuery.size.height,
-                    color: Colors.white,
-                    child: Column(children: <Widget>[
-                      _appBar(context),
-                      facilityImage(SupabaseB()
-                          .getFacilityImage(facilityItem['facility'])),
-                      const SizedBox(height: 20),
-                      facilityInfo(facilityItem),
-                      const SizedBox(height: 15),
-                      selectDate(),
-                      const SizedBox(
-                        height: 20,
+            body: FutureBuilder(
+                future: SupabaseB()
+                    .getAttendedDates(facilityItem['facility'], timePicked),
+                builder: (context, snapshot) {
+                  print(snapshot.hasData);
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    return SingleChildScrollView(
+                      child: Container(
+                        width: _mediaQuery.size.width,
+                        color: Colors.white,
+                        child: Column(children: <Widget>[
+                          _appBar(context),
+                          facilityImage(SupabaseB()
+                              .getFacilityImage(facilityItem['facility'])),
+                          const SizedBox(height: 20),
+                          facilityInfo(facilityItem),
+                          const SizedBox(height: 15),
+                          selectDate(),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                        ]),
                       ),
-                    ]),
-                  );
-                }
-              }),
-        )),
+                    );
+                  }
+                })),
       ),
     );
   }

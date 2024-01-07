@@ -594,7 +594,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       Flexible(
                         child: AutoSizeText(
-                          account.fullname,
+                          account.display_name,
                           textAlign: TextAlign.center,
                           maxLines: 2,
                           style: const TextStyle(

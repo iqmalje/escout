@@ -252,79 +252,75 @@ class _DetailsActivityState extends State<DetailsActivity> {
                     height: 10,
                   ),
                   Builder(builder: (context) {
-                    if (SupabaseB.isAdminToggled &&
-                        activity.status == 'ONGOING') {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          InkWell(
-                            onTap: () {},
-                            borderRadius: BorderRadius.circular(10),
-                            child: Ink(
-                              width: 135,
-                              height: 40,
-                              decoration: ShapeDecoration(
-                                color: const Color(0xFFECECEC),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  'Cancel',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w600,
-                                    height: 0,
+                    if (SupabaseB.isAdminToggled) {
+                      return InkWell(
+                        onTap: () async {
+                          //warning
+                          bool? isDelete = await showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                    'Are you sure to delete this activity?',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w500,
+                                      height: 0,
+                                    ),
                                   ),
-                                ),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('No')),
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop(true);
+                                        },
+                                        child: const Text('Yes')),
+                                  ],
+                                );
+                              });
+
+                          if (isDelete != null && isDelete) {
+                            await SupabaseB().deleteActivity(activity);
+                            Navigator.of(context).pop();
+                          }
+                        },
+                        borderRadius: BorderRadius.circular(10),
+                        child: Ink(
+                          width: MediaQuery.sizeOf(context).width * 0.85,
+                          height: 50,
+                          decoration: ShapeDecoration(
+                            color: const Color(0xFF2E3B78),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'Delete activity',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w600,
+                                height: 0,
                               ),
                             ),
                           ),
-                          InkWell(
-                            onTap: () async {
-                              await SupabaseB()
-                                  .updateActivityDone(activity.activityid);
-                              setState(() {
-                                activity.status = "DONE";
-                              });
-                            },
-                            borderRadius: BorderRadius.circular(10),
-                            child: Ink(
-                              width: 135,
-                              height: 40,
-                              decoration: ShapeDecoration(
-                                color: const Color(0xFF2E3B78),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  'Completed',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w600,
-                                    height: 0,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
+                        ),
                       );
                     } else {
                       return Container();
                     }
                   }),
                   const SizedBox(
-                    height: 20,
+                    height: 40,
                   )
                 ],
               ),
