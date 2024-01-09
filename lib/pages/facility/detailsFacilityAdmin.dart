@@ -117,7 +117,20 @@ class _detailsFacilityAdminState extends State<detailsFacilityAdmin> {
               height: 200,
               width: MediaQuery.of(context).size.width,
               color: const Color.fromRGBO(237, 237, 237, 100),
-              child: Image.network(url),
+              child: Image.network(
+                url,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+
+                  return Center(
+                    child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null),
+                  );
+                },
+              ),
             ),
           );
         },

@@ -2,10 +2,12 @@ import 'package:escout/backend/backend.dart';
 import 'package:escout/model/activity.dart';
 import 'package:escout/pages/activity/createactivitypage.dart';
 import 'package:escout/pages/activity/detailsactivity.dart';
+import 'package:flutter/rendering.dart';
 
 import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 class ActivityPage extends StatefulWidget {
   const ActivityPage({super.key});
@@ -39,80 +41,94 @@ class _ActivityPageState extends State<ActivityPage> {
     selectedMonth = selectedDate.month;
     selectedYear = selectedDate.year;
 
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Select Month and Year'),
-          contentPadding: const EdgeInsets.all(16.0), // Adjust padding for size
-          content: Column(
-            mainAxisSize: MainAxisSize.min, // Adjust size to content
-            children: [
-              Row(
-                children: [
-                  const Text('Month:'),
-                  const SizedBox(width: 8),
-                  DropdownButton<int>(
-                    value: selectedMonth,
-                    items: List.generate(12, (index) => index + 1).map(
-                      (int month) {
-                        return DropdownMenuItem<int>(
-                          value: month,
-                          child: Text(month.toString()),
-                        );
-                      },
-                    ).toList(),
-                    onChanged: (int? value) {
-                      setState(() {
-                        selectedMonth = value!;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  const Text('Year:'),
-                  const SizedBox(width: 8),
-                  DropdownButton<int>(
-                    value: selectedYear,
-                    items: List.generate(100, (index) => 2022 + index)
-                        .map((int year) {
-                      return DropdownMenuItem<int>(
-                        value: year,
-                        child: Text(year.toString()),
-                      );
-                    }).toList(),
-                    onChanged: (int? value) {
-                      setState(() {
-                        selectedYear = value!;
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  selectedDate = DateTime(selectedYear, selectedMonth, 1);
-                });
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
+    DateTime? dateSelected = await showMonthPicker(
+        initialDate: selectedDate,
+        context: context,
+        headerColor: const Color(0xFF2E3B78),
+        selectedMonthBackgroundColor: const Color(0xFF2E3B78));
+
+    if (dateSelected != null) {
+      setState(() {
+        selectedDate = dateSelected;
+        selectedYear = selectedDate.year;
+        selectedMonth = selectedDate.month;
+      });
+    }
+
+    // await showDialog(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return AlertDialog(
+    //       title: const Text('Select Month and Year'),
+    //       contentPadding: const EdgeInsets.all(16.0), // Adjust padding for size
+    //       content: Column(
+    //         mainAxisSize: MainAxisSize.min, // Adjust size to content
+    //         children: [
+    //           Row(
+    //             children: [
+    //               const Text('Month:'),
+    //               const SizedBox(width: 8),
+    //               DropdownButton<int>(
+    //                 value: selectedMonth,
+    //                 items: List.generate(12, (index) => index + 1).map(
+    //                   (int month) {
+    //                     return DropdownMenuItem<int>(
+    //                       value: month,
+    //                       child: Text(month.toString()),
+    //                     );
+    //                   },
+    //                 ).toList(),
+    //                 onChanged: (int? value) {
+    //                   setState(() {
+    //                     selectedMonth = value!;
+    //                   });
+    //                 },
+    //               ),
+    //             ],
+    //           ),
+    //           Row(
+    //             children: [
+    //               const Text('Year:'),
+    //               const SizedBox(width: 8),
+    //               DropdownButton<int>(
+    //                 value: selectedYear,
+    //                 items: List.generate(100, (index) => 2022 + index)
+    //                     .map((int year) {
+    //                   return DropdownMenuItem<int>(
+    //                     value: year,
+    //                     child: Text(year.toString()),
+    //                   );
+    //                 }).toList(),
+    //                 onChanged: (int? value) {
+    //                   setState(() {
+    //                     selectedYear = value!;
+    //                   });
+    //                 },
+    //               ),
+    //             ],
+    //           ),
+    //         ],
+    //       ),
+    //       actions: [
+    //         ElevatedButton(
+    //           onPressed: () {
+    //             Navigator.of(context).pop();
+    //           },
+    //           child: const Text('Cancel'),
+    //         ),
+    //         ElevatedButton(
+    //           onPressed: () {
+    //             setState(() {
+    //               selectedDate = DateTime(selectedYear, selectedMonth, 1);
+    //             });
+    //             Navigator.of(context).pop();
+    //           },
+    //           child: const Text('OK'),
+    //         ),
+    //       ],
+    //     );
+    //   },
+    // );
   }
 
   @override
