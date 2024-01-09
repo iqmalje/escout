@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:escout/backend/backend.dart';
 import 'package:escout/pages/homepage/temppage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -70,7 +69,8 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                       'Program Category',
                       style: TextStyle(
                         fontSize: 14,
-                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
                         letterSpacing: .3,
                       ),
                     ),
@@ -79,12 +79,12 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                       height: 35,
                       child: Container(
                         decoration: ShapeDecoration(
-                          color: const Color.fromRGBO(237, 237, 237, 100),
+                          color: Color.fromARGB(255, 246, 246, 246),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(3)),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 17),
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
                           child: DropdownButton<String>(
                             value: dropdownValue,
                             isExpanded: true,
@@ -104,7 +104,14 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
-                                child: Text(value),
+                                child: Text(
+                                  value,
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
                               );
                             }).toList(),
                           ),
@@ -175,7 +182,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                         width: 160,
                         height: 35,
                         decoration: ShapeDecoration(
-                          color: const Color.fromRGBO(237, 237, 237, 100),
+                          color: const Color.fromARGB(255, 246, 246, 246),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(3)),
                         ),
@@ -195,7 +202,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                                       : Colors.black,
                                   fontSize: 13,
                                   fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w400,
+                                  fontWeight: FontWeight.w500,
                                   height: 0,
                                 ),
                               ),
@@ -255,7 +262,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                                       : Colors.black,
                                   fontSize: 13,
                                   fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w400,
+                                  fontWeight: FontWeight.w500,
                                   height: 0,
                                 ),
                               ),
@@ -282,10 +289,11 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
               const Padding(
                 padding: EdgeInsets.only(left: 25.0, top: 10),
                 child: Text(
-                  'Program end date registration',
+                  'Program End Date Registration',
                   style: TextStyle(
                     fontSize: 14,
-                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
                     letterSpacing: .3,
                   ),
                 ),
@@ -308,7 +316,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                     });
                   },
                   child: Container(
-                    height: 35,
+                    height: 40,
                     decoration: ShapeDecoration(
                       color: const Color.fromRGBO(237, 237, 237, 100),
                       shape: RoundedRectangleBorder(
@@ -330,7 +338,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                                   : Colors.black,
                               fontSize: 13,
                               fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.w500,
                               height: 0,
                             ),
                           ),
@@ -352,7 +360,8 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                   'Program Description',
                   style: TextStyle(
                     fontSize: 14,
-                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
                     letterSpacing: .3,
                   ),
                 ),
@@ -368,9 +377,11 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                   decoration: InputDecoration(
                     hintText: 'Program description',
                     hintStyle: const TextStyle(
-                        fontSize: 14.0,
+                        fontSize: 13,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(147, 151, 160, 100)),
-                    contentPadding: const EdgeInsets.only(left: 20, right: 20),
+                    contentPadding: const EdgeInsets.only(left: 10, right: 20),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(9),
                         borderSide: BorderSide.none),
@@ -392,9 +403,11 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                     const Text(
                       'Add the program in the activity list',
                       style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14),
+                        fontStyle: FontStyle.italic,
+                        fontSize: 12,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     //toggle button
                     switchButton(),
@@ -514,19 +527,21 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
             textItems['label'],
             style: const TextStyle(
               fontSize: 14,
-              fontWeight: FontWeight.bold,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
               letterSpacing: .3,
             ),
           ),
           const SizedBox(height: 10),
           ConstrainedBox(
             constraints: BoxConstraints(
-              minHeight: 20,
-            ),
+                //minHeight: 20,
+                ),
             child: Container(
               width: MediaQuery.sizeOf(context).width * 0.9,
+              //height: 45,
               decoration: ShapeDecoration(
-                color: const Color(0xFFECECEC),
+                color: Color.fromARGB(255, 246, 246, 246),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
               ),
@@ -541,7 +556,9 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                   decoration: InputDecoration(
                     hintText: textItems['hintText'],
                     hintStyle: const TextStyle(
-                        fontSize: 14.0,
+                        fontSize: 13,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(147, 151, 160, 100)),
                     border: InputBorder.none,
                   ),
@@ -614,13 +631,14 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
           style: ElevatedButton.styleFrom(
             primary: const Color(0xFF2E3B78),
             elevation: 0,
-            fixedSize: const Size(355, 50),
+            fixedSize: Size(MediaQuery.sizeOf(context).width * 0.9, 50),
           ),
-          child: const Text('POST',
+          child: const Text('POST FEED',
               style: TextStyle(
                   fontSize: 14,
                   letterSpacing: .3,
-                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600,
                   color: Colors.white)),
         ),
       ),

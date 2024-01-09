@@ -2,11 +2,8 @@ import 'package:escout/backend/backend.dart';
 import 'package:escout/model/activity.dart';
 import 'package:escout/pages/activity/createactivitypage.dart';
 import 'package:escout/pages/activity/detailsactivity.dart';
-import 'package:flutter/rendering.dart';
-
-import 'package:intl/intl.dart';
-
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 class ActivityPage extends StatefulWidget {
@@ -42,6 +39,14 @@ class _ActivityPageState extends State<ActivityPage> {
     selectedYear = selectedDate.year;
 
     DateTime? dateSelected = await showMonthPicker(
+        monthStylePredicate: (dt) {
+          return TextButton.styleFrom(
+              textStyle: const TextStyle(
+            fontSize: 14,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w500,
+          ));
+        },
         initialDate: selectedDate,
         context: context,
         headerColor: const Color(0xFF2E3B78),
@@ -200,8 +205,11 @@ class _ActivityPageState extends State<ActivityPage> {
                       child: Container(
                         width: 140,
                         height: 30,
-                        decoration:
-                            const BoxDecoration(color: Color(0xFFEDEDED)),
+                        decoration: ShapeDecoration(
+                          color: Color.fromARGB(255, 238, 238, 238),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -209,7 +217,9 @@ class _ActivityPageState extends State<ActivityPage> {
                               "${monthName[selectedDate.month - 1]} ${selectedDate.year.toString().substring(2)}",
                               style: const TextStyle(
                                 color: Colors.black,
-                                fontSize: 16,
+                                fontSize: 14,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                             const SizedBox(

@@ -64,9 +64,9 @@ class _listPageState extends State<listPage> {
                       child: Text('Latest Update',
                           style: TextStyle(
                               color: Colors.black,
-                              fontSize: 14,
+                              fontSize: 16,
                               fontFamily: 'Poppins',
-                              fontWeight: FontWeight.bold)),
+                              fontWeight: FontWeight.w700)),
                     ),
                   ),
 
@@ -135,7 +135,7 @@ Widget buildAPost(BuildContext context, Activity item) {
                 )));
       },
       child: Padding(
-        padding: const EdgeInsets.only(top: 10.0),
+        padding: const EdgeInsets.only(top: 5.0),
         child: Ink(
           child: Column(
             children: <Widget>[
@@ -161,7 +161,8 @@ Widget buildAPost(BuildContext context, Activity item) {
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 12,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Poppins',
                           ),
                         ),
                         const SizedBox(
@@ -172,7 +173,8 @@ Widget buildAPost(BuildContext context, Activity item) {
                           style: const TextStyle(
                             color: Colors.black,
                             fontSize: 10,
-                            fontWeight: FontWeight.normal,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Poppins',
                           ),
                         ),
                       ],
@@ -183,10 +185,8 @@ Widget buildAPost(BuildContext context, Activity item) {
 
               //feed image
               ConstrainedBox(
-                constraints: BoxConstraints(
-                    maxHeight: 300,
-                    minHeight: 100,
-                    minWidth: MediaQuery.sizeOf(context).width),
+                constraints:
+                    BoxConstraints(minWidth: MediaQuery.sizeOf(context).width),
                 child: Stack(children: <Widget>[
                   //event image
                   Center(child: Image.network(item.imageurl)),
@@ -205,27 +205,35 @@ Widget buildAPost(BuildContext context, Activity item) {
                       child: Row(children: <Widget>[
                         const SizedBox(width: 7),
 
-                        //event type: colored-circle label
-                        Container(
-                          width: 10,
-                          height: 10,
-                          decoration: BoxDecoration(
-                            color: const Color.fromRGBO(48, 46, 132, 100),
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                        ),
-                        const SizedBox(width: 7),
-
                         //event type: name
                         Text(
                           item.category,
                           style: const TextStyle(
                             fontSize: 10,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Poppins',
                             color: Colors.black,
                             letterSpacing: .3,
                           ),
-                        )
+                        ),
+
+                        //event type: colored-circle label
+                        // Container(
+                        //   width: 10,
+                        //   height: 10,
+                        //   decoration: BoxDecoration(
+                        //     color: const Color.fromRGBO(48, 46, 132, 100),
+                        //     borderRadius: BorderRadius.circular(100),
+                        //   ),
+                        // ),
+                        const SizedBox(width: 7),
+
+                        // icon category
+                        Container(
+                            width: 15,
+                            height: 15,
+                            child:
+                                Image.asset('assets/images/camping_icon.png')),
                       ]),
                     ),
                   ),
@@ -250,7 +258,8 @@ Widget buildAPost(BuildContext context, Activity item) {
                               item.name,
                               style: const TextStyle(
                                 fontSize: 15,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Poppins',
                                 letterSpacing: .3,
                               ),
                             ),
@@ -264,6 +273,11 @@ Widget buildAPost(BuildContext context, Activity item) {
                               textAlign: TextAlign.start,
                               maxLines: 4,
                               overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Poppins',
+                              ),
                             )
                             //caption subtitle
                           ]),

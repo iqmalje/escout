@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:escout/backend/backend.dart';
 import 'package:flutter/material.dart';
-
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -303,126 +301,131 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                           ),
                           Row(
                             children: [
-                              GestureDetector(
-                                onTap: () async {
-                                  DateTime? pickedDate = await showDatePicker(
-                                      context: context,
-                                      initialDate: startdate ??= DateTime.now(),
-                                      firstDate: DateTime.now(),
-                                      lastDate: DateTime.now()
-                                          .add(const Duration(days: 365)));
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    DateTime? pickedDate = await showDatePicker(
+                                        context: context,
+                                        initialDate: startdate ??=
+                                            DateTime.now(),
+                                        firstDate: DateTime.now(),
+                                        lastDate: DateTime.now()
+                                            .add(const Duration(days: 365)));
 
-                                  if (pickedDate == null) return;
+                                    if (pickedDate == null) return;
 
-                                  //check if end date is later or equal to start date
-                                  if (enddate == null) {
-                                    setState(() {
-                                      startdate = pickedDate;
-                                    });
-                                    return;
-                                  }
-                                  if (pickedDate.millisecondsSinceEpoch >
-                                      enddate!.millisecondsSinceEpoch) {
-                                  } else {
-                                    setState(() {
-                                      startdate = pickedDate;
-                                    });
-                                  }
-                                },
-                                child: Container(
-                                  width: 160,
-                                  height: 40,
-                                  decoration: ShapeDecoration(
-                                    color: const Color(0xFFECECEC),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(3)),
-                                  ),
-                                  child: Row(children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 6),
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          startdate == null
-                                              ? 'Start date'
-                                              : DateFormat('dd/MM/yyyy')
-                                                  .format(startdate!),
-                                          style: TextStyle(
-                                            color: startdate == null
-                                                ? const Color(0xFF9397A0)
-                                                : Colors.black,
-                                            fontSize: 14,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w400,
-                                            height: 0,
+                                    //check if end date is later or equal to start date
+                                    if (enddate == null) {
+                                      setState(() {
+                                        startdate = pickedDate;
+                                      });
+                                      return;
+                                    }
+                                    if (pickedDate.millisecondsSinceEpoch >
+                                        enddate!.millisecondsSinceEpoch) {
+                                    } else {
+                                      setState(() {
+                                        startdate = pickedDate;
+                                      });
+                                    }
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    decoration: ShapeDecoration(
+                                      color: const Color(0xFFECECEC),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(3)),
+                                    ),
+                                    child: Row(children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 6),
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            startdate == null
+                                                ? 'Start date'
+                                                : DateFormat('dd/MM/yyyy')
+                                                    .format(startdate!),
+                                            style: TextStyle(
+                                              color: startdate == null
+                                                  ? const Color(0xFF9397A0)
+                                                  : Colors.black,
+                                              fontSize: 14,
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.w400,
+                                              height: 0,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ]),
+                                    ]),
+                                  ),
                                 ),
                               ),
                               const SizedBox(
                                 width: 5,
                               ),
-                              GestureDetector(
-                                onTap: () async {
-                                  DateTime? pickedDate = await showDatePicker(
-                                      context: context,
-                                      initialDate: enddate ??= DateTime.now(),
-                                      firstDate: DateTime.now(),
-                                      lastDate: DateTime.now()
-                                          .add(const Duration(days: 365)));
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    DateTime? pickedDate = await showDatePicker(
+                                        context: context,
+                                        initialDate: enddate ??= DateTime.now(),
+                                        firstDate: DateTime.now(),
+                                        lastDate: DateTime.now()
+                                            .add(const Duration(days: 365)));
 
-                                  if (pickedDate == null) return;
+                                    if (pickedDate == null) return;
 
-                                  //check if end date is less or equal to start date
-                                  if (startdate == null) {
-                                    setState(() {
-                                      enddate = pickedDate;
-                                    });
+                                    //check if end date is less or equal to start date
+                                    if (startdate == null) {
+                                      setState(() {
+                                        enddate = pickedDate;
+                                      });
 
-                                    return;
-                                  }
-                                  if (startdate!.millisecondsSinceEpoch >
-                                      pickedDate.millisecondsSinceEpoch) {
-                                  } else {
-                                    setState(() {
-                                      enddate = pickedDate;
-                                    });
-                                  }
-                                },
-                                child: Container(
-                                  width: 160,
-                                  height: 40,
-                                  decoration: ShapeDecoration(
-                                    color: const Color(0xFFECECEC),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(3)),
-                                  ),
-                                  child: Row(children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 6),
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          enddate == null
-                                              ? 'End date'
-                                              : DateFormat('dd/MM/yyyy')
-                                                  .format(enddate!),
-                                          style: TextStyle(
-                                            color: enddate == null
-                                                ? const Color(0xFF9397A0)
-                                                : Colors.black,
-                                            fontSize: 14,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w400,
-                                            height: 0,
+                                      return;
+                                    }
+                                    if (startdate!.millisecondsSinceEpoch >
+                                        pickedDate.millisecondsSinceEpoch) {
+                                    } else {
+                                      setState(() {
+                                        enddate = pickedDate;
+                                      });
+                                    }
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    decoration: ShapeDecoration(
+                                      color: const Color(0xFFECECEC),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(3)),
+                                    ),
+                                    child: Row(children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 6),
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            enddate == null
+                                                ? 'End date'
+                                                : DateFormat('dd/MM/yyyy')
+                                                    .format(enddate!),
+                                            style: TextStyle(
+                                              color: enddate == null
+                                                  ? const Color(0xFF9397A0)
+                                                  : Colors.black,
+                                              fontSize: 14,
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.w400,
+                                              height: 0,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ]),
+                                    ]),
+                                  ),
                                 ),
                               ),
                             ],

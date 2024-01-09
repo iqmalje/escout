@@ -360,7 +360,7 @@ class _detailsFacilityAdminState extends State<detailsFacilityAdmin> {
   Widget EditButton() {
     return SizedBox(
       width: 90.0,
-      height: 25.0,
+      height: 30.0,
       child: ElevatedButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
@@ -385,7 +385,9 @@ class _detailsFacilityAdminState extends State<detailsFacilityAdmin> {
             Text(
               'Edit',
               style: TextStyle(
-                fontSize: 12.0,
+                fontSize: 11,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
                 decoration: TextDecoration.underline,
                 color: Colors.white,
               ),
@@ -429,7 +431,7 @@ Widget _appBar(context) {
           style: TextStyle(
             color: Colors.white,
             fontSize: 25,
-            //fontFamily: 'Poppins',
+            fontFamily: 'Poppins',
             fontWeight: FontWeight.w600,
             height: 0,
           ),

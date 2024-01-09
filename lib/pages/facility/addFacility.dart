@@ -98,11 +98,11 @@ class _addFacilityPageState extends State<addFacilityPage> {
 
   Widget cButton() {
     return Padding(
-      padding: const EdgeInsets.only(top: 50),
+      padding: const EdgeInsets.only(top: 30),
       child: Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 30),
+            padding: const EdgeInsets.only(bottom: 40),
             child: ElevatedButton(
               onPressed: () async {
                 if (isEditMode) {
@@ -138,11 +138,12 @@ class _addFacilityPageState extends State<addFacilityPage> {
                 elevation: 0,
                 fixedSize: const Size(300, 50),
               ),
-              child: Text(isEditMode ? 'EDIT' : 'CREATE',
+              child: Text(isEditMode ? 'CONFIRM' : 'CREATE',
                   style: const TextStyle(
                       fontSize: 14,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
                       letterSpacing: .3,
-                      fontWeight: FontWeight.bold,
                       color: Colors.white)),
             ),
           )),
@@ -178,10 +179,10 @@ class _addFacilityPageState extends State<addFacilityPage> {
           ),
           Text(
             isEditMode ? 'Edit Facility' : 'Add Facility',
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 25,
-              //fontFamily: 'Poppins',
+              fontFamily: 'Poppins',
               fontWeight: FontWeight.w600,
               height: 0,
             ),
@@ -351,7 +352,8 @@ Widget textField(Map textItems) {
           maxLines: 2,
           style: const TextStyle(
             fontSize: 14,
-            fontWeight: FontWeight.bold,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w600,
             letterSpacing: .3,
           ),
         ),
@@ -363,11 +365,16 @@ Widget textField(Map textItems) {
             onChanged: textItems['onChange'],
             minLines: 1,
             maxLines: 5,
+            style: const TextStyle(
+              fontSize: 13,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w500,
+            ),
             decoration: InputDecoration(
               hintText: textItems['hintText'],
               hintStyle: const TextStyle(
                   fontSize: 14.0, color: Color.fromRGBO(147, 151, 160, 100)),
-              contentPadding: const EdgeInsets.only(left: 20),
+              contentPadding: const EdgeInsets.only(left: 10),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(9),
                   borderSide: BorderSide.none),
