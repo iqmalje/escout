@@ -349,8 +349,9 @@ class _FacilityAccessedInformationState
                     height: 20,
                   ),
                   FutureBuilder(
-                      future:
-                          SupabaseB().getAttendedDates(facilityID, timePicked),
+                      future: SupabaseB().getAttendedDates(
+                          facilityID, timePicked,
+                          id: attendeeItem['accessed_by']),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
                           return const Center(
