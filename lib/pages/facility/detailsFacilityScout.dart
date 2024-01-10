@@ -65,6 +65,7 @@ class _detailsFacilityScoutState extends State<detailsFacilityScout> {
       child: InkWell(
         onTap: () async {
           DateTime? datePicked = await showDatePicker(
+              initialDate: DateTime.now(),
               context: context,
               firstDate: DateTime.fromMillisecondsSinceEpoch(0),
               lastDate: DateTime.now().add(const Duration(days: 365)));

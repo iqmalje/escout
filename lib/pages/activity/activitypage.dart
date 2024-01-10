@@ -4,7 +4,6 @@ import 'package:escout/pages/activity/createactivitypage.dart';
 import 'package:escout/pages/activity/detailsactivity.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 class ActivityPage extends StatefulWidget {
   const ActivityPage({super.key});
@@ -38,27 +37,29 @@ class _ActivityPageState extends State<ActivityPage> {
     selectedMonth = selectedDate.month;
     selectedYear = selectedDate.year;
 
-    DateTime? dateSelected = await showMonthPicker(
-        monthStylePredicate: (dt) {
-          return TextButton.styleFrom(
-              textStyle: const TextStyle(
-            fontSize: 14,
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w500,
-          ));
-        },
-        initialDate: selectedDate,
-        context: context,
-        headerColor: const Color(0xFF2E3B78),
-        selectedMonthBackgroundColor: const Color(0xFF2E3B78));
+    // TODO: PICK A GOOD NOT TRASHY MODULE FROM PUB DEV (month_picker_dialog was the shitty one)
 
-    if (dateSelected != null) {
-      setState(() {
-        selectedDate = dateSelected;
-        selectedYear = selectedDate.year;
-        selectedMonth = selectedDate.month;
-      });
-    }
+    // DateTime? dateSelected = await showMonthPicker(
+    //     monthStylePredicate: (dt) {
+    //       return TextButton.styleFrom(
+    //           textStyle: const TextStyle(
+    //         fontSize: 14,
+    //         fontFamily: 'Poppins',
+    //         fontWeight: FontWeight.w500,
+    //       ));
+    //     },
+    //     initialDate: selectedDate,
+    //     context: context,
+    //     headerColor: const Color(0xFF2E3B78),
+    //     selectedMonthBackgroundColor: const Color(0xFF2E3B78));
+
+    // if (dateSelected != null) {
+    //   setState(() {
+    //     selectedDate = dateSelected;
+    //     selectedYear = selectedDate.year;
+    //     selectedMonth = selectedDate.month;
+    //   });
+    // }
 
     // await showDialog(
     //   context: context,
