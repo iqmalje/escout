@@ -30,111 +30,25 @@ class _ActivityPageState extends State<ActivityPage> {
     'November',
     'December',
   ];
+
+List<String> images = [
+  "assets/images/myImage.jpg",
+  "assets/images/myimage2.jpg",
+  // "assets/images/image4.png"
+];
+
+List<String> titles = [
+  "Johor Rovers Vigil 2023 & Serving For The Future",
+  "WORLD JOTA JOTI 2023 STESEN 9M4CPJ Kelolaan JOSRAC",
+  // "WORLD JOTA JOTI 2023 STESEN 9M4CPJ Kelolaan JOSRAC",
+];
+
   int selectedMonth = DateTime.now().month;
   int selectedYear = DateTime.now().year;
 
   Future<void> _selectDate(BuildContext context) async {
     selectedMonth = selectedDate.month;
     selectedYear = selectedDate.year;
-
-    // TODO: PICK A GOOD NOT TRASHY MODULE FROM PUB DEV (month_picker_dialog was the shitty one)
-
-    // DateTime? dateSelected = await showMonthPicker(
-    //     monthStylePredicate: (dt) {
-    //       return TextButton.styleFrom(
-    //           textStyle: const TextStyle(
-    //         fontSize: 14,
-    //         fontFamily: 'Poppins',
-    //         fontWeight: FontWeight.w500,
-    //       ));
-    //     },
-    //     initialDate: selectedDate,
-    //     context: context,
-    //     headerColor: const Color(0xFF2E3B78),
-    //     selectedMonthBackgroundColor: const Color(0xFF2E3B78));
-
-    // if (dateSelected != null) {
-    //   setState(() {
-    //     selectedDate = dateSelected;
-    //     selectedYear = selectedDate.year;
-    //     selectedMonth = selectedDate.month;
-    //   });
-    // }
-
-    // await showDialog(
-    //   context: context,
-    //   builder: (BuildContext context) {
-    //     return AlertDialog(
-    //       title: const Text('Select Month and Year'),
-    //       contentPadding: const EdgeInsets.all(16.0), // Adjust padding for size
-    //       content: Column(
-    //         mainAxisSize: MainAxisSize.min, // Adjust size to content
-    //         children: [
-    //           Row(
-    //             children: [
-    //               const Text('Month:'),
-    //               const SizedBox(width: 8),
-    //               DropdownButton<int>(
-    //                 value: selectedMonth,
-    //                 items: List.generate(12, (index) => index + 1).map(
-    //                   (int month) {
-    //                     return DropdownMenuItem<int>(
-    //                       value: month,
-    //                       child: Text(month.toString()),
-    //                     );
-    //                   },
-    //                 ).toList(),
-    //                 onChanged: (int? value) {
-    //                   setState(() {
-    //                     selectedMonth = value!;
-    //                   });
-    //                 },
-    //               ),
-    //             ],
-    //           ),
-    //           Row(
-    //             children: [
-    //               const Text('Year:'),
-    //               const SizedBox(width: 8),
-    //               DropdownButton<int>(
-    //                 value: selectedYear,
-    //                 items: List.generate(100, (index) => 2022 + index)
-    //                     .map((int year) {
-    //                   return DropdownMenuItem<int>(
-    //                     value: year,
-    //                     child: Text(year.toString()),
-    //                   );
-    //                 }).toList(),
-    //                 onChanged: (int? value) {
-    //                   setState(() {
-    //                     selectedYear = value!;
-    //                   });
-    //                 },
-    //               ),
-    //             ],
-    //           ),
-    //         ],
-    //       ),
-    //       actions: [
-    //         ElevatedButton(
-    //           onPressed: () {
-    //             Navigator.of(context).pop();
-    //           },
-    //           child: const Text('Cancel'),
-    //         ),
-    //         ElevatedButton(
-    //           onPressed: () {
-    //             setState(() {
-    //               selectedDate = DateTime(selectedYear, selectedMonth, 1);
-    //             });
-    //             Navigator.of(context).pop();
-    //           },
-    //           child: const Text('OK'),
-    //         ),
-    //       ],
-    //     );
-    //   },
-    // );
   }
 
   @override
@@ -146,14 +60,13 @@ class _ActivityPageState extends State<ActivityPage> {
         child: Scaffold(
           floatingActionButton: Builder(builder: (context) {
             if (SupabaseB.isAdminToggled) {
+              // Assuming SupabaseB.isAdminToggled is defined in your backend logic
               return CircleAvatar(
                 maxRadius: 30,
                 backgroundColor: const Color(0xFF2E3B78),
                 child: IconButton(
                   color: Colors.white,
-                  icon: const Icon(
-                    Icons.add,
-                  ),
+                  icon: const Icon(Icons.add),
                   onPressed: () async {
                     await Navigator.push(
                         context,
@@ -170,8 +83,7 @@ class _ActivityPageState extends State<ActivityPage> {
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(100),
             child: Container(
-              //blue box container
-              width: MediaQuery.sizeOf(context).width,
+              width: MediaQuery.of(context).size.width,
               height: 90,
               decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
               child: const Center(
@@ -191,14 +103,11 @@ class _ActivityPageState extends State<ActivityPage> {
             padding: const EdgeInsets.symmetric(horizontal: 36),
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                  maxWidth: MediaQuery.sizeOf(context).width,
+                  maxWidth: MediaQuery.of(context).size.width,
                   maxHeight: double.infinity),
               child: Column(
-                //blue bow column
                 children: [
-                  const SizedBox(
-                    height: 18,
-                  ),
+                  const SizedBox(height: 18),
                   Align(
                     alignment: Alignment.centerRight,
                     child: GestureDetector(
@@ -223,9 +132,7 @@ class _ActivityPageState extends State<ActivityPage> {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            const SizedBox(
-                                width:
-                                    5), // Add some space between the text and the icon
+                            const SizedBox(width: 5),
                             const Icon(
                               Icons.calendar_today,
                               color: Colors.black,
@@ -237,30 +144,38 @@ class _ActivityPageState extends State<ActivityPage> {
                     ),
                   ),
                   FutureBuilder<List<Activity>>(
-                      future: SupabaseB.isAdminToggled
-                          ? SupabaseB().getActivities(filters: {
-                              'year': selectedYear,
-                              'month': selectedMonth
-                            })
-                          : SupabaseB().getAttendedActivities(
-                              '$selectedYear-${selectedMonth.toString().padLeft(2, '0')}-%'),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
+                    future: SupabaseB.isAdminToggled
+                        ? SupabaseB().getActivities(filters: {
+                            'year': selectedYear,
+                            'month': selectedMonth
+                          })
+                        : SupabaseB().getAttendedActivities(
+                            '$selectedYear-${selectedMonth.toString().padLeft(2, '0')}-%'),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      activities = snapshot.data!;
+                      return Expanded(
+                        // child: Column(
+                        //   children: [
+                        //     buildActivity(activities.elementAt(0),
+                        //         const AssetImage("assets/images/myImage.jpg")),
+                        //     buildActivity(activities.elementAt(1),
+                        //         const AssetImage("assets/images/myimage2.jpg")),
+                            
 
-                        activities = snapshot.data!;
-
-                        return Expanded(
-                          child: ListView.builder(
-                              itemCount: activities.length,
-                              itemBuilder: (context, index) {
-                                return buildActivity(
-                                    activities.elementAt(index));
-                              }),
-                        );
-                      })
+                        //   ],
+                        // ),
+                        child: ListView.builder(
+                          itemCount: activities.length,
+                          itemBuilder: (context, index) {
+                            return buildActivity(activities.elementAt(index),titles[index], AssetImage(images[index]));
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -270,7 +185,7 @@ class _ActivityPageState extends State<ActivityPage> {
     );
   }
 
-  Widget buildActivity(Activity item) {
+  Widget buildActivity(Activity item, String myTitle,  ImageProvider image) {
     return Padding(
       padding: const EdgeInsets.only(top: 10.0),
       child: GestureDetector(
@@ -281,7 +196,61 @@ class _ActivityPageState extends State<ActivityPage> {
         },
         child: Container(
           width: 340,
-          height: 58,
+          height: 250,
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                    top: 10,
+                    left: MediaQuery.of(context).size.width * 0.58,
+                    right: 10),
+                child: Row(
+                  children: [
+                    Text(
+                      "Camping",
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    SizedBox(
+                        height: 15,
+                        child: Image.asset("assets/images/camp_icon.png")),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: image,
+                          /* const AssetImage("assets/images/myImage.jpg"), */ fit:
+                              BoxFit.cover)),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Text(
+                  myTitle,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              Padding(
+                padding:EdgeInsets.only(left:MediaQuery.of(context).size.width*0.6),
+                child: Text("20/10/2023",style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                  
+                ),),
+              )
+            ],
+          ),
           decoration: ShapeDecoration(
             color: Colors.white,
             shape:
@@ -292,73 +261,15 @@ class _ActivityPageState extends State<ActivityPage> {
                 blurRadius: 2,
                 offset: Offset(0, 2),
                 spreadRadius: 0,
-              )
+              ),
             ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  child: Text(
-                    item.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w500,
-                      height: 0,
-                    ),
-                  ),
-                ),
-                Row(
-                  children: [
-                    Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: const Color(0xFF302E84)),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      item.category,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 10,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                    const Spacer(),
-                    Text(
-                      DateFormat('dd/MM/yyyy').format(item.created_at),
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 10,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
           ),
         ),
       ),
     );
   }
-}
 
-String formatDate(DateTime date, List<String> format) {
-  return DateFormat(format.join(' ')).format(date);
+  String formatDate(DateTime date, List<String> format) {
+    return DateFormat(format.join(' ')).format(date);
+  }
 }

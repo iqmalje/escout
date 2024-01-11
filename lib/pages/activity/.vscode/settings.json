@@ -1,0 +1,6 @@
+{
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "editor.codeLens": true,
+  "cmake.configureOnOpen": false,
+  "git.mergeEditor": false
+}

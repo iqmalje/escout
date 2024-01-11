@@ -39,7 +39,7 @@ class _FacilityAccessedInformationState
 
     return Container(
       // ignore: prefer_const_constructors
-      color: Color(0xFF2E3B78),
+      color: Color.fromARGB(255, 120, 63, 46),
       child: SafeArea(
         child: Scaffold(
           body: SingleChildScrollView(
