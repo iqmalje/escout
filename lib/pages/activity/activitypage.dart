@@ -362,3 +362,6 @@ class _ActivityPageState extends State<ActivityPage> {
 String formatDate(DateTime date, List<String> format) {
   return DateFormat(format.join(' ')).format(date);
 }
+
+
+/// RESTORED 
