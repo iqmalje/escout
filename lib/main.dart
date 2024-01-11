@@ -1,5 +1,6 @@
 // ignore_for_file: unused_local_variable
 
+import 'package:escout/pages/activity/activitypage%20copy.dart';
 import 'package:escout/pages/homepage/temppage.dart';
 import 'package:escout/pages/signin/signinpage.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,6 @@ void main() async {
     isSignedIn = true;
   }
   bool isAvailable = await NfcManager.instance.isAvailable();
-  
 
   //listen for auth
   final authSubscription =

@@ -3,12 +3,13 @@
 import 'dart:io';
 
 import 'package:escout/backend/backend.dart';
+import 'package:escout/model/facility.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class addFacilityPage extends StatefulWidget {
   bool isEditMode;
-  dynamic facilityItem;
+  Facility? facilityItem;
   addFacilityPage({super.key, this.isEditMode = false, this.facilityItem});
 
   @override
@@ -18,7 +19,7 @@ class addFacilityPage extends StatefulWidget {
 
 class _addFacilityPageState extends State<addFacilityPage> {
   bool isEditMode = false;
-  dynamic facilityItem;
+  Facility? facilityItem;
   _addFacilityPageState(this.isEditMode, this.facilityItem);
 
   late TextEditingController name = TextEditingController(),
@@ -34,33 +35,19 @@ class _addFacilityPageState extends State<addFacilityPage> {
     super.initState();
     if (facilityItem != null) {
       name = TextEditingController(
-          text: facilityItem['name'] != null
-              ? facilityItem['name'].toString()
-              : '');
+          text: facilityItem != null ? facilityItem!.name : '');
       address1 = TextEditingController(
-          text: facilityItem['address1'] != null
-              ? facilityItem['address1'].toString()
-              : '');
+          text: facilityItem != null ? facilityItem!.address1 : '');
       address2 = TextEditingController(
-          text: facilityItem['address2'] != null
-              ? facilityItem['address2'].toString()
-              : '');
+          text: facilityItem != null ? facilityItem!.address2 : '');
       city = TextEditingController(
-          text: facilityItem['city'] != null
-              ? facilityItem['city'].toString()
-              : '');
+          text: facilityItem != null ? facilityItem!.city : '');
       state = TextEditingController(
-          text: facilityItem['state'] != null
-              ? facilityItem['state'].toString()
-              : '');
+          text: facilityItem != null ? facilityItem!.state : '');
       pic = TextEditingController(
-          text: facilityItem['pic'] != null
-              ? facilityItem['pic'].toString()
-              : '');
+          text: facilityItem != null ? facilityItem!.pic : '');
       postcode = TextEditingController(
-          text: facilityItem['postcode'] != null
-              ? facilityItem['postcode'].toString()
-              : '');
+          text: facilityItem != null ? facilityItem!.postcode.toString() : '');
     }
   }
 
@@ -107,7 +94,7 @@ class _addFacilityPageState extends State<addFacilityPage> {
               onPressed: () async {
                 if (isEditMode) {
                   await SupabaseB().updateFacility(
-                      facilityItem['facility'],
+                      facilityItem!.facilityID,
                       {
                         'name': name.text,
                         'address1': address1.text,
@@ -214,8 +201,7 @@ class _addFacilityPageState extends State<addFacilityPage> {
                     });
                   }
                 },
-                child: Image.network(
-                    SupabaseB().getFacilityImage(facilityItem['facility'])),
+                child: Image.network(facilityItem!.imageURL),
               );
             }
             return Column(

@@ -1,10 +1,11 @@
 import 'package:escout/backend/backend.dart';
+import 'package:escout/model/facility.dart';
 import 'package:escout/pages/facility/addFacility.dart';
 import 'package:escout/pages/facility/facilityAccessed.dart';
 import 'package:flutter/material.dart';
 
 class detailsFacilityAdmin extends StatefulWidget {
-  final dynamic facilityItem;
+  final Facility facilityItem;
   const detailsFacilityAdmin({super.key, required this.facilityItem});
 
   @override
@@ -13,7 +14,7 @@ class detailsFacilityAdmin extends StatefulWidget {
 }
 
 class _detailsFacilityAdminState extends State<detailsFacilityAdmin> {
-  dynamic facilityItem;
+  Facility facilityItem;
   _detailsFacilityAdminState(this.facilityItem);
 
   @override
@@ -31,8 +32,7 @@ class _detailsFacilityAdminState extends State<detailsFacilityAdmin> {
           color: Colors.white,
           child: Column(children: <Widget>[
             _appBar(context),
-            facilityImage(
-                SupabaseB().getFacilityImage(facilityItem['facility'])),
+            facilityImage(facilityItem.imageURL),
             facilityInfo(),
             selectDate(),
             const SizedBox(
@@ -70,7 +70,7 @@ class _detailsFacilityAdminState extends State<detailsFacilityAdmin> {
 
                     if (confirmDelete == null || confirmDelete == false) return;
 
-                    await SupabaseB().deleteFacility(facilityItem['facility']);
+                    await SupabaseB().deleteFacility(facilityItem.facilityID);
 
                     Navigator.of(context).pop();
                   },
@@ -171,7 +171,7 @@ class _detailsFacilityAdminState extends State<detailsFacilityAdmin> {
                         children: [
                           //facility name
                           Text(
-                            facilityItem['name'],
+                            facilityItem.name,
                             maxLines: 2,
                             style: const TextStyle(
                                 fontSize: 15,
@@ -194,7 +194,7 @@ class _detailsFacilityAdminState extends State<detailsFacilityAdmin> {
                               ),
                               Flexible(
                                 child: Text(
-                                  '${facilityItem['address1']}, ${facilityItem['address2']}, ${facilityItem['postcode']} ${facilityItem['city']}, ${facilityItem['state']}',
+                                  '${facilityItem.address1}, ${facilityItem.address2}, ${facilityItem.postcode} ${facilityItem.city}, ${facilityItem.state}',
                                   maxLines: 5,
                                   style: const TextStyle(
                                     color: Colors.black,
@@ -219,7 +219,7 @@ class _detailsFacilityAdminState extends State<detailsFacilityAdmin> {
                                 width: 10,
                               ),
                               Text(
-                                facilityItem['pic'] ??= 'None',
+                                facilityItem.pic,
                                 style: const TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w400,

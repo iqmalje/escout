@@ -1,10 +1,11 @@
+import 'package:escout/model/facility.dart';
 import 'package:escout/pages/facility/FacilityAccessedInformation.dart';
 import 'package:flutter/material.dart';
 
 import '../../backend/backend.dart';
 
 class AllFacilityAccess extends StatefulWidget {
-  final dynamic facilityItem;
+  final Facility facilityItem;
   final DateTime timePicked;
   const AllFacilityAccess(
       {super.key, required this.facilityItem, required this.timePicked});
@@ -15,7 +16,7 @@ class AllFacilityAccess extends StatefulWidget {
 }
 
 class _AllFacilityAccessState extends State<AllFacilityAccess> {
-  dynamic facilityItem;
+  Facility facilityItem;
   DateTime timePicked;
   _AllFacilityAccessState(this.facilityItem, this.timePicked);
 
@@ -77,7 +78,7 @@ class _AllFacilityAccessState extends State<AllFacilityAccess> {
             child: Center(
               child: FutureBuilder(
                   future: SupabaseB()
-                      .getAllAccess(facilityItem['facility'], timePicked),
+                      .getAllAccess(facilityItem.facilityID, timePicked),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData)
                       return const CircularProgressIndicator();
@@ -246,7 +247,7 @@ class _AllFacilityAccessState extends State<AllFacilityAccess> {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => FacilityAccessedInformation(
                     attendeeItem: item,
-                    facilityID: facilityItem['facility'],
+                    facilityID: facilityItem.facilityID,
                     timePicked: timePicked,
                   )));
         },

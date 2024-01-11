@@ -1,4 +1,5 @@
 import 'package:escout/backend/backend.dart';
+import 'package:escout/model/facility.dart';
 import 'package:escout/pages/facility/addFacility.dart';
 import 'package:escout/pages/facility/detailsFacilityAdmin.dart';
 import 'package:escout/pages/facility/detailsFacilityScout.dart';
@@ -95,11 +96,9 @@ class _FacilityPageState extends State<FacilityPage> {
     );
   }
 
-
-List<String> images = [
-  "assets/images/image3.png",
-
-];
+  List<String> images = [
+    "assets/images/image3.png",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -123,59 +122,64 @@ List<String> images = [
                       },
                     ),
                   ),
-            body: Column(
-              //blue bow column
-              children: [
-                Container(
-                  //blue box container
-                  width: MediaQuery.sizeOf(context).width,
-                  height: 90,
-                  decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
-                  child: const Center(
-                    child: Text(
-                      'Facility',
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 255, 255, 255),
-                        fontSize: 24,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w600,
+            body: SingleChildScrollView(
+              child: Column(
+                //blue bow column
+                children: [
+                  Container(
+                    //blue box container
+                    width: MediaQuery.sizeOf(context).width,
+                    height: 90,
+                    decoration: const BoxDecoration(color: Color(0xFF2E3B78)),
+                    child: const Center(
+                      child: Text(
+                        'Facility',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontSize: 24,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 18,
-                ),
-                FutureBuilder(
-                    future: SupabaseB().getFacilities(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData)
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      return Padding(
-                        //padding for the edge of column below the blue box
-                        padding: const EdgeInsets.symmetric(horizontal: 36.0),
-                        child: Column(
-                          children: [
-                            ListView.builder(
-                              itemCount: 1,
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.sizeOf(context).height - 210,
+                    child: FutureBuilder<List<Facility>>(
+                        future: SupabaseB().getFacilities(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+
+                          return Padding(
+                            //padding for the edge of column below the blue box
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 36.0),
+                            child: ListView.builder(
+                              itemCount: snapshot.data!.length,
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
-                                return buildFacility(snapshot.data[index], AssetImage(images[index]));
+                                return buildFacility(
+                                    snapshot.data!.elementAt(index));
                               },
-                            )
-                          ],
-                        ),
-                      );
-                    }),
-              ],
+                            ),
+                          );
+                        }),
+                  ),
+                ],
+              ),
             ),
           )),
     );
   }
 
-  Widget buildFacility(dynamic item, ImageProvider image) {
+  Widget buildFacility(Facility item) {
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: Container(
@@ -240,20 +244,20 @@ List<String> images = [
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                padding: const EdgeInsets.all(10),
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.15,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: image,
-                          /* const AssetImage("assets/images/myImage.jpg"), */ fit:
-                              BoxFit.cover)),
-                ),
-              ),
+                        padding: const EdgeInsets.all(10),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.15,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(item.imageURL),
+                                  /* const AssetImage("assets/images/myImage.jpg"), */ fit:
+                                      BoxFit.cover)),
+                        ),
+                      ),
                       Text(
                         // item['name'],
-                        "BILIK MESYUARAT DI PEJABAT PERSEKUTUAN PENGAKAP MALAYSIA NEGERI JOHOR ",
+                        item.name,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(

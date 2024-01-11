@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:escout/model/account.dart';
 import 'package:escout/model/activity.dart';
+import 'package:escout/model/facility.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseB {
@@ -180,10 +181,27 @@ class SupabaseB {
     }
   }
 
-  Future<dynamic> getFacilities() async {
+  Future<List<dynamic>> getAllAttendees(
+      String activityid, DateTime timeAttend) async {
+    List<dynamic> item = [];
+    print(
+        "aid = $activityid, time_attend = ${'${timeAttend.year}-${timeAttend.month.toString().padLeft(2, '0')}-${timeAttend.day.toString().padLeft(2, '0')}%'}");
+    item = await supabase.rpc('get_all_attendances', params: {
+      'aid': activityid,
+      'time_attend':
+          '${timeAttend.year}-${timeAttend.month.toString().padLeft(2, '0')}-${timeAttend.day.toString().padLeft(2, '0')}%'
+    });
+    print("dah");
+    return item;
+  }
+
+  Future<List<Facility>> getFacilities() async {
     var data = await supabase.from('facilities').select('*');
-    print(data);
-    return data;
+    List<Facility> facilities = [];
+    for (var element in data) {
+      facilities.add(Facility(element));
+    }
+    return facilities;
   }
 
   Future<dynamic> getAttendedDates(String facilityid, DateTime timePicked,
@@ -243,6 +261,39 @@ class SupabaseB {
           .from('activities')
           .getPublicUrl('${activity['activityid']}/cover.png')
     }).eq('activityid', activity['activityid']);
+  }
+
+  Future<void> updateEvent(
+      Map<String, dynamic> items, String activityID) async {
+    var accid = supabase.auth.currentUser!.id;
+
+    await supabase.from('activities').update({
+      'name': items['name'],
+      'category': items['category'].toString().toUpperCase(),
+      'location': items['location'],
+      'startdate': items['startdate'],
+      'enddate': items['enddate'],
+      'is_show_activity': true,
+      'created_by': accid,
+      'is_show_feed': false,
+    }).eq('activityid', activityID);
+
+    //upload to db
+    //{activityid: blabla}
+
+    if (items['file'] != null) {
+      await supabase.storage
+          .from('activities')
+          .update('$activityID/cover.png', items['file']);
+      //update activity db
+      await supabase.from('activities').update({
+        'imageurl': supabase.storage
+            .from('activities')
+            .getPublicUrl('$activityID/cover.png')
+      });
+    }
+
+    print('dah update');
   }
 
   Future<dynamic> getScoutDetails(String scoutid) async {
@@ -426,6 +477,38 @@ class SupabaseB {
           .from('activities')
           .getPublicUrl('${activity['activityid']}/cover.png')
     }).eq('activityid', activity['activityid']);
+  }
+
+  Future<void> updateFeed(Map<String, dynamic> items, String activityID) async {
+    var accid = supabase.auth.currentUser!.id;
+    await supabase.from('activities').update({
+      'name': items['name'],
+      'category': items['category'].toString().toUpperCase(),
+      'location': items['location'],
+      'startdate': items['startdate'],
+      'enddate': items['enddate'],
+      'is_show_activity': items['is_show_activity'],
+      'created_by': accid,
+      'fee': items['fee'],
+      'registrationenddate': items['registrationenddate'],
+      'description': items['description'],
+      'is_show_feed': true,
+    }).eq('activityid', activityID);
+
+    //upload to storage
+    if (items['file'] != null) {
+      await supabase.storage
+          .from('activities')
+          .update('$activityID/cover.png', items['file']);
+
+      await supabase.from('activities').update({
+        'imageurl': supabase.storage
+            .from('activities')
+            .getPublicUrl('$activityID/cover.png')
+      }).eq('activityid', activityID);
+    }
+
+    print('dah update');
   }
 
   Future<void> addAttendanceByScoutID(String activityid, String scoutID) async {

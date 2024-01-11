@@ -1,11 +1,12 @@
 //import 'package:facilitypage/facilityAccessed.dart';
 import 'package:escout/backend/backend.dart';
+import 'package:escout/model/facility.dart';
 import 'package:escout/pages/facility/facilityAccessedScout.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class detailsFacilityScout extends StatefulWidget {
-  final dynamic facilityItem;
+  final Facility facilityItem;
 
   const detailsFacilityScout({super.key, required this.facilityItem});
 
@@ -15,7 +16,7 @@ class detailsFacilityScout extends StatefulWidget {
 }
 
 class _detailsFacilityScoutState extends State<detailsFacilityScout> {
-  final dynamic facilityItem;
+  final Facility facilityItem;
   DateTime timePicked = DateTime.now();
   _detailsFacilityScoutState(this.facilityItem);
   @override
@@ -28,7 +29,7 @@ class _detailsFacilityScoutState extends State<detailsFacilityScout> {
         child: Scaffold(
             body: FutureBuilder(
                 future: SupabaseB()
-                    .getAttendedDates(facilityItem['facility'], timePicked),
+                    .getAttendedDates(facilityItem.facilityID, timePicked),
                 builder: (context, snapshot) {
                   print(snapshot.hasData);
                   if (!snapshot.hasData) {
@@ -43,7 +44,7 @@ class _detailsFacilityScoutState extends State<detailsFacilityScout> {
                         child: Column(children: <Widget>[
                           _appBar(context),
                           facilityImage(SupabaseB()
-                              .getFacilityImage(facilityItem['facility'])),
+                              .getFacilityImage(facilityItem.facilityID)),
                           const SizedBox(height: 20),
                           facilityInfo(facilityItem),
                           const SizedBox(height: 15),
@@ -239,7 +240,7 @@ facilityImage(String url) => Builder(
       },
     );
 
-facilityInfo(dynamic facilityItem) => Builder(
+facilityInfo(Facility facilityItem) => Builder(
       builder: (BuildContext context) {
         return Container(
           constraints: BoxConstraints(
@@ -263,7 +264,7 @@ facilityInfo(dynamic facilityItem) => Builder(
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               //facility name
               Text(
-                facilityItem['name'],
+                facilityItem.name,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
@@ -286,8 +287,7 @@ facilityInfo(dynamic facilityItem) => Builder(
                   ),
                   Flexible(
                     child: Text(
-                      '${facilityItem['address1']}, ${facilityItem['address2']}, ${facilityItem['postcode']} ${facilityItem['city']}, ${facilityItem['state']}',
-                      maxLines: 2,
+                      '${facilityItem.address1}, ${facilityItem.address2}, ${facilityItem.postcode} ${facilityItem.city}, ${facilityItem.state}',
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         color: Colors.black,

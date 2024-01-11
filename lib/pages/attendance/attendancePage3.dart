@@ -2,6 +2,7 @@
 
 import 'package:escout/model/activity.dart';
 import 'package:escout/pages/attendance/recordAttendance.dart';
+import 'package:escout/pages/attendance/showAllParticipants.dart';
 import 'package:flutter/material.dart';
 
 class attendancePage3 extends StatefulWidget {
@@ -44,7 +45,7 @@ class _attendancePage3State extends State<attendancePage3> {
               openAttendanceButton(
                   context, activity.activityid, attendancekey, activity),
               const SizedBox(height: 15),
-              showParticipantButton(),
+              showParticipantButton(context, activity, timePicked),
             ]),
           )),
         ),
@@ -345,9 +346,16 @@ Widget openAttendanceButton(context, activityid, secondkey, activity) {
   );
 }
 
-Widget showParticipantButton() {
+Widget showParticipantButton(
+    BuildContext context, Activity activity, DateTime timePicked) {
   return ElevatedButton(
-    onPressed: () {},
+    onPressed: () {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => showAllParticipants(
+                activity: activity,
+                timePicked: timePicked,
+              )));
+    },
     style: ElevatedButton.styleFrom(
       primary: Colors.transparent,
       elevation: 0,

@@ -1,31 +1,60 @@
 import 'dart:io';
 
 import 'package:escout/backend/backend.dart';
+import 'package:escout/model/activity.dart';
 import 'package:escout/pages/homepage/temppage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class CreateFeedPage extends StatefulWidget {
-  const CreateFeedPage({super.key});
+  final Activity? activity;
+  const CreateFeedPage({super.key, this.activity});
 
   @override
-  State<CreateFeedPage> createState() => _CreateFeedPageState();
+  State<CreateFeedPage> createState() => _CreateFeedPageState(activity);
 }
 
 class _CreateFeedPageState extends State<CreateFeedPage> {
+  Activity? activity;
+  bool isEditMode = false;
+  _CreateFeedPageState(this.activity) {
+    if (activity != null) {
+      isEditMode = true;
+    }
+  }
   ImagePicker imagePicker = ImagePicker();
   String dropdownValue = 'Meeting';
   List<String> list = ['Meeting', 'Camping'];
   XFile? imagePicked;
   bool isShowActivity = false;
 
-  TextEditingController name = TextEditingController(),
-      category = TextEditingController(),
-      location = TextEditingController(),
-      fee = TextEditingController(),
-      description = TextEditingController();
+  late TextEditingController name, category, location, fee, description;
   DateTime? startdate, enddate, registerenddate;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (activity == null) {
+      name = TextEditingController();
+      category = TextEditingController();
+      location = TextEditingController();
+      fee = TextEditingController();
+      description = TextEditingController();
+    } else {
+      name = TextEditingController(text: activity!.name);
+      category = TextEditingController(
+          text: toBeginningOfSentenceCase(activity!.category));
+      location = TextEditingController(text: activity!.location);
+      fee = TextEditingController(
+          text: activity!.fee == null ? '0' : activity!.fee!.toString());
+      description = TextEditingController(text: activity!.description);
+      startdate = activity!.startdate;
+      enddate = activity!.enddate;
+      registerenddate = activity!.registrationenddate;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -484,7 +513,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
           setState(() {});
         },
         child: Builder(builder: (context) {
-          if (imagePicked == null) {
+          if (imagePicked == null && !isEditMode) {
             return Container(
               height: 200,
               width: MediaQuery.of(context).size.width,
@@ -509,6 +538,8 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
                     ),
                   ]),
             );
+          } else if (imagePicked == null && isEditMode) {
+            return Image.network(activity!.imageurl);
           } else {
             return Image.file(File(imagePicked!.path));
           }
@@ -590,51 +621,19 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
       child: Center(
         child: ElevatedButton(
           onPressed: () async {
-            if (name.text.isEmpty ||
-                location.text.isEmpty ||
-                description.text.isEmpty) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Please fill in all the fields!')));
-              return;
+            if (isEditMode) {
+              await updateFeed();
+            } else {
+              await createFeed();
             }
-
-            if (startdate == null ||
-                enddate == null ||
-                registerenddate == null) {
-              return;
-            }
-
-            if (imagePicked == null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Please pick an image')));
-            }
-
-            await SupabaseB().createFeed({
-              'name': name.text,
-              'category': dropdownValue,
-              'location': location.text,
-              'startdate':
-                  '${startdate!.year}-${startdate!.month}-${startdate!.day}',
-              'enddate': '${enddate!.year}-${enddate!.month}-${enddate!.day}',
-              'is_show_activity': isShowActivity,
-              'fee': fee.text.isEmpty ? '0' : fee.text,
-              'registrationenddate':
-                  '${registerenddate!.year}-${registerenddate!.month}-${registerenddate!.day}',
-              'description': description.text,
-              'file': File(imagePicked!.path)
-            });
-
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => const TempPage()),
-                (route) => false);
           },
           style: ElevatedButton.styleFrom(
             primary: const Color(0xFF2E3B78),
             elevation: 0,
             fixedSize: Size(MediaQuery.sizeOf(context).width * 0.9, 50),
           ),
-          child: const Text('POST FEED',
-              style: TextStyle(
+          child: Text(isEditMode ? 'UPDATE FEED' : 'POST FEED',
+              style: const TextStyle(
                   fontSize: 14,
                   letterSpacing: .3,
                   fontFamily: 'Poppins',
@@ -643,5 +642,62 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
         ),
       ),
     );
+  }
+
+  Future<void> createFeed() async {
+    if (name.text.isEmpty ||
+        location.text.isEmpty ||
+        description.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please fill in all the fields!')));
+      return;
+    }
+
+    if (startdate == null || enddate == null || registerenddate == null) {
+      return;
+    }
+
+    if (imagePicked == null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Please pick an image')));
+    }
+
+    await SupabaseB().createFeed({
+      'name': name.text,
+      'category': dropdownValue,
+      'location': location.text,
+      'startdate': '${startdate!.year}-${startdate!.month}-${startdate!.day}',
+      'enddate': '${enddate!.year}-${enddate!.month}-${enddate!.day}',
+      'is_show_activity': isShowActivity,
+      'fee': fee.text.isEmpty ? '0' : fee.text,
+      'registrationenddate':
+          '${registerenddate!.year}-${registerenddate!.month}-${registerenddate!.day}',
+      'description': description.text,
+      'file': File(imagePicked!.path)
+    });
+
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const TempPage()),
+        (route) => false);
+  }
+
+  Future<void> updateFeed() async {
+    await SupabaseB().updateFeed({
+      'name': name.text,
+      'category': dropdownValue,
+      'location': location.text,
+      'startdate': '${startdate!.year}-${startdate!.month}-${startdate!.day}',
+      'enddate': '${enddate!.year}-${enddate!.month}-${enddate!.day}',
+      'is_show_activity': isShowActivity,
+      'fee': fee.text.isEmpty ? '0' : fee.text,
+      'registrationenddate':
+          '${registerenddate!.year}-${registerenddate!.month}-${registerenddate!.day}',
+      'description': description.text,
+      'file': imagePicked == null ? null : File(imagePicked!.path)
+    }, activity!.activityid);
+
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const TempPage()),
+        (route) => false);
   }
 }

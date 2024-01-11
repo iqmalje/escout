@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:escout/backend/backend.dart';
+import 'package:escout/pages/feed/createFeedPage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -375,6 +377,97 @@ class _DetailsprogramState extends State<Detailsprogram> {
                       ],
                     ),
                   ),
+                  Builder(builder: (context) {
+                    if (SupabaseB.isAdminToggled) {
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 30.0),
+                              child: Material(
+                                child: InkWell(
+                                  onTap: () async {
+                                    await updateActivity();
+                                  },
+                                  child: Ink(
+                                    height: 40,
+                                    decoration: ShapeDecoration(
+                                      // ignore: prefer_const_constructors
+                                      color: Color(0xFF2E3B78),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                    ),
+                                    child: const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Update Activity',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w600,
+                                            height: 0,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 30.0),
+                              child: Material(
+                                child: InkWell(
+                                  onTap: () async {
+                                    await deleteActivity();
+                                  },
+                                  child: Ink(
+                                    height: 40,
+                                    decoration: ShapeDecoration(
+                                      // ignore: prefer_const_constructors
+                                      color: Color.fromARGB(255, 201, 54, 54),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                    ),
+                                    child: const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Delete Activity',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w600,
+                                            height: 0,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      );
+                    } else {
+                      return Container();
+                    }
+                  })
                 ],
               ),
             ),
@@ -382,5 +475,43 @@ class _DetailsprogramState extends State<Detailsprogram> {
         ),
       ),
     );
+  }
+
+  Future<void> deleteActivity() async {
+    var confirmDelete = await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text(
+              'Are you sure to delete this facility?',
+              style: TextStyle(fontFamily: 'Poppins', fontSize: 18),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: const Text('No')),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: const Text('Yes')),
+            ],
+          );
+        });
+
+    if (confirmDelete == null || confirmDelete == false) return;
+
+    await SupabaseB().deleteActivity(activity);
+
+    Navigator.of(context).pop();
+  }
+
+  Future<void> updateActivity() async {
+    await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => CreateFeedPage(
+              activity: activity,
+            )));
   }
 }

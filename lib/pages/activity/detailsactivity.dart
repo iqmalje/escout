@@ -2,6 +2,7 @@
 
 import 'package:escout/backend/backend.dart';
 import 'package:escout/model/activity.dart';
+import 'package:escout/pages/activity/createactivitypage.dart';
 import 'package:escout/pages/attendance/attendancePage3.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -205,7 +206,7 @@ class _DetailsActivityState extends State<DetailsActivity> {
                                 width: 10,
                               ),
                               Text(
-                                '${activity.startdate.day} - ${activity.enddate.day} ${monthName[activity.enddate.month - 1]} 2023',
+                                '${activity.startdate.day} - ${activity.enddate.day} ${monthName[activity.enddate.month - 1]} ${activity.enddate.year}',
                                 style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 12,
@@ -236,6 +237,24 @@ class _DetailsActivityState extends State<DetailsActivity> {
                           )
                         ],
                       ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.sizeOf(context).width * 0.85,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Builder(builder: (context) {
+                          if (SupabaseB.isAdminToggled) {
+                            return EditButton();
+                          } else {
+                            return Container();
+                          }
+                        }),
+                      ],
                     ),
                   ),
                   const SizedBox(
@@ -488,6 +507,45 @@ class _DetailsActivityState extends State<DetailsActivity> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget EditButton() {
+    return SizedBox(
+      width: 90.0,
+      height: 30.0,
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => CreateActivityPage(
+                    activity: activity,
+                  )));
+        },
+        style: ElevatedButton.styleFrom(
+          primary: const Color(0xFF2E3B78),
+        ),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Icon(
+              Icons.edit,
+              size: 12.0,
+              color: Colors.white,
+            ),
+            SizedBox(width: 8.0),
+            Text(
+              'Edit',
+              style: TextStyle(
+                fontSize: 11,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                decoration: TextDecoration.underline,
+                color: Colors.white,
+              ),
+            ),
+          ],
         ),
       ),
     );

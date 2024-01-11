@@ -1,13 +1,40 @@
+import 'package:escout/backend/backend.dart';
+import 'package:escout/model/activity.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class showAllParticipants extends StatefulWidget {
-  const showAllParticipants({super.key});
+  final Activity activity;
+  final DateTime timePicked;
+  const showAllParticipants(
+      {super.key, required this.activity, required this.timePicked});
 
   @override
-  State<showAllParticipants> createState() => _showAllParticipantsState();
+  State<showAllParticipants> createState() =>
+      _showAllParticipantsState(activity, timePicked);
 }
 
 class _showAllParticipantsState extends State<showAllParticipants> {
+  Activity activity;
+  DateTime timePicked;
+  List<String> monthName = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+  _showAllParticipantsState(this.activity, this.timePicked);
+  bool isDoneLoading = false;
+  int totalAttendees = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,245 +42,306 @@ class _showAllParticipantsState extends State<showAllParticipants> {
           preferredSize: Size(MediaQuery.sizeOf(context).width, 200),
           child: _appBar(context)),
       body: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 35),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width * 0.1),
-                // Adjust the multiplier (0.1 in this case) based on your percentage preference
-                child: const Text(
-                  'Activity Details',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                    letterSpacing: .3,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              width: MediaQuery.sizeOf(context).width * 0.85,
-              height: 120,
-              decoration: ShapeDecoration(
-                color: const Color(0xFFFAFAFA),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                shadows: const [
-                  BoxShadow(
-                    color: Color(0x3F000000),
-                    blurRadius: 2,
-                    offset: Offset(0, 2),
-                    spreadRadius: 0,
-                  )
-                ],
-              ),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      'activity',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w500,
-                        height: 0,
+        child: FutureBuilder<List<dynamic>>(
+            future:
+                SupabaseB().getAllAttendees(activity.activityid, timePicked),
+            builder: (context, snapshot) {
+              return Column(
+                children: [
+                  const SizedBox(height: 35),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: MediaQuery.of(context).size.width * 0.1),
+                      // Adjust the multiplier (0.1 in this case) based on your percentage preference
+                      child: const Text(
+                        'Activity Details',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          letterSpacing: .3,
+                        ),
                       ),
                     ),
-                    Row(
-                      children: [
-                        Icon(Icons.location_on),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'location',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 11,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                            height: 0,
-                          ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    constraints: BoxConstraints(
+                        maxWidth: MediaQuery.sizeOf(context).width * 0.85,
+                        minHeight: 120),
+                    decoration: ShapeDecoration(
+                      color: const Color(0xFFFAFAFA),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      shadows: const [
+                        BoxShadow(
+                          color: Color(0x3F000000),
+                          blurRadius: 2,
+                          offset: Offset(0, 2),
+                          spreadRadius: 0,
                         )
                       ],
                     ),
-                    Row(
-                      children: [
-                        Icon(Icons.calendar_month),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'date',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 11,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                            height: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15.0, vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            activity.name,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 12,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500,
+                              height: 0,
+                            ),
                           ),
+                          Row(
+                            children: [
+                              const Icon(Icons.location_on),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                activity.location,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 11,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                  height: 0,
+                                ),
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Icon(Icons.calendar_month),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                DateFormat('dd MMMM yyyy').format(timePicked),
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 11,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                  height: 0,
+                                ),
+                              )
+                            ],
+                          ),
+                          const Row(
+                            children: [
+                              Icon(Icons.account_circle),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'PPM NEGERI JOHOR',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 11,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                  height: 0,
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    width: MediaQuery.sizeOf(context).width * 0.85,
+                    height: 40,
+                    decoration: ShapeDecoration(
+                      color: const Color(0xFFFAFAFA),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      shadows: const [
+                        BoxShadow(
+                          color: Color(0x3F000000),
+                          blurRadius: 2,
+                          offset: Offset(0, 2),
+                          spreadRadius: 0,
                         )
                       ],
                     ),
-                    Row(
-                      children: [
-                        Icon(Icons.account_circle),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'PPM NEGERI JOHOR',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 11,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15.0, vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Row(
+                            children: [
+                              const Text(
+                                'Total Number of Participants',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 11,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                  height: 0,
+                                ),
+                              ),
+                              const Spacer(), // Add this to push the next text to the right
+                              Builder(builder: (context) {
+                                if (!snapshot.hasData) {
+                                  return const SizedBox(
+                                      height: 10,
+                                      width: 10,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ));
+                                }
+                                return Text(
+                                  snapshot.data!.length.toString(),
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 11,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
+                                    height: 0,
+                                  ),
+                                );
+                              }),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 23),
+                  const Text(
+                    'List of participants',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      letterSpacing: .3,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    width: MediaQuery.sizeOf(context).width * 0.9,
+                    height: 35,
+                    decoration: ShapeDecoration(
+                      color: const Color(0xFFFAFAFA),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                    ),
+                    child: const TextField(
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.search),
+                          border:
+                              OutlineInputBorder(borderSide: BorderSide.none),
+                          hintStyle: TextStyle(
+                            color: Color(0xFF9397A0),
+                            fontSize: 13,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w400,
                             height: 0,
                           ),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              width: MediaQuery.sizeOf(context).width * 0.85,
-              height: 40,
-              decoration: ShapeDecoration(
-                color: const Color(0xFFFAFAFA),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                shadows: const [
-                  BoxShadow(
-                    color: Color(0x3F000000),
-                    blurRadius: 2,
-                    offset: Offset(0, 2),
-                    spreadRadius: 0,
+                          hintText: "Search participant's name"),
+                    ),
+                  ),
+                  const SizedBox(height: 13),
+                  Expanded(
+                    child: Builder(builder: (context) {
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+
+                      return Builder(builder: (context) {
+                        if (snapshot.data!.isEmpty) {
+                          return const Padding(
+                            padding: EdgeInsets.only(top: 50.0),
+                            child: Text('No attendees yet'),
+                          );
+                        }
+                        return SizedBox(
+                          width: MediaQuery.sizeOf(context).width * 0.9,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return buildParticipant(
+                                  context, snapshot.data!.elementAt(index));
+                            },
+                          ),
+                        );
+                      });
+                    }),
+                  ),
+                ],
+              );
+            }),
+      ),
+    );
+  }
+
+  Widget buildParticipant(BuildContext context, dynamic item) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Container(
+          width: MediaQuery.sizeOf(context).width * 0.85,
+          height: 60,
+          decoration: const BoxDecoration(
+              color: Color.fromARGB(255, 237, 237, 237),
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          child: Row(
+            children: [
+              Row(
+                children: [
+                  //container for profile pic
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundImage: NetworkImage(item['image_url']),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(item['fullname'],
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          )),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(item['pos'],
+                          style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w300,
+                          ))
+                    ],
                   )
                 ],
-              ),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          'Total Number of Participants',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 11,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                            height: 0,
-                          ),
-                        ),
-                        Spacer(), // Add this to push the next text to the right
-                        Text(
-                          'Number',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 11,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                            height: 0,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 23),
-            const Text(
-              'List of participants',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-                letterSpacing: .3,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Container(
-              width: MediaQuery.sizeOf(context).width * 0.8,
-              height: 35,
-              decoration: ShapeDecoration(
-                color: const Color.fromARGB(255, 228, 228, 228),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-              ),
-              child: const TextField(
-                decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(borderSide: BorderSide.none),
-                    hintStyle: TextStyle(
-                      color: Color(0xFF9397A0),
-                      fontSize: 13,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w400,
-                      height: 0,
-                    ),
-                    hintText: "Search participant's name"),
-              ),
-            ),
-            const SizedBox(height: 13),
-            Container(
-                width: MediaQuery.sizeOf(context).width * 0.85,
-                height: 44,
-                decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 228, 228, 228)),
-                child: Row(
-                  children: [
-                    Row(
-                      children: [
-                        //container for profile pic
-                        Container(
-                          margin: const EdgeInsets.only(left: 10.0),
-                          width: 50.0,
-                          height: 50.0,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.blue,
-                          ),
-                        ),
-                        const Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text('BARDIN BIN UTEH (NAMA)',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w500,
-                                )),
-                            Text("KETUA PESURUHJAYA PENGAKAP NEGERI JOHOR",
-                                style: TextStyle(
-                                  fontSize: 8,
-                                  fontWeight: FontWeight.w300,
-                                ))
-                          ],
-                        )
-                      ],
-                    )
-                  ],
-                )),
-          ],
-        ),
-      ),
+              )
+            ],
+          )),
     );
   }
 }

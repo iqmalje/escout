@@ -1,25 +1,48 @@
 import 'dart:io';
 
 import 'package:escout/backend/backend.dart';
+import 'package:escout/model/activity.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class CreateActivityPage extends StatefulWidget {
-  const CreateActivityPage({super.key});
+  final Activity? activity;
+  const CreateActivityPage({super.key, this.activity});
 
   @override
-  State<CreateActivityPage> createState() => _CreateActivityPage();
+  State<CreateActivityPage> createState() => _CreateActivityPage(activity);
 }
 
 class _CreateActivityPage extends State<CreateActivityPage> {
-  TextEditingController name = TextEditingController(),
-      category = TextEditingController(),
-      location = TextEditingController();
+  Activity? activity;
+  bool isEditMode = false;
+  _CreateActivityPage(this.activity) {
+    if (activity != null) isEditMode = true;
+  }
+
+  late TextEditingController name, category, location;
+  DateTime? startdate, enddate;
+  @override
+  void initState() {
+    super.initState();
+
+    name =
+        TextEditingController(text: activity == null ? null : activity!.name);
+    category = TextEditingController(
+        text: activity == null
+            ? null
+            : toBeginningOfSentenceCase(activity!.category));
+    location = TextEditingController(
+        text: activity == null ? null : activity!.location);
+
+    startdate = activity == null ? null : activity!.startdate;
+    enddate = activity == null ? null : activity!.enddate;
+  }
 
   String dropdownValue = 'Camping';
   List<String> list = <String>['Meeting', 'Camping'];
-  DateTime? startdate, enddate;
+
   final ImagePicker picker = ImagePicker();
   XFile? imagePicked;
   @override
@@ -38,52 +61,73 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                   //blue bow column
                   children: [
                     _appBar(context),
-                    InkWell(
-                      onTap: () async {
-                        XFile? image =
-                            await picker.pickImage(source: ImageSource.gallery);
+                    Builder(builder: (context) {
+                      if (isEditMode) {
+                        return GestureDetector(onTap: () async {
+                          XFile? image = await picker.pickImage(
+                              source: ImageSource.gallery);
 
-                        if (image == null) return;
-                        setState(() {
-                          imagePicked = image;
-                        });
-                      },
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                            minWidth: MediaQuery.sizeOf(context).width,
-                            minHeight: 180),
-                        child: Ink(
-                          decoration:
-                              const BoxDecoration(color: Color(0xFFECECEC)),
-                          child: Builder(builder: (context) {
-                            if (imagePicked == null) {
-                              return Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                      child: Image.asset(
-                                          'assets/images/upload.png')),
-                                  const Text(
-                                    'Upload an image',
-                                    style: TextStyle(
-                                      color: Color(0xFFD9D9D9),
-                                      fontSize: 12,
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0,
+                          if (image == null) return;
+                          setState(() {
+                            imagePicked = image;
+                          });
+                        }, child: Builder(builder: (context) {
+                          if (imagePicked == null) {
+                            return Image.network(activity!.imageurl);
+                          } else {
+                            return FittedBox(
+                                fit: BoxFit.fill,
+                                child: Image.file(File(imagePicked!.path)));
+                          }
+                        }));
+                      }
+                      return InkWell(
+                        onTap: () async {
+                          XFile? image = await picker.pickImage(
+                              source: ImageSource.gallery);
+
+                          if (image == null) return;
+                          setState(() {
+                            imagePicked = image;
+                          });
+                        },
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                              minWidth: MediaQuery.sizeOf(context).width,
+                              minHeight: 180),
+                          child: Ink(
+                            decoration:
+                                const BoxDecoration(color: Color(0xFFECECEC)),
+                            child: Builder(builder: (context) {
+                              if (imagePicked == null) {
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                        child: Image.asset(
+                                            'assets/images/upload.png')),
+                                    const Text(
+                                      'Upload an image',
+                                      style: TextStyle(
+                                        color: Color(0xFFD9D9D9),
+                                        fontSize: 12,
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w400,
+                                        height: 0,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              );
-                            } else {
-                              return FittedBox(
-                                  fit: BoxFit.fill,
-                                  child: Image.file(File(imagePicked!.path)));
-                            }
-                          }),
+                                  ],
+                                );
+                              } else {
+                                return FittedBox(
+                                    fit: BoxFit.fill,
+                                    child: Image.file(File(imagePicked!.path)));
+                              }
+                            }),
+                          ),
                         ),
-                      ),
-                    ),
+                      );
+                    }),
                     const SizedBox(
                       height: 20,
                     ),
@@ -446,7 +490,7 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                                   return;
                                 }
 
-                                if (imagePicked == null) {
+                                if (imagePicked == null && !isEditMode) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           content: Text(
@@ -461,17 +505,31 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                                               'Please choose the dates!')));
                                   return;
                                 }
-
-                                await SupabaseB().addEvent({
-                                  'name': name.text,
-                                  'category': dropdownValue,
-                                  'location': location.text,
-                                  'startdate': DateFormat('yyyy-MM-dd')
-                                      .format(startdate!),
-                                  'enddate':
-                                      DateFormat('yyyy-MM-dd').format(enddate!),
-                                  'file': File(imagePicked!.path)
-                                });
+                                if (isEditMode) {
+                                  await SupabaseB().updateEvent({
+                                    'name': name.text,
+                                    'category': dropdownValue,
+                                    'location': location.text,
+                                    'startdate': DateFormat('yyyy-MM-dd')
+                                        .format(startdate!),
+                                    'enddate': DateFormat('yyyy-MM-dd')
+                                        .format(enddate!),
+                                    'file': imagePicked == null
+                                        ? null
+                                        : File(imagePicked!.path)
+                                  }, activity!.activityid);
+                                } else {
+                                  await SupabaseB().addEvent({
+                                    'name': name.text,
+                                    'category': dropdownValue,
+                                    'location': location.text,
+                                    'startdate': DateFormat('yyyy-MM-dd')
+                                        .format(startdate!),
+                                    'enddate': DateFormat('yyyy-MM-dd')
+                                        .format(enddate!),
+                                    'file': File(imagePicked!.path)
+                                  });
+                                }
 
                                 Navigator.of(context).pop();
                               },
@@ -483,10 +541,10 @@ class _CreateActivityPage extends State<CreateActivityPage> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5)),
                                 ),
-                                child: const Center(
+                                child: Center(
                                   child: Text(
-                                    'CREATE',
-                                    style: TextStyle(
+                                    isEditMode ? 'UPDATE' : 'CREATE',
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 14,
                                       fontFamily: 'Poppins',

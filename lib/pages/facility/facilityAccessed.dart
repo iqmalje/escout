@@ -1,10 +1,11 @@
 import 'package:escout/backend/backend.dart';
+import 'package:escout/model/facility.dart';
 import 'package:escout/pages/facility/allFacilityAccess.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class facilityAccessed extends StatefulWidget {
-  final dynamic facilityItem;
+  final Facility facilityItem;
   final DateTime timePicked;
   const facilityAccessed(
       {super.key, required this.facilityItem, required this.timePicked});
@@ -15,7 +16,7 @@ class facilityAccessed extends StatefulWidget {
 }
 
 class _facilityAccessedState extends State<facilityAccessed> {
-  dynamic facilityItem;
+  Facility facilityItem;
   DateTime timePicked;
   _facilityAccessedState(this.facilityItem, this.timePicked);
 
@@ -48,7 +49,7 @@ class _facilityAccessedState extends State<facilityAccessed> {
             //Total of facility’s accessed
             FutureBuilder(
                 future: SupabaseB()
-                    .getTotalAccess(facilityItem['facility'], timePicked),
+                    .getTotalAccess(facilityItem.facilityID, timePicked),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return const Center(
@@ -56,7 +57,6 @@ class _facilityAccessedState extends State<facilityAccessed> {
                     );
                   }
                   return accessedInfo({
-                    
                     'info': 'Total of facility’s accessed',
                     'accessedCount': snapshot.data.toString()
                   });
@@ -66,7 +66,7 @@ class _facilityAccessedState extends State<facilityAccessed> {
             //Number of people accessed
             FutureBuilder(
                 future: SupabaseB()
-                    .getNumberAccess(facilityItem['facility'], timePicked),
+                    .getNumberAccess(facilityItem.facilityID, timePicked),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return const Center(
@@ -115,7 +115,7 @@ class _facilityAccessedState extends State<facilityAccessed> {
                     children: [
                       //facility name
                       Text(
-                        facilityItem['name'],
+                        facilityItem.name,
                         style: const TextStyle(
                             fontSize: 15,
                             color: Colors.black,
@@ -137,7 +137,7 @@ class _facilityAccessedState extends State<facilityAccessed> {
                           ),
                           Flexible(
                             child: Text(
-                              '${facilityItem['address1']}, ${facilityItem['address2']}, ${facilityItem['postcode']} ${facilityItem['city']}, ${facilityItem['state']}',
+                              '${facilityItem.address1}, ${facilityItem.address2}, ${facilityItem.postcode} ${facilityItem.city}, ${facilityItem.state}',
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w400,
@@ -161,7 +161,7 @@ class _facilityAccessedState extends State<facilityAccessed> {
                             width: 10,
                           ),
                           Text(
-                            facilityItem['pic'],
+                            facilityItem.pic,
                             style: const TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w400,
