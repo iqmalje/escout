@@ -184,7 +184,7 @@ class _facilityAccessedState extends State<facilityAccessed> {
                             width: 10,
                           ),
                           Text(
-                            'PPM NEGERI JOHOR',
+                            'PPM NEGERI OR',
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w400,
