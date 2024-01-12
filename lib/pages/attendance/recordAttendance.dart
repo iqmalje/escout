@@ -24,7 +24,7 @@ class _RecordAttendanceState extends State<RecordAttendance> {
   FocusNode fn = FocusNode();
   dynamic activity;
 
-  String activityid = '', secondkey = '';
+  String activityid = '', secondkey = '', searchFilter = '';
 
   _RecordAttendanceState(this.activityid, this.secondkey, this.activity);
 
@@ -102,6 +102,11 @@ class _RecordAttendanceState extends State<RecordAttendance> {
                     ),
                     child: TextField(
                       controller: search,
+                      onChanged: (value) {
+                        setState(() {
+                          searchFilter = value;
+                        });
+                      },
                       decoration: const InputDecoration(
                           contentPadding: EdgeInsets.only(bottom: 10),
                           prefixIcon: Icon(Icons.search),
@@ -229,11 +234,17 @@ class _RecordAttendanceState extends State<RecordAttendance> {
                               builder: (context, snapshot) {
                                 if (!snapshot.hasData) {
                                   return const CircularProgressIndicator();
-                                } 
+                                }
 
                                 //separate based on date
 
                                 attendees = snapshot.data!;
+                                attendees = attendees
+                                    .where((element) => element['fullname']
+                                        .toString()
+                                        .toLowerCase()
+                                        .contains(searchFilter))
+                                    .toList();
                                 attendees.removeWhere((element) =>
                                     !element['attendancekey']
                                         .toString()
